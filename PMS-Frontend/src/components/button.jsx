@@ -10,7 +10,7 @@ const Button = ({
 }) => {
 
     return <button className={cn(
-            "hover:bg-gray-100 w-full cursor-pointer rounded-lg font-medium transition-colors duration-200",
+            "w-full cursor-pointer rounded-lg font-medium transition-colors duration-200",
             sizeStyles[size],
             className
           )}>

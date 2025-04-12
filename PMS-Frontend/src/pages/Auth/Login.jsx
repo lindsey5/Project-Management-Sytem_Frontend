@@ -3,21 +3,22 @@ import Input from "../../components/input"
 import { googleLogin, Login } from "../../services/AuthService";
 import { toast } from "react-toastify";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { downloadImageAsBase64 } from "../../utils/utils";
 
 const GoogleButton = () => {
 
     const handleSuccess = async (response) => {
         const credential = response.credential;
         const decoded = JSON.parse(atob(credential.split('.')[1]));
+        const byteImage = await downloadImageAsBase64(decoded.picture);
         const r = await googleLogin({
             google_id: decoded.sub, 
             firstname: decoded.given_name, 
             lastname: decoded.family_name,
-            email: decoded.email
+            email: decoded.email,
+            profile_pic: byteImage
         })
-
-        localStorage.setItem("token", r.token);
-        window.location.href = '/home'
+        if(r.success) window.location.href = '/home'
       };
     
       const handleError = (error) => {

@@ -9,3 +9,31 @@ import { twMerge } from "tailwind-merge";
 export const cn = (...inputs) => {
   return twMerge(clsx(inputs));
 }
+
+export const formatDate = (input) => {
+  const date = new Date(input);
+
+  // Convert to UTC-based date string
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+  const day = String(date.getUTCDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+export const downloadImageAsBase64 = async (imageUrl) => {
+  try {
+    const response = await fetch(imageUrl);
+    if (!response.ok) throw new Error('Image download failed');
+    
+    const blob = await response.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result.split(',')[1]); // Get only the base64 data
+      reader.readAsDataURL(blob);
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  }
+};

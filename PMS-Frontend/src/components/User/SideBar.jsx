@@ -1,9 +1,24 @@
 import { useLocation } from "react-router-dom"
 import Button from "../button"
 import Dropdown from "../dropdown"
+import { useEffect, useState } from "react";
+import { getProjects } from "../../services/ProjectService";
 
 const SideBar = () => {
     const pathname = useLocation().pathname;
+    const [projects, setProjects] = useState([]);
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            const response = await getProjects();
+            if(response.success){
+                setProjects(response.projects.map(p => ({title: p.title})))    
+            }
+        }
+
+        fetchProjects();
+    }, [])
+
 
     return <aside className="w-56 fixed top-0 left-0 bottom-0 border-r border-gray-300 py-4 bg-white">
         <img className="h-[48px] cursor-pointer mb-8" src="/logo.png" alt="" />
@@ -17,12 +32,7 @@ const SideBar = () => {
             <Dropdown 
                 label="Projects"
                 iconPath="/briefcase.png"
-                items={[
-                    { label: "Project 1"},
-                    { label: "Project 1"},
-                    { label: "Project 1"},
-                    { label: "Project 1"},
-                ]}
+                items={projects}
                 onClick={() => window.location.href="/projects"}
             />
         </div>
