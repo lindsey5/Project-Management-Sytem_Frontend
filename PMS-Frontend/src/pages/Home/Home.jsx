@@ -17,14 +17,12 @@ const HeroSection = () => {
             Collaborate with your team, track progress, and meet deadlines efficiently.
           </p>
           <div className={`opacity-0 mt-8 mb-8 flex gap-6 ${ inView && 'animate-show-delay' }`}>
-            <button className="animate-wiggle rounded-xl bg-black text-white px-4 py-2 font-bold text-xl cursor-pointer hover:bg-gray-700">
-              Sign Up
-            </button>
             <button 
-                className="rounded-xl border-black border-2 px-4 py-2 font-bold text-xl cursor-pointer hover:bg-gray-100"
-                onClick={() => navigate('/login')}
+              className="animate-wiggle rounded-xl bg-black text-white px-4 py-2 font-bold 
+              text-xl cursor-pointer hover:bg-gray-700"
+              onClick={() => navigate('/login')}
             >
-              Login
+            Get Started
             </button>
           </div>
           <img className='mt-20 h-[350px]' src="Screenshot 2025-04-10 155510.png" alt="" />

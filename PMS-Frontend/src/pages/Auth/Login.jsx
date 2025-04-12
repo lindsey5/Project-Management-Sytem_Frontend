@@ -3,9 +3,9 @@ import Input from "../../components/input"
 import { googleLogin, Login } from "../../services/AuthService";
 import { toast } from "react-toastify";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { getUserDetails } from "../../services/UserService";
 
 const GoogleButton = () => {
+
     const handleSuccess = async (response) => {
         const credential = response.credential;
         const decoded = JSON.parse(atob(credential.split('.')[1]));
@@ -17,8 +17,7 @@ const GoogleButton = () => {
         })
 
         localStorage.setItem("token", r.token);
-
-        console.log(await getUserDetails())
+        window.location.href = '/home'
       };
     
       const handleError = (error) => {
@@ -70,24 +69,22 @@ const LoginPage = () => {
         }
     }
 
-    return <form 
-                className="w-full h-screen flex justify-center items-center" 
-                onSubmit={handleSubmit}
-            >
-        <div className="w-[360px] shadow-lg shadow-gray-300 border border-gray-300 rounded-lg p-6">
-            <h1 className="font-bold text-4xl mb-8">Login</h1>
-            {errors.map(err => <p className="text-red-600">{err}</p>)}
-            <Input className="w-full" label={"Email Address"} type={"email"} handleInput={(e) => handleInput(e, setEmail)}/>
-            <Input className="w-full" label={"Password"} type={"password"}  handleInput={(e) => handleInput(e, setPassword)}/>
-            <div className="flex w-full items-center justify-between">
-                <a className="text-gray-400 hover:underline" href="">Forgot Password?</a>
-                <button className="cursor-pointer mt-2 text-white bg-black px-6 py-2 rounded-lg mb-2">Login</button>
+    return <form className="w-full h-screen flex justify-center items-center" 
+                onSubmit={handleSubmit}>
+            <div className="w-[360px] shadow-lg shadow-gray-300 border border-gray-300 rounded-lg p-6">
+                <h1 className="font-bold text-4xl mb-8">Login</h1>
+                {errors.map(err => <p className="text-red-600">{err}</p>)}
+                <Input className="w-full" label={"Email Address"} type={"email"} handleInput={(e) => handleInput(e, setEmail)}/>
+                <Input className="w-full" label={"Password"} type={"password"}  handleInput={(e) => handleInput(e, setPassword)}/>
+                <div className="flex w-full items-center justify-between">
+                    <a className="text-gray-400 hover:underline" href="">Forgot Password?</a>
+                    <button className="cursor-pointer mt-2 text-white bg-black px-6 py-2 rounded-lg mb-2">Login</button>
+                </div>
+                <div className="w-full flex flex-col items-center gap-2 mb-4">
+                    <p className="mt-2">Don't have an account? <a className="underline font-bold" href="">Sign Up</a></p>
+                </div>
+                <GoogleButton />
             </div>
-            <div className="w-full flex flex-col items-center gap-2 mb-4">
-                <p className="mt-2">Don't have an account? <a className="underline font-bold" href="">Sign Up</a></p>
-            </div>
-            <GoogleButton />
-        </div>
     </form>
 }
 
