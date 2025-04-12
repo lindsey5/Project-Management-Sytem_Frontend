@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react"
 import Input from "../../components/input"
-import { googleLogin, Login } from "../../services/Auth/AuthService";
+import { googleLogin, Login } from "../../services/AuthService";
 import { toast } from "react-toastify";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { getUserDetails } from "../../services/UserService";
 
 const GoogleButton = () => {
     const handleSuccess = async (response) => {
@@ -16,6 +17,8 @@ const GoogleButton = () => {
         })
 
         localStorage.setItem("token", r.token);
+
+        console.log(await getUserDetails())
       };
     
       const handleError = (error) => {
