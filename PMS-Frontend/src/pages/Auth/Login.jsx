@@ -3,46 +3,86 @@ import Input from "../../components/input"
 import { googleLogin, Login } from "../../services/AuthService";
 import { toast } from "react-toastify";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { downloadImageAsBase64 } from "../../utils/utils";
 
 const GoogleButton = () => {
+    const fetchGoogleProfilePicture = async (accessToken) => {
+        const res = await fetch(
+        "https://people.googleapis.com/v1/people/me?personFields=photos",
+        {
+            headers: {
+            Authorization: `Bearer ${accessToken}`,
+            },
+        }
+        );
+        const data = await res.json();
+        return data.photos?.[0]?.url; // CORS-friendly URL
+    };
 
     const handleSuccess = async (response) => {
+      try {
+
+        //const profilePic = await fetchGoogleProfilePicture(accessToken);
         const credential = response.credential;
         const decoded = JSON.parse(atob(credential.split('.')[1]));
-        const byteImage = await downloadImageAsBase64(decoded.picture);
+         console.log(decoded)
+        const byteImage = null;
+        
         const r = await googleLogin({
-            google_id: decoded.sub, 
-            firstname: decoded.given_name, 
-            lastname: decoded.family_name,
-            email: decoded.email,
-            profile_pic: byteImage
-        })
-        if(r.success) window.location.href = '/home'
-      };
-    
-      const handleError = (error) => {
-        console.log('Login Error:', error);
-      };
-
-    return <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <GoogleLogin 
-          onSuccess={handleSuccess} 
-          onError={handleError} 
-          useOneTap={true}
-      />
-       <p className="text-center mt-8 text-sm">
-          By signing in, you agree to Google's{" "}
-          <a className="font-bold underline" href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
-            Privacy Policy
-          </a>{" "}
-          and{" "}
-          <a className="font-bold underline" href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">
-            Terms of Service
-          </a>.
-        </p>
-    </GoogleOAuthProvider>
-}
+          google_id: decoded.sub, 
+          firstname: decoded.given_name, 
+          lastname: decoded.family_name,
+          email: decoded.email,
+          profile_pic: byteImage
+        });
+  
+        if(r?.success) window.location.href = '/home';
+        else toast.error("Login Error")
+      } catch (error) {
+        console.error('Login processing error:', error);
+        toast.error("Login Error")
+      }
+    };
+  
+    const handleError = (error) => {
+      console.error('Google Login Error:', error);
+      toast.error("Login Error");
+    };
+  
+    return (
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <div>
+          <GoogleLogin 
+            onSuccess={handleSuccess} 
+            onError={handleError} 
+            useOneTap={true}
+            auto_select={true}
+            shape="rectangular"
+            size="large"
+          />
+          <p className="text-center mt-4 text-sm text-gray-600">
+            By signing in, you agree to Google's{" "}
+            <a 
+              className="font-medium text-blue-600 hover:underline" 
+              href="https://policies.google.com/privacy" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              Privacy Policy
+            </a>{" "}
+            and{" "}
+            <a 
+              className="font-medium text-blue-600 hover:underline" 
+              href="https://policies.google.com/terms" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              Terms of Service
+            </a>.
+          </p>
+        </div>
+      </GoogleOAuthProvider>
+    );
+};
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -75,8 +115,8 @@ const LoginPage = () => {
             <div className="w-[360px] shadow-lg shadow-gray-300 border border-gray-300 rounded-lg p-6">
                 <h1 className="font-bold text-4xl mb-8">Login</h1>
                 {errors.map(err => <p className="text-red-600">{err}</p>)}
-                <Input className="w-full" label={"Email Address"} type={"email"} handleInput={(e) => handleInput(e, setEmail)}/>
-                <Input className="w-full" label={"Password"} type={"password"}  handleInput={(e) => handleInput(e, setPassword)}/>
+                <Input className="w-full" label={"Email Address"} type={"email"} onChange={(e) => handleInput(e, setEmail)}/>
+                <Input className="w-full" label={"Password"} type={"password"}  onChange={(e) => handleInput(e, setPassword)}/>
                 <div className="flex w-full items-center justify-between">
                     <a className="text-gray-400 hover:underline" href="">Forgot Password?</a>
                     <button className="cursor-pointer mt-2 text-white bg-black px-6 py-2 rounded-lg mb-2">Login</button>

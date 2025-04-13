@@ -1,19 +1,21 @@
-import { sizeStyles, iconSize } from "./sizeConfig"
+import { sizeStyles, iconSize } from "./config"
 import { cn } from "../utils/utils"
 
 const Button = ({
     label,
     size="md",
     iconPath,
-    onClick,
-    className
+    className,
+    ...rest
 }) => {
 
     return <button className={cn(
-            "w-full cursor-pointer rounded-lg font-medium transition-colors duration-200",
+            "w-full cursor-pointer rounded-lg",
             sizeStyles[size],
-            className
-          )}>
+            className,
+          )}
+          {...rest}
+          >
         <span className="flex items-center gap-3">
             {<img className={cn(iconSize[size])} src={iconPath}/>}
             {label}
