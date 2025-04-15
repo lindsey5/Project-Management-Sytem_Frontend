@@ -27,6 +27,7 @@ const ProjectHeader = () => {
                     <Tab label="Tasks" value="/project/tasks" />
                     <Tab label="Team" value="/project/team" />
                     <Tab label="Overview" value="3" />
+                    <Tab label="Requests" value="3" />
                     <Tab label="Settings" value="3" />
                 </TabList>
             </Box>

@@ -83,12 +83,15 @@ const Kanban = () => {
               {cards
                 .filter(card => card.status === status)
                 .map(card => (
-                  <Card 
+                  <div>
+                    <Card 
                     key={card.id}
                     className="bg-white m-3"
                     draggable={!loading}
                     onDragStart={(e) => handleDragStart(e, card.id)}
                   />
+                  {card.id}
+                  </div>
                 ))
               }
             </div>

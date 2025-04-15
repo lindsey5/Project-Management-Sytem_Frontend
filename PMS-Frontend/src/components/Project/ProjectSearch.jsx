@@ -140,6 +140,7 @@ const ProjectSearch = ({close}) => {
                                         <h2 className='break-all text-gray-400 mt-1'>{project.category}</h2>
                                     </div>
                                     <p className='text-gray-400 text-[14px]'>Deadline: {project.end_date}</p>
+                                    <p className='text-gray-400 text-[14px]'>Creator: {project.user.firstname} {project.user.lastname.charAt(0)}.</p>
                                     <Chip 
                                         label={project.status} 
                                         variant='filled' 

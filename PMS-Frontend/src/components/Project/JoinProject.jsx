@@ -4,15 +4,29 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useState } from "react";
+import { createRequest } from "../../services/RequestService";
+import { toast } from "react-toastify";
 
 const JoinProject = ({ close }) =>{
   const [value, setValue] = useState("manual");
+  const [code, setCode] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!code.trim()) {
+        toast.error('Please enter a valid project code');
+        return;
+    }
+
+    setLoading(true);
+    const response = await createRequest(code);
+    if(response.success) toast.success('Request submitted successfully! Waiting for admin approval')
+    else toast.error(response.message)
+    setLoading(false);
 
   }
 
@@ -32,13 +46,14 @@ const JoinProject = ({ close }) =>{
                     </Tabs>
                 </Box>
                 <div className="p-2">
-                    {value == 'manual' && <Input label="Enter Code" className="w-full"/>}
+                    {value == 'manual' && <Input onChange={(e) => setCode(e.target.value)} label="Enter Code" className="w-full"/>}
                     {value == 'scan' && <QrCodeScanner />}
                 </div>
                 <div className="flex flex-row-reverse gap-3 mt-8">
                     {value == "manual" && <button 
                         className="bg-black text-white p-2 rounded-lg cursor-pointer hover:bg-gray-600"
                         onClick={handleSubmit}
+                        disabled={loading}
                     >Join</button>}
                     <button className="p-2 rounded-lg cursor-pointer hover:bg-gray-200"
                         onClick={close}

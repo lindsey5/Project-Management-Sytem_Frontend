@@ -7,6 +7,7 @@ import FolderCopyOutlinedIcon from '@mui/icons-material/FolderCopyOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Tooltip } from "@mui/material";
 import ProjectSearch from "../Project/ProjectSearch";
 
@@ -57,6 +58,14 @@ const SideBar = () => {
             <Tooltip title="Notifications" placement="left-end" arrow>
                 <IconButton size="medium">
                     <NotificationsNoneOutlinedIcon sx={{ fontSize: 28 }}/>
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Log out" placement="left-end" arrow>
+                <IconButton size="medium" onClick={() => {
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                }}>
+                    <LogoutIcon sx={{ fontSize: 28 }}/>
                 </IconButton>
             </Tooltip>
     </aside>
