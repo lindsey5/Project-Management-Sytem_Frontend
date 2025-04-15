@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { cn } from '../../utils/utils';
 import { useEffect, useState } from 'react';
-import CreateProjectModal from '../../pages/User/Home/createProject';
+import CreateProjectModal from './CreateProject';
 import { getProjects } from '../../services/ProjectService';
 import { Box, Button, Chip } from '@mui/material';
 
