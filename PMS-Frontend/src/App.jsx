@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import UserLayout from "./layouts/UserLayout";
 import Home from "./pages/User/Home";
 import ProjectLayout from "./layouts/ProjectLayout";
+import Tasks from "./pages/User/Projects/Tasks";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -23,10 +24,11 @@ const router = createBrowserRouter(
       </Route>
       <Route element={<UserLayout />}>
         <Route path="/home" element={<Home />}/>
-        <Route path="project/:code" element={<ProjectLayout />}>
-
+        <Route path="/project">
+          <Route element={<ProjectLayout />}>
+            <Route path="tasks" element={<Tasks />}/>
+          </Route>
         </Route>
-       
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </>
@@ -36,10 +38,10 @@ const router = createBrowserRouter(
 
 const App = () => {
 
-  return <>
+  return <div>
     <RouterProvider router={router} />
     <ToastContainer />
-  </>
+  </div>
 }
 
 export default App

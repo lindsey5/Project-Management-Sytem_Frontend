@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import CreateProjectModal from './CreateProject';
 import { getProjects } from '../../services/ProjectService';
 import { Box, Button, Chip } from '@mui/material';
+import JoinProject from './JoinProject';
 
 const NewProjectButton = ({setShowCreate, setShowJoin}) => {
     const [isShow, setIsShow] = useState(false);
@@ -33,7 +34,10 @@ const NewProjectButton = ({setShowCreate, setShowJoin}) => {
                     className="w-36 rounded-md cursor-pointer px-4 py-2 hover:bg-gray-200"
                     onClick={setShowCreate}
                 >Create Project</button>
-                <button className="rounded-md cursor-pointer px-4 py-2 hover:bg-gray-200">Join Project</button>
+                <button 
+                    className="rounded-md cursor-pointer px-4 py-2 hover:bg-gray-200"
+                    onClick={setShowJoin}
+                >Join Project</button>
         </div>
     </div>
 }
@@ -41,6 +45,7 @@ const NewProjectButton = ({setShowCreate, setShowJoin}) => {
 
 const ProjectSearch = ({close}) => {
     const [showCreate, setShowCreate] = useState(false);
+    const [showJoin, setShowJoin] = useState(false);
     const [projects, setProjects] = useState([]);
     const [filteredProjects, setFilteredProjects] = useState([]);
     const [alignment, setAlignment] = useState('All');
@@ -84,6 +89,7 @@ const ProjectSearch = ({close}) => {
 
     return <aside className="flex justity-start fixed left-18 right-0 inset-y-0 bg-black/50 z-10">
         {showCreate && <CreateProjectModal close={() => setShowCreate(false)}/>}
+        {showJoin && <JoinProject close={() => setShowJoin(false)}/>}
         <div className="w-[400px] transition-all duration-300 ease-in relative px-4 py-7 bg-white flex flex-col justify-between gap-3">
             <div className='flex gap-3 items-center justify-between'>
             <h1 className='text-3xl font-bold'>All Projects</h1>
@@ -123,10 +129,9 @@ const ProjectSearch = ({close}) => {
             </Box>
             <div className='overflow-y-auto flex-1 '>
                 {filteredProjects.map(project => {
-                    console.log(project)
                     return <div 
                             className='rounded-lg p-3 justify-between flex items-center cursor-pointer hover:bg-gray-100'
-                            onClick={() => window.location.href = `/project/${project.project_code}`}
+                            onClick={() => window.location.href = `/project/tasks?c=${project.project_code}`}
                         >
                             <div className='flex items-center gap-3'>
                                 <div className='flex flex-col gap-2 items-start'>
@@ -148,7 +153,10 @@ const ProjectSearch = ({close}) => {
                 })}
             </div>
             <div className='flex flex-row-reverse'>
-                <NewProjectButton setShowCreate={() => setShowCreate(!showCreate)}/>
+                <NewProjectButton 
+                    setShowCreate={() => setShowCreate(!showCreate)}
+                    setShowJoin={() => setShowJoin(!showJoin)}
+                />
             </div>
         </div>
     </aside>

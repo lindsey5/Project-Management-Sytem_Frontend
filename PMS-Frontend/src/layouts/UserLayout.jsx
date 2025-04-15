@@ -7,7 +7,7 @@ const UserLayout = () => {
         return <Navigate to="/login" replace />
     }
     return <UserContextProvider>
-            <div className="pl-20 min-w-screen min-h-screen">
+            <div className="pl-19 h-screen">
                 <SideBar />
                 <Outlet />
             </div>

@@ -1,0 +1,59 @@
+.custom-scan-button, 
+.custom-file-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+}
+
+.custom-scan-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.custom-scan-button:hover {
+    background-color: #45a049;
+}
+
+.custom-file-button {
+    background-color: #2196F3;
+    color: white;
+}
+
+.custom-file-button:hover {
+    background-color: #0b7dda;
+}
+
+/* Scanner container */
+.scanner-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#reader {
+    margin-bottom: 20px;
+}
+
+/* Hide the default powered by text */
+#html5-qrcode-anchor-scan-type-change {
+    display: none !important;
+}
+
+/* Style the torch button */
+#html5-qrcode-button-torch {
+    background: #333;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+/* Style the zoom controls */
+#html5-qrcode-input-range-zoom {
+    width: 100%;
+    margin: 10px 0;
+}
