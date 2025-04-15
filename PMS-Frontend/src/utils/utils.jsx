@@ -22,28 +22,18 @@ export const formatDate = (input) => {
 }
 
 export const downloadImageAsBase64 = async (imageUrl) => {
-  console.log(imageUrl)
   try {
-    const response = await fetch(imageUrl);
-    if (!response.ok) throw new Error('Image download failed');
+    const proxyUrl = `/api/imageproxy?url=${encodeURIComponent(imageUrl)}`;
 
+    const response = await fetch(proxyUrl);
+    if (!response.ok) throw new Error('Proxy image download failed');
+    
     const blob = await response.blob();
-
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const reader = new FileReader();
-
-      reader.onloadend = () => {
-        const base64 = reader.result?.split(',')[1];
-        resolve(base64);
-      };
-
-      reader.onerror = () => {
-        reject('Failed to read blob as base64');
-      };
-
+      reader.onloadend = () => resolve(reader.result.split(',')[1]);
       reader.readAsDataURL(blob);
     });
-
   } catch (error) {
     console.error('Error:', error);
     return null;

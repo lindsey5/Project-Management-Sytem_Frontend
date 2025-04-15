@@ -3,29 +3,15 @@ import Input from "../../components/input"
 import { googleLogin, Login } from "../../services/AuthService";
 import { toast } from "react-toastify";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { downloadImageAsBase64 } from "../../utils/utils";
 
 const GoogleButton = () => {
-    const fetchGoogleProfilePicture = async (accessToken) => {
-        const res = await fetch(
-        "https://people.googleapis.com/v1/people/me?personFields=photos",
-        {
-            headers: {
-            Authorization: `Bearer ${accessToken}`,
-            },
-        }
-        );
-        const data = await res.json();
-        return data.photos?.[0]?.url; // CORS-friendly URL
-    };
 
     const handleSuccess = async (response) => {
       try {
-
-        //const profilePic = await fetchGoogleProfilePicture(accessToken);
         const credential = response.credential;
         const decoded = JSON.parse(atob(credential.split('.')[1]));
-         console.log(decoded)
-        const byteImage = null;
+        const byteImage = await downloadImageAsBase64(decoded.picture);
         
         const r = await googleLogin({
           google_id: decoded.sub, 

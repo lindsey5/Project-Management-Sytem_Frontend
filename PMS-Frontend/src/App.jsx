@@ -13,6 +13,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserLayout from "./layouts/UserLayout";
 import Home from "./pages/User/Home";
+import ProjectLayout from "./layouts/ProjectLayout";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -22,6 +23,9 @@ const router = createBrowserRouter(
       </Route>
       <Route element={<UserLayout />}>
         <Route path="/home" element={<Home />}/>
+        <Route path="project/:code" element={<ProjectLayout />}>
+
+        </Route>
        
       </Route>
       <Route path="*" element={<Navigate to="/" />} />

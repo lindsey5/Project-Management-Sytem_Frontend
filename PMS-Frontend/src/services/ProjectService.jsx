@@ -27,3 +27,16 @@ export const getProjects = async () => {
         return error.response ? error.response.data : error.message
     }
 }
+
+export const getAuthorization = async (project_code) => {
+    try{
+        const response = await axios.get(`/api/project/authorize?project_code=${project_code}`,{
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }})
+
+        return response.data
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
+}
