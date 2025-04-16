@@ -30,7 +30,7 @@ const SideBar = () => {
     const { user } = useContext(UserContext);
     const [showSearch, setShowSearch] = useState(false);
 
-    return <aside className="z-50 px-4 py-10 fixed top-0 left-0 bottom-0 bg-white flex flex-col gap-3 border-r-1 border-gray-200">
+    return <aside className="hidden sm:flex z-50 px-4 py-10 fixed top-0 left-0 bottom-0 bg-white flex-col gap-3 border-r-1 border-gray-200">
         {showSearch && <ProjectSearch close={() => setShowSearch(false)}/>}
             <button className="w-10 cursor-pointer">
                 <img className="rounded-full" src={user && user.profile_pic} alt="" />

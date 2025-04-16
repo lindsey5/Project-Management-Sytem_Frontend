@@ -2,7 +2,8 @@ import { StatusChip } from "../chip"
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import Card from "../card";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ProjectContext } from "../../layouts/ProjectLayout";
 
 const status = {
     "To Do" : " #951ff7",
@@ -17,7 +18,7 @@ const Board = () => {
 
 }
 
-const StatusBar = ({currentStatus, ...rest}) => {
+const StatusHeader = ({currentStatus, ...rest}) => {
     return <div className="flex items-center justify-between flex-1" {...rest}>
         <StatusChip 
             label={currentStatus}
@@ -38,7 +39,8 @@ const Kanban = () => {
       { id: 4, status: 'Error' },
       { id: 5, status: 'In Review' }
     ]);
-    const [loading, setLoading] = useState(false); // Loading state
+    const [loading, setLoading] = useState(false); 
+    const { role } = useContext(ProjectContext);
   
     const handleDragStart = (e, cardId) => {
       e.dataTransfer.setData('cardId', cardId);
@@ -69,7 +71,7 @@ const Kanban = () => {
       <div className="p-3 min-w-[1080px] relative">
         <div className="grid grid-cols-5 gap-3 border-b-1 border-gray-300 py-3">
           {statuses.map(status => (
-            <StatusBar key={status} currentStatus={status} />
+            <StatusHeader key={status} currentStatus={status} />
           ))}
         </div>
         <div className="grid grid-cols-5 py-3 box-border">
@@ -77,21 +79,18 @@ const Kanban = () => {
             <div 
               key={status}
               className="min-h-[200px]"
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, status)}
+              onDragOver={role === 'Admin' && handleDragOver}
+              onDrop={(e) => role === 'Admin' && handleDrop(e, status)}
             >
               {cards
                 .filter(card => card.status === status)
                 .map(card => (
-                  <div>
                     <Card 
                     key={card.id}
-                    className="bg-white m-3"
-                    draggable={!loading}
-                    onDragStart={(e) => handleDragStart(e, card.id)}
+                    className={`bg-white m-3 ${role === 'Admin' && 'cursor-pointer'}`}
+                    draggable={!loading && role === 'Admin'}
+                    onDragStart={(e) => role === 'Admin' && handleDragStart(e, card.id)}
                   />
-                  {card.id}
-                  </div>
                 ))
               }
             </div>

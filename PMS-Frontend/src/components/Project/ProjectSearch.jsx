@@ -5,11 +5,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { cn } from '../../utils/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import CreateProjectModal from './CreateProject';
 import { getProjects } from '../../services/ProjectService';
 import { Box, Button, Chip } from '@mui/material';
 import JoinProject from './JoinProject';
+import { CustomButton } from '../button';
 
 const NewProjectButton = ({setShowCreate, setShowJoin}) => {
     const [isShow, setIsShow] = useState(false);
@@ -47,13 +48,13 @@ const ProjectSearch = ({close}) => {
     const [showCreate, setShowCreate] = useState(false);
     const [showJoin, setShowJoin] = useState(false);
     const [projects, setProjects] = useState([]);
-    const [filteredProjects, setFilteredProjects] = useState([]);
     const [alignment, setAlignment] = useState('All');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [input, setInput] = useState('');
 
     const StatusButton = ({label, value}) => {
         return <Button
             variant="contained"
-            size='small'
             sx={{ 
                 borderRadius: '20px',
                 backgroundColor: alignment === value ? 'black' : 'white',
@@ -65,24 +66,32 @@ const ProjectSearch = ({close}) => {
                 paddingX: '6px',
                 boxShadow: 'none'
             }}
-            onClick={() => handleChange(value)}
+            onClick={() => setAlignment(value)}
         >
         {label}
         </Button>
     }
 
-    const handleChange = (newAlignment) => {
-        setAlignment(newAlignment)
-        setFilteredProjects(newAlignment !== 'All' ? 
-            projects.filter(project => project.status === newAlignment) 
-        : projects)
-    };
+    const filteredProjects = useMemo(() => {
+        return projects.filter(project => {
+            return project.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            project.category.toLowerCase().includes(searchTerm.toLowerCase())
+        }).filter(p => alignment !== 'All' ? p.status === alignment : true)
+    }, [searchTerm, projects, alignment])
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+          setSearchTerm(input)
+        }, 300); // 300ms delay
+      
+        return () => clearTimeout(delayDebounce);
+      }, [input]);
+    
 
     useEffect(() => {
         const fetchProjects = async () => {
             const fetchedProjects = await getProjects();
             setProjects(fetchedProjects.projects.sort((a, b) => new Date(a.end_date) - new Date(b.end_date)))
-            setFilteredProjects(fetchedProjects.projects.sort((a, b) => new Date(a.end_date) - new Date(b.end_date)))
         }
         fetchProjects();
     }, [])
@@ -100,11 +109,7 @@ const ProjectSearch = ({close}) => {
             <TextField
                     id="input-with-icon-textfield"
                     placeholder='Search Project'
-                    onChange={(e) => setFilteredProjects(projects.filter(project => {
-                        setAlignment('All')
-                        return project.title.toLowerCase().includes(e.target.value.toLowerCase()) || 
-                        project.category.toLowerCase().includes(e.target.value.toLowerCase())
-                    }))}
+                    onChange={(e) => setInput(e.target.value)}
                     sx={{
                         '& .MuiOutlinedInput-root': {
                         borderRadius: '20px'
@@ -122,10 +127,46 @@ const ProjectSearch = ({close}) => {
                     size='small'
                 />
             <Box sx={{ width: '100%', display: 'flex', marginY: '20px', justifyContent: 'space-between' }}>
-                <StatusButton label='All' value='All' />
-                <StatusButton label={`Active (${projects.filter(p => p.status === 'Active').length})`} value='Active'/>
-                <StatusButton label={`On Hold (${projects.filter(p => p.status === 'On Hold').length})`} value='On Hold'/>
-                <StatusButton label={`Closed (${projects.filter(p => p.status === 'Closed').length})`} value='Closed'/>
+                <CustomButton 
+                    label="All"
+                    size="small"
+                    sx={{
+                        backgroundColor: alignment === "All" ? 'black' : '#f3f4f6',
+                        color: alignment == "All" ? 'white' : 'black',
+                        '&:hover': { backgroundColor: alignment === "All" ? '#6b7280' : '#e5e7eb'} 
+                    }}
+                    onClick={() => setAlignment("All")}
+                />
+                <CustomButton 
+                    label={`Active (${projects.filter(p => p.status === 'Active').length})`} 
+                    size="small"
+                    sx={{
+                        backgroundColor: alignment === "Active" ? 'black' : '#f3f4f6',
+                        color: alignment == "Active" ? 'white' : 'black',
+                        '&:hover': { backgroundColor: alignment === "Active" ? '#6b7280' : '#e5e7eb'} 
+                    }}
+                    onClick={() => setAlignment("Active")}
+                />
+                <CustomButton 
+                    label={`On Hold (${projects.filter(p => p.status === 'On Hold').length})`} 
+                    size="small"
+                    sx={{
+                        backgroundColor: alignment === "On Hold" ? 'black' : '#f3f4f6',
+                        color: alignment == "On Hold" ? 'white' : 'black',
+                        '&:hover': { backgroundColor: alignment === "On Hold" ? '#6b7280' : '#e5e7eb'} 
+                    }}
+                    onClick={() => setAlignment("On Hold")}
+                />
+                <CustomButton 
+                    label={`Closed (${projects.filter(p => p.status === 'Closed').length})`} 
+                    size="small"
+                    sx={{
+                        backgroundColor: alignment === "Closed" ? 'black' : '#f3f4f6',
+                        color: alignment == "Closed" ? 'white' : 'black',
+                        '&:hover': { backgroundColor: alignment === "Closed" ? '#6b7280' : '#e5e7eb'} 
+                    }}
+                    onClick={() => setAlignment("Closed")}
+                />
             </Box>
             <div className='overflow-y-auto flex-1 '>
                 {filteredProjects.map(project => {
@@ -137,7 +178,7 @@ const ProjectSearch = ({close}) => {
                                 <div className='flex flex-col gap-2 items-start'>
                                     <div>
                                         <h1 className='break-all font-bold text-xl'>{project.title}</h1>
-                                        <h2 className='break-all text-gray-400 mt-1'>{project.category}</h2>
+                                        <h2 className='break-all text-gray-400 mt-1'>{project.type}</h2>
                                     </div>
                                     <p className='text-gray-400 text-[14px]'>Deadline: {project.end_date}</p>
                                     <p className='text-gray-400 text-[14px]'>Creator: {project.user.firstname} {project.user.lastname.charAt(0)}.</p>

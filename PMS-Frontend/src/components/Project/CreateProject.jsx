@@ -8,7 +8,7 @@ import { useState } from "react";
 import { CreateProject } from "../../services/ProjectService";
 import { formatDate } from "../../utils/utils";
 import { toast } from "react-toastify";
-import projectCategories from '../../../project_categories.json'
+import project_types from '../../../project_types.json'
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 
@@ -25,12 +25,12 @@ const CreateProjectModal = ({close}) => {
         else if(!state.description) setError('Description is required')
         else if(!state.start_date) setError('Start date is required')
         else if(!state.end_date) setError('Deadline is required')
-        else if(!value) setError('Category is required')
+        else if(!value) setError('Project type is required')
         else if(state.start_date.$d > state.end_date.$d) setError("Invalid Deadline")
         else {
             const response = await CreateProject({
                 ...state, 
-                category: value.name,
+                type: value.name,
                 start_date: formatDate(state.start_date?.$d),
                 end_date: formatDate(state.end_date.$d)
             })
@@ -42,13 +42,7 @@ const CreateProjectModal = ({close}) => {
         }
     }
 
-    const options = Array.from(new Set(projectCategories)).sort().map((option) => {
-        const firstLetter = option[0].toUpperCase();
-        return {
-            firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-            name: option,
-        };
-    });
+    const options = Array.from(new Set(project_types)).sort((a, b) => a.name.localeCompare(b.name)).sort((a, b) => a.category.localeCompare(b.category))
 
     return <div className="fixed inset-0 bg-gray-600/50 flex justify-center items-center z-50">
         <div className="px-6 py-10 w-[90%] max-w-128 bg-white rounded-xl">
@@ -78,6 +72,7 @@ const CreateProjectModal = ({close}) => {
             </div>
             <Autocomplete
                 value={value}
+                groupBy={(option) => option.category}
                 onChange={(event, newValue) => {
                     if (typeof newValue === 'string') {
                     setValue({
@@ -132,7 +127,7 @@ const CreateProjectModal = ({close}) => {
                 sx={{ width: '100%', marginTop: '30px' }}
                 freeSolo
                 renderInput={(params) => (
-                    <TextField {...params} label="Select Category" />
+                    <TextField {...params} label="Project Type" />
                 )}
             />
             <p className="text-red-600">{error}</p>

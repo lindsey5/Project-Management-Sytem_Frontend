@@ -15,6 +15,7 @@ import UserLayout from "./layouts/UserLayout";
 import Home from "./pages/User/Home";
 import ProjectLayout from "./layouts/ProjectLayout";
 import Tasks from "./pages/User/Projects/Tasks";
+import Team from "./pages/User/Projects/Team";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -27,6 +28,7 @@ const router = createBrowserRouter(
         <Route path="/project">
           <Route element={<ProjectLayout />}>
             <Route path="tasks" element={<Tasks />}/>
+            <Route path="team" element={<Team />} />
           </Route>
         </Route>
       </Route>

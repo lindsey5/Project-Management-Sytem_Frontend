@@ -6,6 +6,7 @@ import Tab from '@mui/material/Tab';
 import { useState } from "react";
 import { createRequest } from "../../services/RequestService";
 import { toast } from "react-toastify";
+import { CustomButton } from "../button";
 
 const JoinProject = ({ close }) =>{
   const [value, setValue] = useState("manual");
@@ -24,7 +25,10 @@ const JoinProject = ({ close }) =>{
 
     setLoading(true);
     const response = await createRequest(code);
-    if(response.success) toast.success('Request submitted successfully! Waiting for admin approval')
+    if(response.success) {
+        toast.success('Request submitted successfully! Wait for admin approval')
+        close();
+    }
     else toast.error(response.message)
     setLoading(false);
 
@@ -50,11 +54,13 @@ const JoinProject = ({ close }) =>{
                     {value == 'scan' && <QrCodeScanner />}
                 </div>
                 <div className="flex flex-row-reverse gap-3 mt-8">
-                    {value == "manual" && <button 
-                        className="bg-black text-white p-2 rounded-lg cursor-pointer hover:bg-gray-600"
+                    {value == "manual" && <CustomButton 
+                        label="Join"
                         onClick={handleSubmit}
                         disabled={loading}
-                    >Join</button>}
+                        sx={{ borderRadius: '10px'}}
+                        size="large"
+                    />}
                     <button className="p-2 rounded-lg cursor-pointer hover:bg-gray-200"
                         onClick={close}
                     >Cancel</button>

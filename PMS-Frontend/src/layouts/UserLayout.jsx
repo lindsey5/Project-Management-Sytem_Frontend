@@ -7,7 +7,7 @@ const UserLayout = () => {
         return <Navigate to="/login" replace />
     }
     return <UserContextProvider>
-            <div className="pl-19 h-screen">
+            <div className="sm:pl-19 h-screen">
                 <SideBar />
                 <Outlet />
             </div>
