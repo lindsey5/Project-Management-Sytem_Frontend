@@ -38,7 +38,7 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
               <StyledTableCell align="right">{row.protein}</StyledTableCell>
             </StyledTableRow>*/
 
-const CustomizedTables = ({cols, rows}) => {
+const CustomizedTable = ({cols, rows}) => {
   return (
     <TableContainer sx={{height: '100%'}}component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -53,4 +53,4 @@ const CustomizedTables = ({cols, rows}) => {
   );
 }
 
-export default CustomizedTables
+export default CustomizedTable

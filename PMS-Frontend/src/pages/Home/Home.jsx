@@ -7,7 +7,6 @@ import { useEffect } from "react";
 const HeroSection = () => {
     const [ref, inView] = useInViewObserver(0.2);
     const navigate = useNavigate();
-    
   
     return (
       <section id="hero" ref={ref} className="w-full flex justify-center px-10 pb-10 pt-[180px] mb-16 text-center">
@@ -26,7 +25,7 @@ const HeroSection = () => {
             Get Started
             </button>
           </div>
-          <img className='mt-20 h-[350px]' src="Screenshot 2025-04-10 155510.png" alt="" />
+          <img className='mt-20 h-[350px]' src="image.png" alt="" />
         </div>
       </section>
     );

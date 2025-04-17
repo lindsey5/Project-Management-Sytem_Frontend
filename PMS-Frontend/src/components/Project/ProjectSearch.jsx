@@ -8,7 +8,7 @@ import { cn } from '../../utils/utils';
 import { useEffect, useMemo, useState } from 'react';
 import CreateProjectModal from './CreateProject';
 import { getProjects } from '../../services/ProjectService';
-import { Box, Button, Chip } from '@mui/material';
+import { Box, Chip } from '@mui/material';
 import JoinProject from './JoinProject';
 import { CustomButton } from '../button';
 

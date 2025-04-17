@@ -6,7 +6,7 @@ import { ProjectContext } from "../../../layouts/ProjectLayout";
 import { Card, Stack, Typography } from "@mui/material";
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
-import { formatDate } from "../../../utils/utils";
+import { formatDateTime } from "../../../utils/utils";
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import { updateTask } from "../../../services/TaskService";
@@ -107,7 +107,7 @@ const Kanban = ({ showCreate, tasks, setTasks }) => {
                       {task.task_Name}
                     </Typography>
                     <Typography variant="subtitle1" fontSize={'14px'} color="gray">
-                      Due: {formatDate(task.due_date)}
+                      Due: {formatDateTime(task.due_date)}
                     </Typography>
                     <Stack direction="row" justifyContent={"space-between"} width="100%">
                       <Stack direction="row" gap={1}>
@@ -118,8 +118,18 @@ const Kanban = ({ showCreate, tasks, setTasks }) => {
                           <AttachFileOutlinedIcon fontSize="inherit" />
                         </IconButton>
                       </Stack>
-                      <AvatarGroup max={4}>
-                        {task.assignees.map(task => <Avatar src={`data:image/jpeg;base64,${task.member.user.profile_pic}`} />)}
+                      <AvatarGroup 
+                        max={3} 
+                        spacing="medium"
+                        sx={{
+                          '& .MuiAvatar-root': {
+                            width: 30,
+                            height: 30,
+                            fontSize: 12,
+                          },
+                        }}
+                      >
+                        {task.assignees.map(task => <Avatar sx={{ width: 30, height: 30 }} src={`data:image/jpeg;base64,${task.member.user.profile_pic}`} />)}
                       </AvatarGroup>
                     </Stack>
                   </Card>

@@ -65,7 +65,6 @@ const CreateTask = ({open, close, currentStatus}) => {
     const handleSubmit = async (data) => {
         setError('');
         if(!data.task_name) setError('Task name is required.')
-        else if(!data.description) setError('Description is required')
         else if(!data.priority) setError('Set priority.')
         else if(!data.status) setError('Set status.')
         else if(data.assigneesMemberId.length < 0) setError('Choose atleast 1 assignee')
@@ -149,7 +148,7 @@ const CreateTask = ({open, close, currentStatus}) => {
             </Box>
             <Divider />
             <Stack direction="column" gap={3} p={3}>
-                <Typography color="red" variant="subtitle1">{error}</Typography>
+                {error && <Typography color="red" variant="subtitle1">{error}</Typography>}
                 <TextField 
                     label="Task name" 
                     value={state.task_name}
@@ -226,7 +225,7 @@ const CreateTask = ({open, close, currentStatus}) => {
                 <CustomButton 
                     onClick={() => handleSubmit(state)}
                     icon={<AddIcon />}
-                    sx={{ borderRadius: '10px'}}
+                    sx={{ borderRadius: '10px', height: '50px'}}
                     disabled={loading}
                 >
                     CREATE

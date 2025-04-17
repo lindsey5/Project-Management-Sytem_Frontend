@@ -60,7 +60,7 @@ const JoinProject = ({ close }) =>{
                         disabled={loading}
                         sx={{ borderRadius: '10px'}}
                         size="large"
-                    />}
+                    >Join</CustomButton>}
                     <button className="p-2 rounded-lg cursor-pointer hover:bg-gray-200"
                         onClick={close}
                     >Cancel</button>

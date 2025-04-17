@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { getMembers } from "../../../services/MemberService";
 import { useSearchParams } from "react-router-dom";
-import CustomizedTables from "../../../components/table";
+import CustomizedTable from "../../../components/table";
 import { ProjectContext } from "../../../layouts/ProjectLayout";
 import { StyledTableCell, StyledTableRow } from "../../../components/table";
 import { Avatar } from "@mui/material";
@@ -9,49 +9,10 @@ import IconButton from '@mui/material/IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
 import { UserContext } from "../../../context/userContext";
 import { TableRow } from "@mui/material";
-  
-const CancelDialog = ({ isOpen, title, text, handleClose, handleAgree }) => {
-    return (
-      <Dialog
-        open={isOpen}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {title}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {text}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-            <Button 
-                onClick={handleClose}
-                sx={{ backgroundColor: "white", color: "gray", ":hover": {
-                    backgroundColor: "#fee2e2"
-                }}}
-            >No</Button>
-            <Button 
-                onClick={handleAgree}
-                sx={{ backgroundColor: '#dc3545', color: 'white', ":hover": {
-                    backgroundColor: "#c82333"
-                }}}
-            >Yes</Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
-
+import { ConfirmDialog } from "../../../components/dialog";
+import { formatDateTime, convertToAsiaTime } from "../../../utils/utils";
 
 const Team = () => {
     const [members, setMembers] = useState([]);
@@ -98,7 +59,7 @@ const Team = () => {
     
 
     return <main className="w-full h-full overflow-y-auto py-10 p-5">
-        <CustomizedTables 
+        <CustomizedTable
             cols={<TableRow>
                     <StyledTableCell align="left">Fullname</StyledTableCell>
                     <StyledTableCell align="left">Email</StyledTableCell>
@@ -119,7 +80,7 @@ const Team = () => {
                     </StyledTableCell>
                     <StyledTableCell align="left">{member.email}</StyledTableCell>
                     <StyledTableCell align="left">{member.role}</StyledTableCell>
-                    <StyledTableCell align="left">{new Date(member.joined_At).toLocaleDateString()}</StyledTableCell>
+                    <StyledTableCell align="left">{formatDateTime(convertToAsiaTime(member.joined_At))}</StyledTableCell>
                     {role === 'Admin' &&  <StyledTableCell align="left">
                         {project.user_id !== member.user_Id && 
                         user.id !== member.id && <>
@@ -149,7 +110,7 @@ const Team = () => {
                 </StyledTableRow>
             })}
         />
-        <CancelDialog 
+        <ConfirmDialog
             title="Delete"
             text="Are you sure do you want to remove?"
             handleClose={handleCloseRemove} 

@@ -1,14 +1,26 @@
 import { useContext, useEffect, useState } from "react"
 import { ProjectContext } from "../../layouts/ProjectLayout"
-import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
+import AvatarGroup from '@mui/material/AvatarGroup';
 import Tab from '@mui/material/Tab';
-import { Tabs } from "@mui/material";
+import { Stack, Tabs } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { StatusChip } from "../chip";
+import { getMembers } from "../../services/MemberService";
 
 const ProjectHeader = () => {
     const { project, code } = useContext(ProjectContext);
     const pathname = useLocation().pathname;
+    const [members, setMembers] = useState([]);
+
+    useEffect(() => {
+        const fetchMembers = async () => {
+            const response = await getMembers(code);
+            setMembers(response.members);
+        }
+
+        fetchMembers()
+    }, [])
 
     const handleChange = (e, value) => {
         window.location.href = `${value}?c=${code}`;
@@ -23,7 +35,7 @@ const ProjectHeader = () => {
             />
         </div>
         <p className="text-gray-400">{project?.type}</p>
-            <Box sx={{ width: '100%', borderBottom: 1, borderColor: 'divider' }}>
+            <Stack width="100%" direction='row' justifyContent="space-between" borderBottom={1} borderColor="divider">
                 <Tabs 
                     onChange={handleChange} 
                     value={pathname} 
@@ -33,11 +45,24 @@ const ProjectHeader = () => {
                 >
                     <Tab label="Tasks" value="/project/tasks" />
                     <Tab label="Team" value="/project/team" />
-                    <Tab label="Overview" value="3" />
-                    <Tab label="Requests" value="3" />
-                    <Tab label="Settings" value="3" />
+                    <Tab label="Overview" value="/project/overview" />
+                    <Tab label="Requests" value="/project/requests" />
+                    <Tab label="Settings" value="/project/settings" />
                 </Tabs>
-            </Box>
+                <AvatarGroup 
+                max={3} 
+                spacing="medium"
+                sx={{
+                    '& .MuiAvatar-root': {
+                    width: 35,
+                    height: 35,
+                    fontSize: 12,
+                    },
+                }}
+                >
+                {members.map(member => <Avatar sx={{ width: 35, height: 35 }} src={`data:image/jpeg;base64,${member.user.profile_pic}`} />)}
+                </AvatarGroup>
+            </Stack>
     </header>
 
 } 
