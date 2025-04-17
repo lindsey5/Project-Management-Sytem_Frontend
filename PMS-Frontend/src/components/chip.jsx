@@ -1,12 +1,12 @@
 import { Chip, Box } from "@mui/material";
 
-export const StatusChip = ({ label, color, sx }) => {
+export const StatusChip = ({label, color, sx}) => {
 
   return (
     <Chip
       label={label}
       icon={
-        <Box
+        color && <Box
           sx={{
             width: 10,
             height: 10,

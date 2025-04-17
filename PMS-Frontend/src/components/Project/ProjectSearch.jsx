@@ -71,7 +71,6 @@ const ProjectSearch = ({close}) => {
     useEffect(() => {
         const fetchProjects = async () => {
             const fetchedProjects = await getProjects();
-            //console.log(fetchedProjects)
             setProjects(fetchedProjects.projects.sort((a, b) => new Date(a.end_date) - new Date(b.end_date)))
         }
         fetchProjects();

@@ -2,18 +2,33 @@ import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import TableRowsOutlinedIcon from '@mui/icons-material/TableRowsOutlined';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
 import { Box } from '@mui/material';
-import { useContext, useState } from 'react';
-import Kanban from '../../../components/Task/Kanban';
+import { useContext, useEffect, useState } from 'react';
 import { CustomButton } from '../../../components/button';
 import AddIcon from '@mui/icons-material/Add';
 import { ProjectContext } from '../../../layouts/ProjectLayout';
 import CreateTask from '../../../components/Task/CreateTask/CreateTask';
+import { getTasks } from '../../../services/TaskService';
+import { lazy, Suspense } from 'react';
+
+
+const Kanban = lazy(() => import('../../../components/Task/Kanban/Kanban'));
 
 const Tasks = () => {
     const [alignment, setAlignment] = useState('Kanban');
     const { role } = useContext(ProjectContext)
     const [showCreate, setShowCreate] = useState(false);
     const [status, setStatus] = useState(null);
+    const { project } = useContext(ProjectContext);
+    const [tasks, setTasks] = useState([]);
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            const response = await getTasks(project.id);
+            setTasks(response.tasks);
+        }
+
+        fetchTasks();
+    },[])
 
     const handleChange = (newAlignment) => {
         setAlignment(newAlignment)
@@ -60,9 +75,10 @@ const Tasks = () => {
                 icon={<AddIcon fontSize='small' />}
                 onClick={() => setShowCreate(true)}
             >New Task</CustomButton>}
-
         </Box>
-        <Kanban showCreate={showCreateWithStatus}/>
+        <Suspense fallback={<div>Loading...</div>}>
+            <Kanban showCreate={showCreateWithStatus} tasks={tasks} setTasks={setTasks}/>
+        </Suspense>
     </div>
 }
 

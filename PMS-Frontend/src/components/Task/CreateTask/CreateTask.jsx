@@ -59,6 +59,7 @@ const CreateTask = ({open, close, currentStatus}) => {
     const { state, dispatch } = useTaskReducer();
     const [files, setFiles] = useState([]);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const { project } = useContext(ProjectContext);
 
     const handleSubmit = async (data) => {
@@ -69,12 +70,16 @@ const CreateTask = ({open, close, currentStatus}) => {
         else if(!data.status) setError('Set status.')
         else if(data.assigneesMemberId.length < 0) setError('Choose atleast 1 assignee')
         else {
-            console.log(await createTask({
+            setLoading(true);
+            const response = await createTask({
                 ...data,
                 project_id: project.id
-            }))
-        }
+            })
 
+            if(response.success) window.location.reload();
+
+            setLoading(false)
+        }
     }
 
     const handleFiles = (e) => {
@@ -100,10 +105,6 @@ const CreateTask = ({open, close, currentStatus}) => {
     const deleteFile = (index) => {
         setFiles(prev => prev.filter((f, i) => i !== index))
     }
-
-    useEffect(() => {
-        console.log(state)
-    }, [state])
 
     const openFile = (file) => {
         const fileURL = URL.createObjectURL(file);
@@ -226,6 +227,7 @@ const CreateTask = ({open, close, currentStatus}) => {
                     onClick={() => handleSubmit(state)}
                     icon={<AddIcon />}
                     sx={{ borderRadius: '10px'}}
+                    disabled={loading}
                 >
                     CREATE
                 </CustomButton>
