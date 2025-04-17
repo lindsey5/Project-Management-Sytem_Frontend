@@ -1,6 +1,6 @@
 import { Button } from "@mui/material"
 
-export const CustomButton = ({label, icon, sx, ...rest}) => {
+export const CustomButton = ({children, icon, sx, ...rest}) => {
     return <Button
         variant="contained"
         startIcon={icon}
@@ -14,6 +14,6 @@ export const CustomButton = ({label, icon, sx, ...rest}) => {
         }}
         {...rest}
     >
-    {label}
+    {children}
     </Button>
 }

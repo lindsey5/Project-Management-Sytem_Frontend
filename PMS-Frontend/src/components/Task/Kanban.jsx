@@ -18,20 +18,20 @@ const Board = () => {
 
 }
 
-const StatusHeader = ({currentStatus, ...rest}) => {
+const StatusHeader = ({showCreate, currentStatus, ...rest}) => {
     return <div className="flex items-center justify-between flex-1" {...rest}>
         <StatusChip 
             label={currentStatus}
             color={status[currentStatus]}
             sx={{fontSize: '15px', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'white'}}
         />
-        <IconButton aria-label="delete" size="small" sx={{backgroundColor: 'white'}}>
-            <AddIcon fontSize="inherit" sx={{ color: '#2328ff'}}/>
+        <IconButton size="small" onClick={() => showCreate(currentStatus)}>
+            <AddIcon fontSize="medium" sx={{ color: '#2328ff'}}/>
         </IconButton>
     </div>
 }
 
-const Kanban = () => {
+const Kanban = ({ showCreate }) => {
     const [cards, setCards] = useState([
       { id: 1, status: 'To Do' },
       { id: 2, status: 'To Do' },
@@ -71,7 +71,7 @@ const Kanban = () => {
       <div className="p-3 min-w-[1080px] relative">
         <div className="grid grid-cols-5 gap-3 border-b-1 border-gray-300 py-3">
           {statuses.map(status => (
-            <StatusHeader key={status} currentStatus={status} />
+            <StatusHeader key={status} currentStatus={status} showCreate={showCreate}/>
           ))}
         </div>
         <div className="grid grid-cols-5 py-3 box-border">
@@ -79,8 +79,8 @@ const Kanban = () => {
             <div 
               key={status}
               className="min-h-[200px]"
-              onDragOver={role === 'Admin' && handleDragOver}
-              onDrop={(e) => role === 'Admin' && handleDrop(e, status)}
+              onDragOver={role === 'Admin' ? handleDragOver : undefined}
+              onDrop={(e) => role === 'Admin' ? handleDrop(e, status) : undefined}
             >
               {cards
                 .filter(card => card.status === status)
@@ -89,7 +89,7 @@ const Kanban = () => {
                     key={card.id}
                     className={`bg-white m-3 ${role === 'Admin' && 'cursor-pointer'}`}
                     draggable={!loading && role === 'Admin'}
-                    onDragStart={(e) => role === 'Admin' && handleDragStart(e, card.id)}
+                    onDragStart={(e) => role === 'Admin' ? handleDragStart(e, card.id) : undefined}
                   />
                 ))
               }

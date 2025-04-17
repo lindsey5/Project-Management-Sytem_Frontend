@@ -20,6 +20,8 @@ const projectReducer = (state, action) => {
             return { ...state, end_date: action.payload }
         case 'SET_CATEGORY':
             return { ... state, type: action.payload }
+        case 'CLEAR':
+            return projectState
         default: 
             return state
     }

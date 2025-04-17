@@ -10,39 +10,63 @@ import { formatDate } from "../../utils/utils";
 import { toast } from "react-toastify";
 import project_types from '../../../project_types.json'
 import TextField from '@mui/material/TextField';
+import { styled } from '@mui/system';
+import CircularProgress from '@mui/material/CircularProgress';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import { green } from '@mui/material/colors';
+import { CustomButton } from "../button";
+import dayjs from "dayjs";
 
 const filter = createFilterOptions();
+
+const GroupHeader = styled('div')(({ theme }) => ({
+    position: 'sticky',
+    top: '-8px',
+    padding: '4px 10px',
+    color: "gray",
+    backgroundColor: "white"
+  }));
+  
+  const GroupItems = styled('ul')({
+    padding: 0,
+  });
 
 const CreateProjectModal = ({close}) => {
     const { state, dispatch } = useProjectReducer();
     const [error, setError] = useState('');
     const [value, setValue] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
         setError('')
+        setLoading(true);
         if(!state.title) setError('Title is required')
         else if(!state.description) setError('Description is required')
         else if(!state.start_date) setError('Start date is required')
         else if(!state.end_date) setError('Deadline is required')
         else if(!value) setError('Project type is required')
-        else if(state.start_date.$d > state.end_date.$d) setError("Invalid Deadline")
+        else if(state.start_date > state.end_date) setError("Invalid Deadline")
         else {
             const response = await CreateProject({
                 ...state, 
                 type: value.name,
-                start_date: formatDate(state.start_date?.$d),
-                end_date: formatDate(state.end_date.$d)
+                start_date: formatDate(state.start_date),
+                end_date: formatDate(state.end_date)
             })
             if(response.success) {
-                window.location.href = "/projects"
+                dispatch({type: 'CLEAR'})
+                window.location.href = `/project/tasks?c=${response.data.project_code}`
             }else{
                 toast.error("Failed, please try again.")
             }
         }
+        setLoading(false)
     }
 
-    const options = Array.from(new Set(project_types)).sort((a, b) => a.name.localeCompare(b.name)).sort((a, b) => a.category.localeCompare(b.category))
+    const deduplicatedOptions = project_types.filter(
+        (option, index, self) =>
+          index === self.findIndex((o) => o.name === option.name)
+      ).sort((a, b) => a.category.localeCompare(b.category));
 
     return <div className="fixed inset-0 bg-gray-600/50 flex justify-center items-center z-50">
         <div className="px-6 py-10 w-[90%] max-w-128 bg-white rounded-xl">
@@ -54,8 +78,9 @@ const CreateProjectModal = ({close}) => {
                 <p className="my-2 text-gray-400">Start Date</p>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker 
-                        value={state.start_date}
-                        onChange={(value) => dispatch({type: 'SET_START_DATE', payload: value})}
+                        value={dayjs(state.start_date)}
+                        minDate={dayjs()}
+                        onChange={(value) => dispatch({type: 'SET_START_DATE', payload: value.$d})}
                     />
                 </LocalizationProvider>
             </div>
@@ -64,8 +89,9 @@ const CreateProjectModal = ({close}) => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker 
                         className="w-full"
-                        value={state.end_date}
-                        onChange={(value) => dispatch({type: 'SET_END_DATE', payload: value})}
+                        minDate={dayjs(state.start_date)}
+                        value={dayjs(state.end_date)}
+                        onChange={(value) => dispatch({type: 'SET_END_DATE', payload: value.$d})}
                     />
                 </LocalizationProvider>
             </div>
@@ -75,24 +101,21 @@ const CreateProjectModal = ({close}) => {
                 groupBy={(option) => option.category}
                 onChange={(event, newValue) => {
                     if (typeof newValue === 'string') {
-                    setValue({
-                        name: newValue,
-                    });
+                    setValue({ name: newValue });
                     } else if (newValue && newValue.inputValue) {
-                    // Create a new value from the user input
-                    setValue({
-                        name: newValue.inputValue,
-                    });
+                    // Creating a new value
+                    setValue({ name: newValue.inputValue });
                     } else {
                     setValue(newValue);
                     }
                 }}
                 filterOptions={(options, params) => {
                     const filtered = filter(options, params);
-
                     const { inputValue } = params;
-                    // Suggest the creation of a new value
-                    const isExisting = options.some((option) => inputValue === option.title);
+
+                    const isExisting = options.some(
+                    (option) => inputValue === option.name
+                    );
                     if (inputValue !== '' && !isExisting) {
                     filtered.push({
                         inputValue,
@@ -106,42 +129,60 @@ const CreateProjectModal = ({close}) => {
                 clearOnBlur
                 handleHomeEndKeys
                 id="free-solo-with-text-demo"
-                options={options}
+                options={deduplicatedOptions}
                 getOptionLabel={(option) => {
-                    // Value selected with enter, right from the input
                     if (typeof option === 'string') {
                     return option;
                     }
-                    // Regular option
                     return option.name;
                 }}
+                renderGroup={(params) => (
+                    <li key={params.key}>
+                    <GroupHeader>{params.group}</GroupHeader>
+                    <GroupItems>{params.children}</GroupItems>
+                    </li>
+                )}
                 renderOption={(props, option) => {
                     const { key, ...optionProps } = props;
+                    const uniqueKey = `${option.name}-${option.category || 'uncategorized'}`;
                     return (
-                    <li key={key} {...optionProps}>
+                    <li key={uniqueKey} {...optionProps}>
                         {option.name}
                     </li>
                     );
                 }}
-                size='medium'
+                size="medium"
                 sx={{ width: '100%', marginTop: '30px' }}
                 freeSolo
                 renderInput={(params) => (
                     <TextField {...params} label="Project Type" />
                 )}
-            />
+                />
             <p className="text-red-600">{error}</p>
             <div className="flex flex-row-reverse gap-3 mt-8">
-            <button 
-                className="bg-black text-white p-2 rounded-lg cursor-pointer hover:bg-gray-600"
+            <CustomButton 
+                sx={{borderRadius: '10px'}}
                 onClick={handleSubmit}
-            >Create</button>
+            >CREATE</CustomButton>
+                {loading && (
+                <CircularProgress
+                    size={24}
+                    sx={{
+                    color: green[500],
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-12px',
+                    marginLeft: '-12px',
+                    }}
+                />
+                )}
             <button className="p-2 rounded-lg cursor-pointer hover:bg-gray-200"
                 onClick={close}
             >Cancel</button>
             </div>
         </div>
+
     </div>
 }
-
 export default CreateProjectModal

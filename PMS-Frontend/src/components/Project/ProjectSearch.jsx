@@ -52,26 +52,6 @@ const ProjectSearch = ({close}) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [input, setInput] = useState('');
 
-    const StatusButton = ({label, value}) => {
-        return <Button
-            variant="contained"
-            sx={{ 
-                borderRadius: '20px',
-                backgroundColor: alignment === value ? 'black' : 'white',
-                color: alignment === value ? 'white' : 'black',
-                '&:hover': {
-                backgroundColor: alignment === value ? '#6b7280' : '#e5e7eb'
-                },
-                paddingY: '4px',
-                paddingX: '6px',
-                boxShadow: 'none'
-            }}
-            onClick={() => setAlignment(value)}
-        >
-        {label}
-        </Button>
-    }
-
     const filteredProjects = useMemo(() => {
         return projects.filter(project => {
             return project.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -91,6 +71,7 @@ const ProjectSearch = ({close}) => {
     useEffect(() => {
         const fetchProjects = async () => {
             const fetchedProjects = await getProjects();
+            //console.log(fetchedProjects)
             setProjects(fetchedProjects.projects.sort((a, b) => new Date(a.end_date) - new Date(b.end_date)))
         }
         fetchProjects();
@@ -136,9 +117,8 @@ const ProjectSearch = ({close}) => {
                         '&:hover': { backgroundColor: alignment === "All" ? '#6b7280' : '#e5e7eb'} 
                     }}
                     onClick={() => setAlignment("All")}
-                />
+                >All</CustomButton>
                 <CustomButton 
-                    label={`Active (${projects.filter(p => p.status === 'Active').length})`} 
                     size="small"
                     sx={{
                         backgroundColor: alignment === "Active" ? 'black' : '#f3f4f6',
@@ -146,9 +126,8 @@ const ProjectSearch = ({close}) => {
                         '&:hover': { backgroundColor: alignment === "Active" ? '#6b7280' : '#e5e7eb'} 
                     }}
                     onClick={() => setAlignment("Active")}
-                />
+                >{`Active (${projects.filter(p => p.status === 'Active').length})`} </CustomButton>
                 <CustomButton 
-                    label={`On Hold (${projects.filter(p => p.status === 'On Hold').length})`} 
                     size="small"
                     sx={{
                         backgroundColor: alignment === "On Hold" ? 'black' : '#f3f4f6',
@@ -156,9 +135,8 @@ const ProjectSearch = ({close}) => {
                         '&:hover': { backgroundColor: alignment === "On Hold" ? '#6b7280' : '#e5e7eb'} 
                     }}
                     onClick={() => setAlignment("On Hold")}
-                />
+                >{`On Hold (${projects.filter(p => p.status === 'On Hold').length})`} </CustomButton>
                 <CustomButton 
-                    label={`Closed (${projects.filter(p => p.status === 'Closed').length})`} 
                     size="small"
                     sx={{
                         backgroundColor: alignment === "Closed" ? 'black' : '#f3f4f6',
@@ -166,7 +144,7 @@ const ProjectSearch = ({close}) => {
                         '&:hover': { backgroundColor: alignment === "Closed" ? '#6b7280' : '#e5e7eb'} 
                     }}
                     onClick={() => setAlignment("Closed")}
-                />
+                >{`Closed (${projects.filter(p => p.status === 'Closed').length})`} </CustomButton>
             </Box>
             <div className='overflow-y-auto flex-1 '>
                 {filteredProjects.map(project => {

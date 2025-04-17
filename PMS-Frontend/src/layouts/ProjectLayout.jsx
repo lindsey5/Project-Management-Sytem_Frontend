@@ -25,12 +25,12 @@ const ProjectLayout = () => {
         getAuthorize()
     }, [])
 
-    return <ProjectContext.Provider value={{ project, code, role }}>
-        <div className="box-border flex flex-col h-full">
-            <ProjectHeader />
-            <Outlet />
-        </div>
-    </ProjectContext.Provider>
+    return project && role ? <ProjectContext.Provider value={{ project, code, role }}>
+    <div className="box-border flex flex-col h-full">
+        <ProjectHeader />
+        <Outlet />
+    </div>
+</ProjectContext.Provider> : null
 }
 
 export default ProjectLayout

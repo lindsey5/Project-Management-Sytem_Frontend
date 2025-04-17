@@ -84,9 +84,12 @@ const Team = () => {
             const response = await getMembers(project_code);
 
             if(response.success){
-                const fetchedMembers = response.members.map(r => ({...r.user, role: r.role, joined_at: r.joined_At}))
-                
-                setMembers([{...response.creator, role: 'Admin'}, ...fetchedMembers]);
+                const fetchedMembers = response.members.map(r => {
+                    const { user, ...rest } = r
+                    const { id, ...userWithoutId } = user
+                    return {...rest, ...userWithoutId}
+                })
+                setMembers(fetchedMembers);
             }
         }
 
@@ -97,16 +100,16 @@ const Team = () => {
     return <main className="w-full h-full overflow-y-auto py-10 p-5">
         <CustomizedTables 
             cols={<TableRow>
-                    <StyledTableCell align="center">Fullname</StyledTableCell>
-                    <StyledTableCell align="center">Email</StyledTableCell>
-                    <StyledTableCell align="center">Role</StyledTableCell>
-                    <StyledTableCell align="center">Joined At</StyledTableCell>
-                    {role === 'Admin' && <StyledTableCell align="center">Action</StyledTableCell>}
+                    <StyledTableCell align="left">Fullname</StyledTableCell>
+                    <StyledTableCell align="left">Email</StyledTableCell>
+                    <StyledTableCell align="left">Role</StyledTableCell>
+                    <StyledTableCell align="left">Joined At</StyledTableCell>
+                    {role === 'Admin' && <StyledTableCell align="left">Action</StyledTableCell>}
             </TableRow>}
             rows={members.length > 0 && members.map((member, i) => {
                 return <StyledTableRow key={i}>
                     <StyledTableCell
-                        sx={{display: 'flex', alignItems: 'center', gap: 2, paddingX: 10}}
+                        sx={{display: 'flex', alignItems: 'center', gap: 2}}
                     >
                         <Avatar
                             src={`data:image/jpeg;base64,${member.profile_pic}`}
@@ -114,11 +117,11 @@ const Team = () => {
                         />
                         {member.firstname} {member.lastname}
                     </StyledTableCell>
-                    <StyledTableCell align="center">{member.email}</StyledTableCell>
-                    <StyledTableCell align="center">{member.role}</StyledTableCell>
-                    <StyledTableCell align="center">{new Date(member.role === 'Admin' ? project.created_At : member.joined_at).toLocaleDateString()}</StyledTableCell>
-                    {role === 'Admin' &&  <StyledTableCell align="center">
-                        {project.user_id !== member.id && 
+                    <StyledTableCell align="left">{member.email}</StyledTableCell>
+                    <StyledTableCell align="left">{member.role}</StyledTableCell>
+                    <StyledTableCell align="left">{new Date(member.joined_At).toLocaleDateString()}</StyledTableCell>
+                    {role === 'Admin' &&  <StyledTableCell align="left">
+                        {project.user_id !== member.user_Id && 
                         user.id !== member.id && <>
                         <IconButton 
                             id="basic-button"
@@ -153,7 +156,6 @@ const Team = () => {
             isOpen={memberId}
             variant="error"
         />
-        
     </main>
 }
 
