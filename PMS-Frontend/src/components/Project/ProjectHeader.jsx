@@ -50,15 +50,17 @@ const ProjectHeader = () => {
                     <Tab label="Settings" value="/project/settings" />
                 </Tabs>
                 <AvatarGroup 
-                max={3} 
-                spacing="medium"
-                sx={{
-                    '& .MuiAvatar-root': {
-                    width: 35,
-                    height: 35,
-                    fontSize: 12,
-                    },
-                }}
+                    max={3} 
+                    spacing="medium"
+                    sx={{
+                        '& .MuiAvatar-root': {
+                        width: 35,
+                        height: 35,
+                        fontSize: 12,
+                        },
+                        cursor: 'pointer'
+                    }}
+                    onClick={() => window.location.href = `/project/team?c=${code}`}
                 >
                 {members.map(member => <Avatar sx={{ width: 35, height: 35 }} src={`data:image/jpeg;base64,${member.user.profile_pic}`} />)}
                 </AvatarGroup>

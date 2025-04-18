@@ -27,6 +27,7 @@ import useTaskReducer from "../../../hooks/taskReducer";
 import { Chip } from "@mui/material";
 import { CustomButton } from "../../button";
 import { createTask } from "../../../services/TaskService";
+import { createTaskAttachment } from "../../../services/TaskAttachmentService";
 
 const style = {
     bgcolor: 'background.paper',
@@ -74,8 +75,16 @@ const CreateTask = ({open, close, currentStatus}) => {
                 ...data,
                 project_id: project.id
             })
+            if(response.success) {
+                for(const file in files){
+                    await createTaskAttachment(response.task.id, file)
+                }
 
-            if(response.success) window.location.reload();
+                window.location.reload();
+            }
+            files.forEach(async (file) => {
+              await createTaskAttachment(response.task.id, file);
+            })
 
             setLoading(false)
         }

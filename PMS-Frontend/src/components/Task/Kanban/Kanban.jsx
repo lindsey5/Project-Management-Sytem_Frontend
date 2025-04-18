@@ -81,62 +81,70 @@ const Kanban = ({ showCreate, tasks, setTasks }) => {
           ))}
         </div>
         <div className="grid grid-cols-5 py-3 gap-3 box-border">
-          {statuses.map(status => (
-            <div 
-              key={status}
-              className="min-h-[200px]"
-              onDragOver={role === 'Admin' ? handleDragOver : undefined}
-              onDrop={(e) => role === 'Admin' ? handleDrop(e, status) : undefined}
-            >
-              {tasks && tasks.length > 0 && tasks
-                .filter(task => task.status === status)
-                .map(task => (
-                    <Card
-                      key={task.id}
-                      variant="outlined"
-                      sx={{ borderRadius: '20px', ':hover' : { backgroundColor: '#F9FAFB'}}}
-                      className={`shadow-xl flex flex-col gap-3 items-start px-2 py-4 bg-white m-3 ${role === 'Admin' && 'cursor-pointer'}`}
-                      draggable={!loading && role === 'Admin'}
-                      onDragStart={(e) => role === 'Admin' ? handleDragStart(e, task.id) : undefined}
-                  >
-                    <StatusChip 
-                      color={lightPriorityColor[task.priority]}
-                      label={task.priority}
-                    />
-                    <Typography variant="h6">
-                      {task.task_Name}
-                    </Typography>
-                    <Typography variant="subtitle1" fontSize={'14px'} color="gray">
-                      Due: {formatDateTime(task.due_date)}
-                    </Typography>
-                    <Stack direction="row" justifyContent={"space-between"} width="100%">
-                      <Stack direction="row" gap={1}>
-                        <IconButton size="small">
-                          <ChatBubbleOutlineOutlinedIcon fontSize="inherit" />
-                        </IconButton>
-                        <IconButton size="small">
-                          <AttachFileOutlinedIcon fontSize="inherit" />
-                        </IconButton>
-                      </Stack>
-                      <AvatarGroup 
-                        max={3} 
-                        spacing="medium"
-                        sx={{
-                          '& .MuiAvatar-root': {
-                            width: 30,
-                            height: 30,
-                            fontSize: 12,
-                          },
-                        }}
-                      >
-                        {task.assignees.map(task => <Avatar sx={{ width: 30, height: 30 }} src={`data:image/jpeg;base64,${task.member.user.profile_pic}`} />)}
-                      </AvatarGroup>
-                    </Stack>
-                  </Card>
-                ))
-              }
-            </div>
-          ))}
+          {statuses.map(status => {
+
+
+            return <div 
+                      key={status}
+                      className="min-h-[200px]"
+                      onDragOver={role === 'Admin' ? handleDragOver : undefined}
+                      onDrop={(e) => role === 'Admin' ? handleDrop(e, status) : undefined}
+                    >
+                      {tasks && tasks.length > 0 && tasks
+                        .filter(task => task.status === status)
+                        .map(task => (
+                            <Card
+                              key={task.id}
+                              variant="outlined"
+                              sx={{ borderRadius: '20px', ':hover' : { backgroundColor: '#F9FAFB'}}}
+                              className={`shadow-xl flex flex-col gap-3 items-start px-2 py-4 bg-white m-3 ${role === 'Admin' && 'cursor-pointer'}`}
+                              draggable={!loading && role === 'Admin'}
+                              onDragStart={(e) => role === 'Admin' ? handleDragStart(e, task.id) : undefined}
+                          >
+                            <StatusChip 
+                              color={lightPriorityColor[task.priority]}
+                              label={task.priority}
+                            />
+                            <Typography variant="h6">
+                              {task.task_Name}
+                            </Typography>
+                            <Typography variant="subtitle1" fontSize={'14px'} color="gray">
+                              Due: {formatDateTime(task.due_date)}
+                            </Typography>
+                            {task.attachments.find(a => a.type.includes('image/')) && 
+                              <img 
+                                src={`data:image/jpeg;base64,${task.attachments.find(a => a.type.includes('image/')).content}`}
+                                className="bg-gray-100 rounded-lg w-full h-[100px]"
+                              />
+                            }
+                            <Stack direction="row" justifyContent={"space-between"} width="100%">
+                              <Stack direction="row" gap={1}>
+                                <IconButton size="small">
+                                  <ChatBubbleOutlineOutlinedIcon fontSize="inherit" />
+                                </IconButton>
+                                <IconButton size="small">
+                                  <AttachFileOutlinedIcon fontSize="inherit" />
+                                </IconButton>
+                              </Stack>
+                              <AvatarGroup 
+                                max={3} 
+                                spacing="medium"
+                                sx={{
+                                  '& .MuiAvatar-root': {
+                                    width: 30,
+                                    height: 30,
+                                    fontSize: 12,
+                                  },
+                                }}
+                              >
+                                {task.assignees.map(task => <Avatar sx={{ width: 30, height: 30 }} src={`data:image/jpeg;base64,${task.member.user.profile_pic}`} />)}
+                              </AvatarGroup>
+                            </Stack>
+                          </Card>
+                        ))
+                      }
+                    </div>
+          })}
         </div>
       </div>
     );

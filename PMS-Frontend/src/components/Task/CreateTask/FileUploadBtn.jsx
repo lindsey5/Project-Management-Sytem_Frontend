@@ -27,7 +27,7 @@ const FileUploadBtn = ({ handleFiles}) => {
                     type="file"
                     onChange={handleFiles}
                     multiple
-                    accept=".pdf,.doc,.docx,image/*,video/*,.xls,.xlsx,.zip,.rar"
+                    accept=".pdf,.doc,.docx,image/*,video/*,.xls,.xlsx"
                 />
             </Button>
 }

@@ -9,6 +9,7 @@ import { ProjectContext } from '../../../layouts/ProjectLayout';
 import CreateTask from '../../../components/Task/CreateTask/CreateTask';
 import { getTasks } from '../../../services/TaskService';
 import { lazy, Suspense } from 'react';
+import { getTaskAttachments } from '../../../services/TaskAttachmentService';
 
 
 const Kanban = lazy(() => import('../../../components/Task/Kanban/Kanban'));
@@ -24,11 +25,18 @@ const Tasks = () => {
     useEffect(() => {
         const fetchTasks = async () => {
             const response = await getTasks(project.id);
-            setTasks(response.tasks);
+            setTasks(await Promise.all(response.tasks.map(async(t) => {
+                const r = await getTaskAttachments(t.id);
+                return {...t, attachments: r.attachments}
+            })));
         }
 
         fetchTasks();
     },[])
+
+    useEffect(() => {
+        console.log(tasks)
+    }, [tasks])
 
     const handleChange = (newAlignment) => {
         setAlignment(newAlignment)
