@@ -68,3 +68,58 @@ export const downloadImageAsBase64 = async (imageUrl) => {
     return null;
   }
 };
+
+export const timeAgo = (date1, date2) => {
+  const diffInMs = date2 - date1; 
+
+  // Convert milliseconds into days, hours, minutes, and seconds
+  const diffInSeconds = Math.floor(diffInMs / 1000);
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  const diffInDays = Math.floor(diffInHours / 24);
+  
+  // Calculate the remaining hours, minutes, and seconds
+  const hours = diffInHours % 24;
+  const minutes = diffInMinutes % 60;
+  const seconds = diffInSeconds % 60;
+  
+  // Output in a time ago format
+  let timeAgo = "";
+  if (diffInDays > 0) {
+      timeAgo = `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+  } else if (hours > 0) {
+      timeAgo = `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  } else if (minutes > 0) {
+      timeAgo = `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  } else if (seconds > 0) {
+      timeAgo = `${seconds} second${seconds > 1 ? 's' : ''} ago`;
+  } else{
+      timeAgo = 'Just now'
+  }
+
+  return timeAgo
+}
+
+export const downloadFile = (file) => {
+    const fileUrl = `data:${file.type};base64,${file.content}`;
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = file.name;
+    link.click();
+}
+
+export const openFile = (file) => {
+  const fileURL = URL.createObjectURL(file);
+  window.open(fileURL);
+};
+
+export const base64ToBlob = (file) => {
+  const byteString = atob(file.content); // decode base64
+  const byteArray = new Uint8Array(byteString.length);
+
+  for (let i = 0; i < byteString.length; i++) {
+    byteArray[i] = byteString.charCodeAt(i);
+  }
+
+  return new Blob([byteArray], { type: file.type });
+}

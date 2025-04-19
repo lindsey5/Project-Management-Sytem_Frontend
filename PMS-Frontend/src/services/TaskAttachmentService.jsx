@@ -31,5 +31,19 @@ export const getTaskAttachments = async (task_id) => {
     }catch(error){
         return error.response ? error.response.data : error.message
     }
+}
+
+export const deleteTaskAttachment = async (id) => {
+    try{
+        const response = await axios.delete(`/api/task_attachment/${id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        return response.data
+
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
 
 }

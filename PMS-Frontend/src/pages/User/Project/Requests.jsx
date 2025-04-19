@@ -80,8 +80,12 @@ const Requests = () => {
 
     const handleSubmit = async (id, status) => {
         updateRequest(id, status)
-            .then(createMember({ project_id: project.id, user_id: userId}))
-        window.location.href = `/project/team?c=${code}`
+            .then(response => {
+                if(response.success) return createMember({ project_id: project.id, user_id: userId})
+            })
+            .then(r => {
+                if(r.success)  window.location.href = `/project/team?c=${code}`
+            })
     }
 
     return <main className="w-full h-full px-10 py-4">
@@ -132,6 +136,7 @@ const Requests = () => {
                 <StyledTableCell align="left">Fullname</StyledTableCell>
                 <StyledTableCell align="left">Email</StyledTableCell>
                 <StyledTableCell align="left">Request Date</StyledTableCell>
+                <StyledTableCell align="center">Status</StyledTableCell>
                 <StyledTableCell align="center">Action</StyledTableCell>
             </TableRow>}
             rows={requests.length > 0 && requests.map((request, i) => {
@@ -147,31 +152,35 @@ const Requests = () => {
                     </StyledTableCell>
                     <StyledTableCell align="left">{request.user.email}</StyledTableCell>
                     <StyledTableCell align="left">{formatDateTime(convertToAsiaTime(request.request_Date))}</StyledTableCell>
+                    <StyledTableCell align="center">{request.status}</StyledTableCell>
                     <StyledTableCell align="center">
-                        <Tooltip title="Approve">
-                            <IconButton 
-                                color="success"
-                                onClick={() => {
-                                    setShowApprove(true);
-                                    setId(request.id)
-                                    setUserId(request.user_Id)
-                                }}
-                            >
-                                <CheckCircleIcon fontSize="inherit"/>
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Decline">
-                            <IconButton 
-                                color="error"
-                                onClick={() => {
-                                    setShowDecline(true);
-                                    setId(request.id)
-                                    setUserId(request.user_Id)
-                                }}
-                            >
-                                <DeleteIcon fontSize="inherit"/>
-                            </IconButton>
-                        </Tooltip>
+                        {request.status === "Pending" && 
+                        <>
+                            <Tooltip title="Approve">
+                                <IconButton 
+                                    color="success"
+                                    onClick={() => {
+                                        setShowApprove(true);
+                                        setId(request.id)
+                                        setUserId(request.user_Id)
+                                    }}
+                                >
+                                    <CheckCircleIcon fontSize="inherit"/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Decline">
+                                <IconButton 
+                                    color="error"
+                                    onClick={() => {
+                                        setShowDecline(true);
+                                        setId(request.id)
+                                        setUserId(request.user_Id)
+                                    }}
+                                >
+                                    <DeleteIcon fontSize="inherit"/>
+                                </IconButton>
+                            </Tooltip>
+                        </>}
                     </StyledTableCell>
                 </StyledTableRow>
             })}

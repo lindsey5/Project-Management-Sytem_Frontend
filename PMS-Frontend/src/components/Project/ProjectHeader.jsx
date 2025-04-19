@@ -7,15 +7,22 @@ import { Stack, Tabs } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { StatusChip } from "../chip";
 import { getMembers } from "../../services/MemberService";
+import { UserContext } from "../../context/userContext";
 
 const ProjectHeader = () => {
-    const { project, code } = useContext(ProjectContext);
+    const { project, code, role } = useContext(ProjectContext);
     const pathname = useLocation().pathname;
     const [members, setMembers] = useState([]);
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
         const fetchMembers = async () => {
             const response = await getMembers(code);
+            const index = response.members.findIndex(m => m.user.email == user.email);
+            if (index > -1) {
+                const [item] = response.members.splice(index, 1);
+                response.members.unshift(item);
+            }
             setMembers(response.members);
         }
 
@@ -46,8 +53,8 @@ const ProjectHeader = () => {
                     <Tab label="Tasks" value="/project/tasks" />
                     <Tab label="Team" value="/project/team" />
                     <Tab label="Overview" value="/project/overview" />
-                    <Tab label="Requests" value="/project/requests" />
-                    <Tab label="Settings" value="/project/settings" />
+                    {role === "Admin" && <Tab label="Requests" value="/project/requests" />}
+                    {role == "Admin" && <Tab label="Settings" value="/project/settings" />}
                 </Tabs>
                 <AvatarGroup 
                     max={3} 

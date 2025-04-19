@@ -56,7 +56,6 @@ const Team = () => {
 
         fetchMembers();
     },[])
-    
 
     return <main className="w-full h-full overflow-y-auto py-10 p-5">
         <CustomizedTable
@@ -82,8 +81,8 @@ const Team = () => {
                     <StyledTableCell align="left">{member.role}</StyledTableCell>
                     <StyledTableCell align="left">{formatDateTime(convertToAsiaTime(member.joined_At))}</StyledTableCell>
                     {role === 'Admin' &&  <StyledTableCell align="left">
-                        {project.user_id !== member.user_Id && 
-                        user.id !== member.id && <>
+                        {((user.email === project.user.email && user.email !== member.email) ||
+                        (member.user_Id !== project.user_id && member.role !== 'Admin')) && <>
                         <IconButton 
                             id="basic-button"
                             aria-controls={open ? 'basic-menu' : undefined}

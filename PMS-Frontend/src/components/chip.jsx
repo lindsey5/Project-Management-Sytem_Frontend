@@ -1,10 +1,12 @@
 import { Chip, Box } from "@mui/material";
 
-export const StatusChip = ({label, color, sx}) => {
+export const StatusChip = ({label, color, ...rest}) => {
 
   return (
     <Chip
+      {...rest}
       label={label}
+      size="medium"
       icon={
         color && <Box
           sx={{
@@ -23,7 +25,6 @@ export const StatusChip = ({label, color, sx}) => {
           marginRight: '0px',
         },
         backgroundColor: '#f3f4f6',
-        ...sx
       }}
     />
   );

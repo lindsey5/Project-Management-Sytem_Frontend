@@ -7,27 +7,25 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import FormControl from '@mui/material/FormControl';
-import CircleIcon from '@mui/icons-material/Circle';
-import InputLabel from "@mui/material/InputLabel";
 import { useEffect, useState, useContext } from "react";
-import { getMembers } from "../../../services/MemberService";
+import { getMembers } from "../../services/MemberService";
 import { useSearchParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { ProjectContext } from "../../../layouts/ProjectLayout";
-import MembersAutocomplete from "./AutoComplete";
-import FileUploadBtn from "./FileUploadBtn";
-import useTaskReducer from "../../../hooks/taskReducer";
+import { ProjectContext } from "../../layouts/ProjectLayout";
+import MembersAutocomplete from "../AutoComplete";
+import FileUploadBtn from "../FileUploadBtn";
+import useTaskReducer from "../../hooks/taskReducer";
 import { Chip } from "@mui/material";
-import { CustomButton } from "../../button";
-import { createTask } from "../../../services/TaskService";
-import { createTaskAttachment } from "../../../services/TaskAttachmentService";
+import { CustomButton } from "../button";
+import { createTask } from "../../services/TaskService";
+import { createTaskAttachment } from "../../services/TaskAttachmentService";
+import StatusSelect from "./Select";
+import { status, priority } from '../../data/taskData';
+import { openFile } from "../../utils/utils";
 
 const style = {
     bgcolor: 'background.paper',
@@ -36,20 +34,6 @@ const style = {
     width: '90%',
     maxWidth: '450px'
 };
-
-const status = [
-    { name: "To Do", color: '#951ff7'},
-    { name: "In Progress", color: "#e2f069"},
-    { name: "In Review", color: "#194bd3"},
-    { name: "Completed", color: "#10B981"},
-    { name: "Error", color: "#F87171"}
-]
-
-const priority = [
-    { name: "High", color: "red"},
-    { name: "Medium", color: "orange"},
-    { name: "Low", color: "green"}
-]
 
 const today = dayjs();
 
@@ -68,7 +52,6 @@ const CreateTask = ({open, close, currentStatus}) => {
         if(!data.task_name) setError('Task name is required.')
         else if(!data.priority) setError('Set priority.')
         else if(!data.status) setError('Set status.')
-        else if(data.assigneesMemberId.length < 0) setError('Choose atleast 1 assignee')
         else {
             setLoading(true);
             const response = await createTask({
@@ -76,23 +59,24 @@ const CreateTask = ({open, close, currentStatus}) => {
                 project_id: project.id
             })
             if(response.success) {
-                for(const file in files){
-                    await createTaskAttachment(response.task.id, file)
-                }
-
+                
+                files.forEach(async (file) => {
+                    await createTaskAttachment(response.task.id, file);
+                })
+                  
                 window.location.reload();
             }
-            files.forEach(async (file) => {
-              await createTaskAttachment(response.task.id, file);
-            })
 
             setLoading(false)
         }
     }
 
     const handleFiles = (e) => {
+        setLoading(true)
         const selectedFiles = Array.from(e.target.files)
+        if(selectedFiles === 0) return
         setFiles(prev => [...prev, ...selectedFiles]);
+        setLoading(false)
     };
 
     useEffect(() => {
@@ -114,25 +98,22 @@ const CreateTask = ({open, close, currentStatus}) => {
         setFiles(prev => prev.filter((f, i) => i !== index))
     }
 
-    const openFile = (file) => {
-        const fileURL = URL.createObjectURL(file);
-        window.open(fileURL);
-    }
-
     useEffect(() => {
         const fetchMembers = async() => {
             const response = await getMembers(project_code)
-            const fetchedMembers = response.members.map(m => {
-                const { user,  ...details } = m; 
-                const { id, ...rest} = user
-                return {...details , ...rest}
-            })
-
-            setMembers([...fetchedMembers])
+            setMembers(response.members)
         }
 
         fetchMembers()
     }, [])
+
+    const handleStatus = (e) => {
+        handleChange(e.target.value, "SET_STATUS")
+    }
+
+    const handlePriority = (e) => {
+        handleChange(e.target.value, "SET_PRIORITY")
+    }
 
     return <Modal
             open={open}
@@ -173,40 +154,18 @@ const CreateTask = ({open, close, currentStatus}) => {
                     onChange={(e) => handleChange(e.target.value, "SET_DESCRIPTION") }
                 />
                 <Stack sx={{ width: '100%'}} direction="row" gap={3}>
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Priority</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            label="Priority"
-                            value={state.priority}
-                            onChange={(e) => handleChange(e.target.value, "SET_PRIORITY") }
-                        >
-                        {priority.map(p => <MenuItem value={p.name}>
-                                <Box display="flex" alignItems="center" gap={1}>
-                                    <CircleIcon sx={{ color: p.color, fontSize: 14 }} />
-                                    {p.name}
-                                </Box>
-                            </MenuItem>)}
-                        </Select>
-                    </FormControl>
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Status</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            label="Status"
-                            value={state.status}
-                            onChange={(e) => handleChange(e.target.value, "SET_STATUS") }
-                        >
-                            {status.map(s => <MenuItem value={s.name}>
-                                <Box display="flex" alignItems="center" gap={1}>
-                                    <CircleIcon sx={{ color: s.color, fontSize: 14 }} />
-                                    {s.name}
-                                </Box>
-                            </MenuItem>)}
-                        </Select>
-                    </FormControl>
+                    <StatusSelect 
+                        label="Priority"
+                        handleChange={handlePriority}
+                        item={priority}
+                        value={state.priority}
+                    />
+                    <StatusSelect 
+                        label="Status"
+                        handleChange={handleStatus} 
+                        item={status} 
+                        value={state.status}
+                    />
                 </Stack>
                 <MembersAutocomplete members={members} handleChange={(e, values) => handleChange(values.map(value => value.id), "SET_ASSIGNEES")}/>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>

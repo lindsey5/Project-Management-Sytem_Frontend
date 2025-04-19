@@ -1,47 +1,39 @@
-import { StatusChip } from "../../chip"
+import { StatusChip } from "../chip"
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
-import { useContext, useState } from "react";
-import { ProjectContext } from "../../../layouts/ProjectLayout";
+import { lazy, Suspense, useContext, useState } from "react";
+import { ProjectContext } from "../../layouts/ProjectLayout";
 import { Card, Stack, Typography } from "@mui/material";
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
-import { formatDateTime } from "../../../utils/utils";
+import { convertToAsiaTime, formatDateTime } from "../../utils/utils";
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import { updateTask } from "../../../services/TaskService";
+import { updateTask } from "../../services/TaskService";
+import Badge from '@mui/material/Badge';
+import { UserContext } from "../../context/userContext";
+import TaskDetails from "./TaskDetails";
+import { statusConfig } from "../config";
 
-const statusType = {
-    "To Do" : " #951ff7",
-    "In Progress" : " #e2f069",
-    "In Review" : " #194bd3",
-    "Completed" : " #10B981",
-    "Error" : " #F87171" 
-}
-
-const lightPriorityColor = {
-    "High" : "red",    
-    "Medium" : "orange" , 
-    "Low": "green"   
-}
-
-
-const StatusHeader = ({showCreate, currentStatus, ...rest}) => {
+const StatusHeader = ({showCreate, currentStatus, showButton, ...rest}) => {
     return <div className="flex items-center justify-between flex-1" {...rest}>
         <StatusChip 
             label={currentStatus}
-            color={statusType[currentStatus]}
-            sx={{fontSize: '15px', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'white'}}
+            size="medium"
+            color={statusConfig[currentStatus]}
+            sx={{ fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'white'}}
         />
-        <IconButton size="small" onClick={() => showCreate(currentStatus)}>
+        {showButton && <IconButton size="small" onClick={() => showCreate(currentStatus)}>
             <AddIcon fontSize="medium" sx={{ color: '#2328ff'}}/>
-        </IconButton>
+        </IconButton>}
     </div>
 }
 
 const Kanban = ({ showCreate, tasks, setTasks }) => {
     const [loading, setLoading] = useState(false); 
+    const { user } = useContext(UserContext);
     const { role } = useContext(ProjectContext);
+    const [selectedTask, setSelectedTask] = useState(null);
 
     const handleDragStart = (e, task_id) => {
       e.dataTransfer.setData('task_id', task_id);
@@ -59,12 +51,12 @@ const Kanban = ({ showCreate, tasks, setTasks }) => {
 
       const response = await updateTask(taskToUpdate.id, {
         ...taskToUpdate,
-        status: newStatus
+        status: newStatus,
       })
 
       if(response.success) {
         setTasks(tasks.map(task => 
-          task.id === taskToUpdate.id ? { ...task, status: newStatus } : task
+          task.id === taskToUpdate.id ? { ...task, status: newStatus,  updated_At: new Date() } : task
         ));
       }
       
@@ -74,47 +66,58 @@ const Kanban = ({ showCreate, tasks, setTasks }) => {
     const statuses = ['To Do', 'In Progress', 'In Review', 'Error', 'Completed'];
   
     return (
-      <div className="p-3 min-w-[1440px] relative">
+      <div className="w-full p-3 min-w-[1000px]">
+        <TaskDetails closeModal={() => setSelectedTask(null)} open={selectedTask} task={selectedTask}/>
         <div className="grid grid-cols-5 gap-3 border-b-1 border-gray-300 py-3">
           {statuses.map(status => (
-            <StatusHeader key={status} currentStatus={status} showCreate={showCreate}/>
+            <StatusHeader key={status} currentStatus={status} showCreate={showCreate} showButton={role === "Admin"}/>
           ))}
         </div>
         <div className="grid grid-cols-5 py-3 gap-3 box-border">
           {statuses.map(status => {
-
-
             return <div 
                       key={status}
                       className="min-h-[200px]"
-                      onDragOver={role === 'Admin' ? handleDragOver : undefined}
-                      onDrop={(e) => role === 'Admin' ? handleDrop(e, status) : undefined}
+                      onDragOver={handleDragOver}
+                      onDrop={(e) => handleDrop(e, status)}
                     >
                       {tasks && tasks.length > 0 && tasks
                         .filter(task => task.status === status)
-                        .map(task => (
-                            <Card
+                        .map(task => {
+                          const index = task.assignees.findIndex(a => a.member.user.email == user.email);
+                          if (index > -1) {
+                              const [item] = task.assignees.splice(index, 1);
+                              task.assignees.unshift(item);
+                          }
+                            return <Card
                               key={task.id}
                               variant="outlined"
                               sx={{ borderRadius: '20px', ':hover' : { backgroundColor: '#F9FAFB'}}}
-                              className={`shadow-xl flex flex-col gap-3 items-start px-2 py-4 bg-white m-3 ${role === 'Admin' && 'cursor-pointer'}`}
-                              draggable={!loading && role === 'Admin'}
-                              onDragStart={(e) => role === 'Admin' ? handleDragStart(e, task.id) : undefined}
+                              className="shadow-xl flex flex-col gap-3 items-start px-2 py-4 bg-white m-3 cursor-pointer"
+                              draggable={!loading}
+                              onDragStart={(e) => handleDragStart(e, task.id)}
+                              onClick={() => setSelectedTask(task)}
                           >
                             <StatusChip 
-                              color={lightPriorityColor[task.priority]}
+                              color={statusConfig[task.priority]}
                               label={task.priority}
                             />
                             <Typography variant="h6">
                               {task.task_Name}
                             </Typography>
-                            <Typography variant="subtitle1" fontSize={'14px'} color="gray">
-                              Due: {formatDateTime(task.due_date)}
+                            <Typography sx={{ 
+                                color: new Date(convertToAsiaTime(task.due_date)) <= new Date() && 
+                                task.status != "Completed" ? "red" : "gray",
+                              }} 
+                                variant="subtitle1" 
+                                fontSize={'14px'}
+                            >
+                              Due: {formatDateTime(convertToAsiaTime(task.due_date))}
                             </Typography>
                             {task.attachments.find(a => a.type.includes('image/')) && 
                               <img 
                                 src={`data:image/jpeg;base64,${task.attachments.find(a => a.type.includes('image/')).content}`}
-                                className="bg-gray-100 rounded-lg w-full h-[100px]"
+                                className="bg-gray-100 rounded-lg w-full"
                               />
                             }
                             <Stack direction="row" justifyContent={"space-between"} width="100%">
@@ -122,9 +125,11 @@ const Kanban = ({ showCreate, tasks, setTasks }) => {
                                 <IconButton size="small">
                                   <ChatBubbleOutlineOutlinedIcon fontSize="inherit" />
                                 </IconButton>
-                                <IconButton size="small">
-                                  <AttachFileOutlinedIcon fontSize="inherit" />
-                                </IconButton>
+                                  <IconButton size="small">
+                                    <Badge badgeContent={task.attachments.length} color="primary">
+                                      <AttachFileOutlinedIcon fontSize="inherit" />
+                                    </Badge>
+                                  </IconButton>
                               </Stack>
                               <AvatarGroup 
                                 max={3} 
@@ -141,7 +146,7 @@ const Kanban = ({ showCreate, tasks, setTasks }) => {
                               </AvatarGroup>
                             </Stack>
                           </Card>
-                        ))
+          })
                       }
                     </div>
           })}

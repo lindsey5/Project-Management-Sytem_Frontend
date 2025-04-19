@@ -26,6 +26,8 @@ const taskReducer = (state, action) => {
             return {...state, due_date: action.payload}
         case 'SET_ASSIGNEES':
             return {...state, assigneesMemberId: action.payload}
+        case 'SET_TASK':
+            return action.payload
         case 'CLEAR':
             return newTaskState
     }

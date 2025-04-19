@@ -12,7 +12,6 @@ export const createTask = async (data) => {
     }catch(error){
         return error.response ? error.response.data : error.message
     }
-
 }
 
 export const getTasks = async (id) => {
@@ -32,6 +31,7 @@ export const getTasks = async (id) => {
 }
 
 export const updateTask = async (id, updatedTask) => {
+    console.log(updatedTask)
     try{
         const response = await axios.put(`/api/task/${id}`, updatedTask, {
             headers: {
@@ -43,5 +43,18 @@ export const updateTask = async (id, updatedTask) => {
     }catch(error){
         return error.response ? error.response.data : error.message
     }
+}
 
+export const getTaskHistory = async (task_id) => {
+    try{
+        const response = await axios.get(`/api/task_history/${task_id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        return response.data
+
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
 }

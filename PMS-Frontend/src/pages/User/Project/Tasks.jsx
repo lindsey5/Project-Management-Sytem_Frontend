@@ -6,13 +6,13 @@ import { useContext, useEffect, useState } from 'react';
 import { CustomButton } from '../../../components/button';
 import AddIcon from '@mui/icons-material/Add';
 import { ProjectContext } from '../../../layouts/ProjectLayout';
-import CreateTask from '../../../components/Task/CreateTask/CreateTask';
+import CreateTask from '../../../components/Task/CreateTask';
 import { getTasks } from '../../../services/TaskService';
 import { lazy, Suspense } from 'react';
 import { getTaskAttachments } from '../../../services/TaskAttachmentService';
+import { CircularProgress } from '@mui/material';
 
-
-const Kanban = lazy(() => import('../../../components/Task/Kanban/Kanban'));
+const Kanban = lazy(() => import('../../../components/Task/Kanban'));
 
 const Tasks = () => {
     const [alignment, setAlignment] = useState('Kanban');
@@ -25,6 +25,7 @@ const Tasks = () => {
     useEffect(() => {
         const fetchTasks = async () => {
             const response = await getTasks(project.id);
+
             setTasks(await Promise.all(response.tasks.map(async(t) => {
                 const r = await getTaskAttachments(t.id);
                 return {...t, attachments: r.attachments}
@@ -33,10 +34,6 @@ const Tasks = () => {
 
         fetchTasks();
     },[])
-
-    useEffect(() => {
-        console.log(tasks)
-    }, [tasks])
 
     const handleChange = (newAlignment) => {
         setAlignment(newAlignment)
@@ -84,7 +81,9 @@ const Tasks = () => {
                 onClick={() => setShowCreate(true)}
             >New Task</CustomButton>}
         </Box>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div className='w-full h-full flex items-center justify-center'>
+            <CircularProgress size={60}/>
+        </div>}>
             <Kanban showCreate={showCreateWithStatus} tasks={tasks} setTasks={setTasks}/>
         </Suspense>
     </div>

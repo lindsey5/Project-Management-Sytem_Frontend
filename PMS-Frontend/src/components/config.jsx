@@ -9,3 +9,14 @@ export const iconSize = {
     md: "h-6",
     lg: "h-7"
 }
+
+export const statusConfig = {
+  "To Do" : " #951ff7",
+  "In Progress" : " #e2f069",
+  "In Review" : " #194bd3",
+  "Completed" : " #10B981",
+  "Error" : " #F87171",
+  "High" : "red",    
+  "Medium" : "orange" , 
+  "Low": "green"
+}

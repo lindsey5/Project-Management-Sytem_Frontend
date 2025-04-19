@@ -48,7 +48,7 @@ const ProjectSearch = ({close}) => {
     const [showCreate, setShowCreate] = useState(false);
     const [showJoin, setShowJoin] = useState(false);
     const [projects, setProjects] = useState([]);
-    const [alignment, setAlignment] = useState('All');
+    const [alignment, setAlignment] = useState('Active');
     const [searchTerm, setSearchTerm] = useState('');
     const [input, setInput] = useState('');
 
