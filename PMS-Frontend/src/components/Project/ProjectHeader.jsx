@@ -69,7 +69,7 @@ const ProjectHeader = () => {
                     }}
                     onClick={() => window.location.href = `/project/team?c=${code}`}
                 >
-                {members.map(member => <Avatar sx={{ width: 35, height: 35 }} src={`data:image/jpeg;base64,${member.user.profile_pic}`} />)}
+                {members.map(member => <Avatar key={member.id} sx={{ width: 35, height: 35 }} src={`data:image/jpeg;base64,${member.user.profile_pic}`} />)}
                 </AvatarGroup>
             </Stack>
     </header>

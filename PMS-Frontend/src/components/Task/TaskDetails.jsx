@@ -1,4 +1,4 @@
-import { Modal, Card, Typography, Stack, Box, Chip, TextField, Avatar, Button, IconButton } from "@mui/material";
+import { Modal, Card, Typography, Box, IconButton, TextField, Button } from "@mui/material";
 import { memo, useContext, useEffect, useState } from "react";
 import { createTaskAttachment, deleteTaskAttachment, getTaskAttachments } from "../../services/TaskAttachmentService";
 import { ProjectContext } from "../../layouts/ProjectLayout";
@@ -15,6 +15,7 @@ import { ConfirmDialog } from "../dialog";
 import Attachments from "./Attachments";
 import HistoryPanel from "./HistoryPanel";
 import TaskEditor from "./TaskEditor";
+import CommentEditor from "./CommentEditor";
 
 const style = {
     bgcolor: 'background.paper',
@@ -34,7 +35,8 @@ const TaskDetails = memo(({task, open, closeModal}) => {
     const [members, setMembers] = useState([]);
     const [history, setHistory] = useState([]);
     const [value, setValue] = useState("Comments");
-    const [selectedAttachment, setSelectedAttachment] = useState(null);
+    const [selectedAttachment, setSelectedAttachment] = useState(false);
+    const [showCommentEditor, setShowCommentEditor] = useState(false);
 
     const handleFiles = async (e) => {
         const selectedFiles = Array.from(e.target.files || []);
@@ -70,6 +72,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
         return () => {
             setMembers([]);
             setAttachments([]);
+            setShowCommentEditor(false)
         }
     }, [task])
 
@@ -78,7 +81,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
         if(response.success){
             setAttachments(attachments.filter(a => a.id != selectedAttachment))
             toast.success("Attachment removed.");
-            setSelectedAttachment(null);
+            setSelectedAttachment(false);
         }else{
             toast.success("Attachment failed to remove");
         }
@@ -97,7 +100,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                 text="Do you really want to delete this attachment?"
                 variant="error"
                 handleAgree={handleDelete}
-                handleClose={() => setSelectedAttachment(null)}
+                handleClose={() => setSelectedAttachment('')}
                 isOpen={selectedAttachment}
             />
                     {/* Left Container*/}
@@ -117,25 +120,56 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                                 </IconButton>}
                            </Box>
                            <Attachments 
-                            attachments={attachments}
-                            role={role}
-                            setSelectedAttachment={setSelectedAttachment}
-                            openFile={openFile}
+                                attachments={attachments}
+                                remove={(a) => role === 'Admin' ? setSelectedAttachment(a.id) : undefined}
+                                openFile={openFile}
                            />
-                            
                         </Box>
 
                         {/* Comments & History */}
-                        <Box sx={{ overflowY: 'auto', position: 'relative', marginTop: '20px'}}>
+                        <Box sx={{ 
+                            overflowY: 'auto', 
+                            boxSizing: 'border-box', 
+                            height: '100%', 
+                            position: 'relative', 
+                            marginTop: '20px'
+                        }}>
                             <TabContext value={value}>
-                                <Box sx={{ backgroundColor: 'white', zIndex: 1, borderBottom: 1, borderColor: 'divider', position: 'sticky', top: 0}}>
+                                <Box sx={{ backgroundColor: 'white', zIndex: 10, borderBottom: 1, borderColor: 'divider', position: 'sticky', top: 0}}>
                                 <TabList onChange={(e, value) => setValue(value)}>
                                     <Tab label="Comments" value="Comments" />
                                     <Tab label="History" value="History" />
                                 </TabList>
                                 </Box>
-                                <TabPanel value="Comments">
-                                    Comments
+                                <TabPanel value="Comments" 
+                                    sx={{ 
+                                        height: '85%', 
+                                        display: 'flex', 
+                                        flexDirection: 'column', 
+                                        boxSizing: 'border-box',
+                                        gap: 2
+                                    }}>
+                                    <Box 
+                                        sx={{ 
+                                            width: '100%', 
+                                            height: '100%',  
+                                            overflowY: 'auto',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: 3,
+                                            borderBottom: 1,
+                                            borderColor: '#d5d5d5'
+                                            }}>
+
+                                    </Box>
+                                    {!showCommentEditor && <Button 
+                                            variant="contained"
+                                            sx={{ width: '150px'}}
+                                            onClick={() => setShowCommentEditor(true)}
+                                        >
+                                            Add Comment
+                                        </Button>}
+                                    {showCommentEditor && <CommentEditor close={() => setShowCommentEditor(false)} />}
                                 </TabPanel>
                                 <HistoryPanel history={history}/>
                             </TabContext>
@@ -143,11 +177,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                     </Box>
                     
                     {/* Right Container*/}
-                    <TaskEditor 
-                        members={members}
-                        role={role}
-                        task={task}
-                    />
+                    <TaskEditor members={members} role={role} task={task}/>
             </Card>
     </Modal>
 })

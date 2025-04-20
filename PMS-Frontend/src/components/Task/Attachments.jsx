@@ -3,13 +3,13 @@ import AttachmentIcon from '@mui/icons-material/Attachment';
 import { EllipsisText } from "../text";
 import { base64ToBlob } from "../../utils/utils";
 
-const Attachments = ({ attachments, role, setSelectedAttachment, openFile}) => {
+const Attachments = ({ attachments, remove, openFile}) => {
     return <Box display="flex" overflow={"auto"} padding={2} gap={2}>
             {attachments.map(a => (
                     <Chip
                         key={a.id}
                         icon={<AttachmentIcon />}
-                        onDelete={() => role === 'Admin' ? setSelectedAttachment(a.id) : undefined}
+                        onDelete={() => remove ? remove(a) : undefined}
                         onClick={() => openFile(base64ToBlob(a))}
                         sx={{
                             maxWidth: '300px',

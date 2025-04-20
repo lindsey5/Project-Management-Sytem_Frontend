@@ -16,7 +16,7 @@ const StatusSelect = ({ handleChange, item, value, label, ...rest}) =>{
                     onChange={handleChange}
                     {...rest}
                 >
-                    {item.map(i => <MenuItem value={i.name}>
+                    {item.map(i => <MenuItem key={i.name} value={i.name}>
                         <Box display="flex" alignItems="center" gap={1}>
                             <CircleIcon sx={{ color: i.color, fontSize: 14 }} />
                             {i.name}

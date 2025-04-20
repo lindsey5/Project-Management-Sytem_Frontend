@@ -67,7 +67,7 @@ const Kanban = ({ showCreate, tasks, setTasks }) => {
   
     return (
       <div className="w-full p-3 min-w-[1000px]">
-        <TaskDetails closeModal={() => setSelectedTask(null)} open={selectedTask} task={selectedTask}/>
+        <TaskDetails closeModal={() => setSelectedTask(null)} open={selectedTask != null} task={selectedTask}/>
         <div className="grid grid-cols-5 gap-3 border-b-1 border-gray-300 py-3">
           {statuses.map(status => (
             <StatusHeader key={status} currentStatus={status} showCreate={showCreate} showButton={role === "Admin"}/>
@@ -142,7 +142,7 @@ const Kanban = ({ showCreate, tasks, setTasks }) => {
                                   },
                                 }}
                               >
-                                {task.assignees.map(task => <Avatar sx={{ width: 30, height: 30 }} src={`data:image/jpeg;base64,${task.member.user.profile_pic}`} />)}
+                                {task.assignees.map(a => <Avatar key={a.id} sx={{ width: 30, height: 30 }} src={`data:image/jpeg;base64,${a.member.user.profile_pic}`} />)}
                               </AvatarGroup>
                             </Stack>
                           </Card>

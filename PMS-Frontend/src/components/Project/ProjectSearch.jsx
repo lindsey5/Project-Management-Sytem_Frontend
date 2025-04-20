@@ -148,6 +148,7 @@ const ProjectSearch = ({close}) => {
             <div className='overflow-y-auto flex-1 '>
                 {filteredProjects.map(project => {
                     return <div 
+                            key={project.id}
                             className='rounded-lg p-3 justify-between flex items-center cursor-pointer hover:bg-gray-100'
                             onClick={() => window.location.href = `/project/tasks?c=${project.project_code}`}
                         >
