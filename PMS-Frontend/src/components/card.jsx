@@ -19,8 +19,6 @@ const Card = ({
             </div>
             <img className="h-12" src={iconPath} alt="" />
         </div>
-
-
 }
 
 export default Card

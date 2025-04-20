@@ -92,7 +92,7 @@ const Requests = () => {
         <Stack direction="row" justifyContent="space-between" alignItems="center">
             <TextField
                 id="input-with-icon-textfield"
-                placeholder='Search Project'
+                placeholder='Search'
                 onChange={(e) => dispatch({ type: "SET_SEARCH_TERM", payload: e.target.value})}
                 sx={{
                     '& .MuiOutlinedInput-root': {

@@ -1,18 +1,53 @@
-import { statusConfig } from "../config";
-import { timeAgo } from "../../utils/utils";
+import { statusConfig } from "../../config";
+import { timeAgo } from "../../../utils/utils";
 import TabPanel from "@mui/lab/TabPanel";
-import { Card, Box, Typography } from "@mui/material";
+import { Card, Box, Typography, CircularProgress } from "@mui/material";
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import { StatusChip } from "../chip";
-import { EllipsisText } from "../text";
+import { StatusChip } from "../../chip";
+import { EllipsisText } from "../../text";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { getTaskHistory } from "../../../services/TaskService";
 
-const HistoryPanel = ({ history }) => {
+const HistoryPanel = ({ task_id }) => {
+    const [history, setHistory] = useState([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const observer = useRef();
+
+    const lastItemRef = useCallback((node) => {
+        if (observer.current) observer.current.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                setPage((prevPage) => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+        
+    },[hasMore]);
+    
+    useEffect(() => {
+        const fetchHistory = async () => {
+            setLoading(true)
+            const fetchedHistory = await getTaskHistory(task_id, page);
+            setLoading(false)
+            if (fetchedHistory.history.length === 0) {
+                setHasMore(false);
+                return;
+            }
+            setHistory([...history, ...fetchedHistory.history])
+        }
+        fetchHistory()
+    }, [page])
+
     return (
-        <TabPanel value="History" sx={{ display: 'flex', flexDirection: "column", gap: 2 }}>
+        <TabPanel value="History" sx={{ display: 'flex', flexDirection: "column", gap: 2, alignItems: 'center' }}>
             {history.map((h, index) => (
                 <Card
+                    ref={index === history.length -1 ? lastItemRef : null}
                     key={index}
                     sx={{
+                        width: '100%',
                         border: 1,
                         borderColor: '#e7e7e7',
                         padding: 2,
@@ -72,6 +107,7 @@ const HistoryPanel = ({ history }) => {
                     </Typography>
                 </Card>
             ))}
+            {loading && <CircularProgress />}
         </TabPanel>
     );
 };

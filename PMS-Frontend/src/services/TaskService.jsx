@@ -45,9 +45,9 @@ export const updateTask = async (id, updatedTask) => {
     }
 }
 
-export const getTaskHistory = async (task_id) => {
+export const getTaskHistory = async (task_id, page) => {
     try{
-        const response = await axios.get(`/api/task_history/${task_id}`, {
+        const response = await axios.get(`/api/task_history/${task_id}?page=${page}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },

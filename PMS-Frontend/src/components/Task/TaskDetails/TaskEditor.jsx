@@ -1,6 +1,6 @@
-import MembersAutocomplete from "../AutoComplete";
-import { priority, status } from "../../data/taskData";
-import StatusSelect from "./Select";
+import MembersAutocomplete from "../../AutoComplete";
+import { priority, status } from "../../../data/taskData";
+import StatusSelect from "../../Select";
 import dayjs from "dayjs";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -8,11 +8,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { Box, TextField, Stack, Card, Button, Typography, Avatar} from "@mui/material";
 import { useEffect } from "react";
-import useTaskReducer from "../../hooks/taskReducer";
+import useTaskReducer from "../../../hooks/taskReducer";
 import { useState } from "react";
-import { formatDateTime, convertToAsiaTime, timeAgo } from "../../utils/utils";
-import { updateTask } from "../../services/TaskService";
-import { updateAssignees } from "../../services/AssigneeService";
+import { formatDateTime, convertToAsiaTime, timeAgo } from "../../../utils/utils";
+import { updateTask } from "../../../services/TaskService";
+import { updateAssignees } from "../../../services/AssigneeService";
 
 const TaskEditor = ({ members, role, task}) => {
     const [savedAssignees, setSavedAssignees] = useState([]);

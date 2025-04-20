@@ -11,7 +11,7 @@ import {
   RichTextEditor,
 } from "mui-tiptap";
 import { useRef, useState } from "react";
-import { openFile } from "../../utils/utils";
+import { openFile } from "../../../utils/utils";
 
 export default function CommentEditor({ close }) {
   const rteRef = useRef(null);
