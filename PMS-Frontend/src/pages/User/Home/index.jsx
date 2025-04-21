@@ -106,11 +106,10 @@ const Home = () => {
         <div
             className="mt-[50px] md:grid md:grid-cols-[2fr_1fr] gap-5"
         >
-            <Card className="h-[500px] border-box px-5 py-10 gap-5 flex flex-col">
+            <Card className="border-1 border-gray-200 h-[500px] border-box px-5 py-10 gap-5 flex flex-col" sx={{ boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}} >
                 <Typography variant="h5">Your Tasks</Typography>
                 <Box className="flex">
                     <StatusSelect 
-                        label={"Status"}
                         width={'200px'}
                         sx={{ height: '35px'}}
                         item={[{ name: 'All', color: 'rgb(174, 172, 175)'}, ...statusData]}
@@ -136,7 +135,7 @@ const Home = () => {
                     )}
                 />
             </Card>
-            <Card className="h-[500px] md:mt-0 mt-20 flex flex-col" sx={{ padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
+            <Card className="h-[500px] md:mt-0 mt-20 flex flex-col border-1 border-gray-200" sx={{ padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
                     <Typography variant="h6">Tasks Overview</Typography>
                     <Typography variant="subtitle1">Total tasks: {tasksDetails?.totalTasks}</Typography>
                     <PieChart

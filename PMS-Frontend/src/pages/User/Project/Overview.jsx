@@ -156,9 +156,6 @@ const Overview = () => {
                     ]}
                 />
             </Card>
-            <Card className="p-5">
-
-            </Card>
         </div>
     </main>
 }

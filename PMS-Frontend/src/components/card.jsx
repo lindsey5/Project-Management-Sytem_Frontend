@@ -8,7 +8,7 @@ export const DashboardCard = ({ label, value, icon, color}) => {
         flexDirection: 'column',
         alignItems: 'start',
         boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'
-    }}>
+    }} className="1px border-1 border-gray-200">
         <Box 
             bgcolor={color} 
             borderRadius={"50%"} 
