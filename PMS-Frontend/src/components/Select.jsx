@@ -5,8 +5,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
 
-const StatusSelect = ({ handleChange, item, value, label, ...rest}) =>{
-    return <FormControl fullWidth>
+const StatusSelect = ({ handleChange, item, value, label, width, ...rest}) =>{
+    return <FormControl sx={{ width: width}}>
                 <InputLabel id="demo-simple-select-label">{label}</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"

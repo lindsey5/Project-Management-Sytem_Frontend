@@ -1,5 +1,5 @@
 export const status = [
-    { name: "To Do", color: '#951ff7'},
+    { name: "To Do", color: ' #951ff7'},
     { name: "In Progress", color: "#e2f069"},
     { name: "In Review", color: "#194bd3"},
     { name: "Completed", color: "#10B981"},

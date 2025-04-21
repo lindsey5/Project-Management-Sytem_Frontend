@@ -90,12 +90,14 @@ const TaskEditor = ({ members, role, task}) => {
                 />
                 <Stack direction="row" gap={2}>
                     <StatusSelect 
+                        width={"100%"}
                         label="Status"
                         item={status}
                         value={state.status}
                         handleChange={(e) => dispatch({ type: "SET_STATUS", payload: e.target.value})}
                     />
                     <StatusSelect 
+                        width={"100%"}
                         label="Priority"
                         item={priority}
                         value={state.priority}

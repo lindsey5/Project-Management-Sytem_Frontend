@@ -3,13 +3,14 @@ import { ProjectContext } from "../../../layouts/ProjectLayout"
 import { Box, Card, Stack, Typography, Tooltip, Avatar } from "@mui/material";
 import { getTasks } from "../../../services/TaskService";
 import { convertToAsiaTime, formatDate } from "../../../utils/utils";
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { statusConfig } from "../../../components/config";
 import { getMembers } from "../../../services/MemberService";
 import { DashboardCard } from "../../../components/card";
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
 
 const Overview = () => {
     const { project } = useContext(ProjectContext);
@@ -75,13 +76,13 @@ const Overview = () => {
             <DashboardCard 
                 label={"Today tasks"}
                 value={tasksData?.tasksToday}
-                icon={<CalendarTodayOutlinedIcon sx={{ color: 'white'}} />}
+                icon={<AssignmentOutlinedIcon sx={{ color: 'white'}} />}
                 color={"rgb(90, 106, 158)"}
             />
             <DashboardCard 
                 label={"Completed tasks"}
                 value={tasksData?.completedTasks}
-                icon={<CheckCircleOutlinedIcon sx={{ color: 'white'}} />}
+                icon={<TaskOutlinedIcon sx={{ color: 'white'}} />}
                 color={" #46a818"}
             />
             <DashboardCard 
@@ -93,7 +94,7 @@ const Overview = () => {
             <DashboardCard 
                 label={"Overdue tasks"}
                 value={tasksData?.overDueTasks}
-                icon={<TaskOutlinedIcon sx={{ color: 'white'}} />}
+                icon={<QueryBuilderOutlinedIcon sx={{ color: 'white'}} />}
                 color={"rgb(241, 94, 94)"}
             />
         </div>

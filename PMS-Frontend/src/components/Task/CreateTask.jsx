@@ -155,12 +155,14 @@ const CreateTask = ({open, close, currentStatus}) => {
                 />
                 <Stack sx={{ width: '100%'}} direction="row" gap={3}>
                     <StatusSelect 
+                        width={"100%"}
                         label="Priority"
                         handleChange={handlePriority}
                         item={priority}
                         value={state.priority}
                     />
                     <StatusSelect 
+                        width={"100%"}
                         label="Status"
                         handleChange={handleStatus} 
                         item={status} 
