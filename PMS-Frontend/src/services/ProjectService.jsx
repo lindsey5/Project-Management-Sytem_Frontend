@@ -7,6 +7,7 @@ export const CreateProject = async (data) => {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         });
+
         return response.data
 
     }catch(error){

@@ -23,7 +23,7 @@ import { Chip } from "@mui/material";
 import { CustomButton } from "../button";
 import { createTask } from "../../services/TaskService";
 import { createTaskAttachment } from "../../services/TaskAttachmentService";
-import StatusSelect from "./Select";
+import StatusSelect from "../Select";
 import { status, priority } from '../../data/taskData';
 import { openFile } from "../../utils/utils";
 
@@ -155,12 +155,14 @@ const CreateTask = ({open, close, currentStatus}) => {
                 />
                 <Stack sx={{ width: '100%'}} direction="row" gap={3}>
                     <StatusSelect 
+                        width={"100%"}
                         label="Priority"
                         handleChange={handlePriority}
                         item={priority}
                         value={state.priority}
                     />
                     <StatusSelect 
+                        width={"100%"}
                         label="Status"
                         handleChange={handleStatus} 
                         item={status} 

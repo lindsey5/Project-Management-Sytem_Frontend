@@ -1,18 +1,17 @@
 import { Modal, Card, Typography, Box, IconButton, TextField, Button } from "@mui/material";
 import { memo, useContext, useEffect, useState } from "react";
-import { createTaskAttachment, deleteTaskAttachment, getTaskAttachments } from "../../services/TaskAttachmentService";
-import { ProjectContext } from "../../layouts/ProjectLayout";
+import { createTaskAttachment, deleteTaskAttachment, getTaskAttachments } from "../../../services/TaskAttachmentService";
+import { ProjectContext } from "../../../layouts/ProjectLayout";
 import AddIcon from '@mui/icons-material/Add';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { getMembers } from "../../services/MemberService";
-import { openFile } from "../../utils/utils";
-import { getTaskHistory } from "../../services/TaskService";
+import { getMembers } from "../../../services/MemberService";
+import { openFile } from "../../../utils/utils";
 import { toast } from "react-toastify";
-import { ConfirmDialog } from "../dialog";
-import Attachments from "./Attachments";
+import { ConfirmDialog } from "../../dialog";
+import Attachments from "../Attachments";
 import HistoryPanel from "./HistoryPanel";
 import TaskEditor from "./TaskEditor";
 import CommentEditor from "./CommentEditor";
@@ -33,7 +32,6 @@ const TaskDetails = memo(({task, open, closeModal}) => {
     const [attachments, setAttachments] = useState([]);
     const { code, role } = useContext(ProjectContext);
     const [members, setMembers] = useState([]);
-    const [history, setHistory] = useState([]);
     const [value, setValue] = useState("Comments");
     const [selectedAttachment, setSelectedAttachment] = useState(false);
     const [showCommentEditor, setShowCommentEditor] = useState(false);
@@ -59,11 +57,8 @@ const TaskDetails = memo(({task, open, closeModal}) => {
 
             const fetchedMembers = await getMembers(code);
 
-            const fetchedHistory = await getTaskHistory(task.id);
-
             setMembers(fetchedMembers.members);
             setAttachments(response.attachments)
-            setHistory(fetchedHistory.history)
 
         }
 
@@ -171,7 +166,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                                         </Button>}
                                     {showCommentEditor && <CommentEditor close={() => setShowCommentEditor(false)} />}
                                 </TabPanel>
-                                <HistoryPanel history={history}/>
+                                <HistoryPanel task_id={task?.id}/>
                             </TabContext>
                         </Box>
                     </Box>

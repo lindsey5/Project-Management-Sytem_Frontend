@@ -1,6 +1,6 @@
-import MembersAutocomplete from "../AutoComplete";
-import { priority, status } from "../../data/taskData";
-import StatusSelect from "./Select";
+import MembersAutocomplete from "../../AutoComplete";
+import { priority, status } from "../../../data/taskData";
+import StatusSelect from "../../Select";
 import dayjs from "dayjs";
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -8,11 +8,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { Box, TextField, Stack, Card, Button, Typography, Avatar} from "@mui/material";
 import { useEffect } from "react";
-import useTaskReducer from "../../hooks/taskReducer";
+import useTaskReducer from "../../../hooks/taskReducer";
 import { useState } from "react";
-import { formatDateTime, convertToAsiaTime, timeAgo } from "../../utils/utils";
-import { updateTask } from "../../services/TaskService";
-import { updateAssignees } from "../../services/AssigneeService";
+import { formatDateTime, convertToAsiaTime, timeAgo } from "../../../utils/utils";
+import { updateTask } from "../../../services/TaskService";
+import { updateAssignees } from "../../../services/AssigneeService";
 
 const TaskEditor = ({ members, role, task}) => {
     const [savedAssignees, setSavedAssignees] = useState([]);
@@ -74,13 +74,6 @@ const TaskEditor = ({ members, role, task}) => {
                         readOnly: role != 'Admin',
                         },
                     }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                border: role != 'Admin' && 'none',
-                            },
-                        },
-                    }}  
                     onChange={(e) => dispatch({type: "SET_TASK_NAME", payload: e.target.value})}
                 />
                 <TextField 
@@ -93,23 +86,18 @@ const TaskEditor = ({ members, role, task}) => {
                         readOnly: role != 'Admin',
                         },
                     }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                border: role != 'Admin' && 'none',
-                            },
-                        },
-                    }} 
                     onChange={(e) => dispatch({type: "SET_DESCRIPTION", payload: e.target.value})}
                 />
                 <Stack direction="row" gap={2}>
                     <StatusSelect 
+                        width={"100%"}
                         label="Status"
                         item={status}
                         value={state.status}
                         handleChange={(e) => dispatch({ type: "SET_STATUS", payload: e.target.value})}
                     />
                     <StatusSelect 
+                        width={"100%"}
                         label="Priority"
                         item={priority}
                         value={state.priority}
@@ -130,13 +118,6 @@ const TaskEditor = ({ members, role, task}) => {
                         slotProps={{
                             input: {
                             readOnly: role != 'Admin',
-                            },
-                        }}
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    border: role != 'Admin' && 'none',
-                                },
                             },
                         }}
                         onChange={(newValue) => dispatch({type: "SET_DUE_DATE", payload: newValue.$d})}

@@ -1,26 +1,29 @@
-import { cn } from "../utils/utils"
+import { Card, Box, Typography } from "@mui/material"
 
-const Card = ({
-    label,
-    value,
-    iconPath,
-    className,
-    ...rest
-}) => {
-    return <div className={cn(
-            className,
-            "shadow-md px-4 py-6 rounded-lg flex justify-between border border-gray-100"
-            )}
-            {...rest}
-            >
-            <div>
-                <h3 className="text-gray-400">{label}</h3>
-                <h1 className="text-3xl font-bold">{value}</h1>
-            </div>
-            <img className="h-12" src={iconPath} alt="" />
-        </div>
-
-
+export const DashboardCard = ({ label, value, icon, color}) => {
+    return <Card sx={{ 
+        paddingX: 2, 
+        paddingY: 3, 
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'start',
+        boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'
+    }} className="1px border-1 border-gray-200">
+        <Box 
+            bgcolor={color} 
+            borderRadius={"50%"} 
+            padding={2}
+        >
+        {icon}
+        </Box>
+        <Typography 
+            variant="subtitle2" 
+            fontSize={"16px"} 
+            color="rgb(160, 160, 160)"
+            marginTop={"20px"}
+        >
+            {label}
+        </Typography>
+        <Typography variant="h4" fontWeight={"bold"}>{value}</Typography>
+    </Card>
 }
-
-export default Card

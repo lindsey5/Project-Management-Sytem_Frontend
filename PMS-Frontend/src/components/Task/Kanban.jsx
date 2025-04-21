@@ -1,7 +1,7 @@
 import { StatusChip } from "../chip"
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
-import { lazy, Suspense, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { ProjectContext } from "../../layouts/ProjectLayout";
 import { Card, Stack, Typography } from "@mui/material";
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
@@ -12,7 +12,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import { updateTask } from "../../services/TaskService";
 import Badge from '@mui/material/Badge';
 import { UserContext } from "../../context/userContext";
-import TaskDetails from "./TaskDetails";
+import TaskDetails from "./TaskDetails/TaskDetails";
 import { statusConfig } from "../config";
 
 const StatusHeader = ({showCreate, currentStatus, showButton, ...rest}) => {

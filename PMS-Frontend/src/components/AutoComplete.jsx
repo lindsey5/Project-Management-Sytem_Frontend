@@ -5,7 +5,7 @@ const MembersAutocomplete = ({ members, handleChange, value, readOnly }) => {
     return (
         <Autocomplete
             multiple
-            limitTags={2}
+            limitTags={4}
             id="members-autocomplete"
             options={members}
             value={value}
