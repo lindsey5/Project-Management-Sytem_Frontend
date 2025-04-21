@@ -74,13 +74,6 @@ const TaskEditor = ({ members, role, task}) => {
                         readOnly: role != 'Admin',
                         },
                     }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                border: role != 'Admin' && 'none',
-                            },
-                        },
-                    }}  
                     onChange={(e) => dispatch({type: "SET_TASK_NAME", payload: e.target.value})}
                 />
                 <TextField 
@@ -93,13 +86,6 @@ const TaskEditor = ({ members, role, task}) => {
                         readOnly: role != 'Admin',
                         },
                     }}
-                    sx={{
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                                border: role != 'Admin' && 'none',
-                            },
-                        },
-                    }} 
                     onChange={(e) => dispatch({type: "SET_DESCRIPTION", payload: e.target.value})}
                 />
                 <Stack direction="row" gap={2}>
@@ -130,13 +116,6 @@ const TaskEditor = ({ members, role, task}) => {
                         slotProps={{
                             input: {
                             readOnly: role != 'Admin',
-                            },
-                        }}
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    border: role != 'Admin' && 'none',
-                                },
                             },
                         }}
                         onChange={(newValue) => dispatch({type: "SET_DUE_DATE", payload: newValue.$d})}

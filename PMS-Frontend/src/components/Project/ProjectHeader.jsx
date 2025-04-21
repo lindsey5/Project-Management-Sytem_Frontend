@@ -50,9 +50,9 @@ const ProjectHeader = () => {
                     scrollButtons="auto" 
                     aria-label="scrollable tabs"
                 >
+                    <Tab label="Overview" value="/project/overview" />
                     <Tab label="Tasks" value="/project/tasks" />
                     <Tab label="Team" value="/project/team" />
-                    <Tab label="Overview" value="/project/overview" />
                     {role === "Admin" && <Tab label="Requests" value="/project/requests" />}
                     {role == "Admin" && <Tab label="Settings" value="/project/settings" />}
                 </Tabs>

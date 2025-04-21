@@ -9,34 +9,7 @@ import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { statusConfig } from "../../../components/config";
 import { getMembers } from "../../../services/MemberService";
-
-const DashboardCard = ({ label, value, icon, color}) => {
-    return <Card sx={{ 
-        paddingX: 2, 
-        paddingY: 3, 
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'start',
-        boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'
-    }}>
-        <Box 
-            bgcolor={color} 
-            borderRadius={"50%"} 
-            padding={2}
-        >
-        {icon}
-        </Box>
-        <Typography 
-            variant="subtitle2" 
-            fontSize={"16px"} 
-            color="rgb(160, 160, 160)"
-            marginTop={"20px"}
-        >
-            {label}
-        </Typography>
-        <Typography variant="h4" fontWeight={"bold"}>{value}</Typography>
-    </Card>
-}
+import { DashboardCard } from "../../../components/card";
 
 const Overview = () => {
     const { project } = useContext(ProjectContext);
@@ -53,18 +26,22 @@ const Overview = () => {
 
             setPieChartData(tasksStatus.map(status => {
                 const numberOfTask = response.tasks.filter(task => task.status == status).length
-                return { value: numberOfTask, percentage: ( numberOfTask / totalTask) * 100, label: status, color: statusConfig[status]}
+                return { value: numberOfTask, percentage: (( numberOfTask / totalTask) * 100).toFixed(2), label: status, color: statusConfig[status]}
             }))
             
             // Set data on cards
             const completedTasks = response.tasks.filter(task => task.status == "Completed").length;
+
             const overDueTasks = response.tasks.filter(task => 
                 task.status !== 'Completed' && 
                 new Date(convertToAsiaTime(task.due_date)) < new Date()).length;
-            const tasksDueSoon = response.tasks.filter(task => new Date(convertToAsiaTime(task.due_date)) > new Date()).length;
+
+            const tasksDueSoon = response.tasks.filter(task => new Date(convertToAsiaTime(task.due_date)) > new Date() && task.status !== 'Completed').length;
+            
             const tasksToday = response.tasks.filter(task => 
                 formatDate(convertToAsiaTime(task.due_date)) === formatDate(new Date()) && 
                 task.status !== "Completed").length;
+
             const members = await getMembers(project.project_code)
 
             const distribution = members.members.map(member => {
@@ -76,7 +53,7 @@ const Overview = () => {
                     assignee: `${member.user.firstname} ${member.user.lastname}`, 
                     picture: member.user.profile_pic,
                     numberOfTask,
-                    percentage: (numberOfTask / totalTask) * 100 }
+                    percentage: ((numberOfTask / totalTask) * 100).toFixed(2) }
             })
 
             setWorkloads([...distribution])
@@ -120,14 +97,10 @@ const Overview = () => {
                 color={"rgb(241, 94, 94)"}
             />
         </div>
-        <Stack 
-            height={'400px'} 
-            marginTop='50px' 
-            gridTemplateColumns={"1.5fr 1fr"} 
-            display={"grid"}
-            gap={3}
+        <div
+            className="mt-[50px] md:grid md:grid-cols-[2fr_1fr] gap-5"
         >
-            <Card sx={{ height: '100%', padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
+            <Card sx={{ height: '400px', padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
                 <Typography variant="h6">Team workload</Typography>
                 <Box 
                     marginTop={"30px"} 
@@ -138,17 +111,23 @@ const Overview = () => {
                     flexDirection={"column"} 
                     gap={2}
                 >
+                <Stack direction={"row"}>
+                    <Typography variant="subtitle1" width={"35%"}>Assignee</Typography>
+                    <Typography variant="subtitle1" width={"70%"}>Work Distribution</Typography>
+                </Stack>
                 {workloads.map(workload => {
-                    return <Box width={"100%"} display={"flex"} alignItems={"center"}>
-                        <Avatar src={`data:image/jpeg;base64,${workload.picture}`} sx={{ marginRight: '20px'}}/>
-                        <Typography width={"30%"}>{workload.assignee}</Typography>
-                        <div className="w-[70%] relative bg-gray-100 h-[30px]">
+                    return <Box width={"100%"} display={"flex"} alignItems={"center"} gap={3}>
+                        <div className="flex w-[30%] gap-3 items-center">
+                            <Avatar src={`data:image/jpeg;base64,${workload.picture}`}/>
+                            <Typography width={"100%"}>{workload.assignee}</Typography>
+                        </div>
+                        <div className="w-[70%] relative bg-gray-200 h-[30px] rounded-lg">
                         <Tooltip 
                             title={`${workload.percentage}% (${workload.numberOfTask}/ ${tasksData.totalTask} task)`} 
                             followCursor 
                             placement="right"
                         >
-                            <Box className='bg-gray-500 h-full absolute px-3 py-1 text-white cursor-pointer'
+                            <Box className='rounded-lg bg-gray-500 h-full absolute px-3 py-1 text-white cursor-pointer'
                                 style={{ width: `${workload.percentage}%` }}
                             >
                             {workload.percentage}%
@@ -159,7 +138,7 @@ const Overview = () => {
                 })}
                 </Box>
             </Card>
-            <Card sx={{ padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
+            <Card className="h-[400px] md:mt-0 mt-20" sx={{ padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
                 <Typography variant="h6">Status overview</Typography>
                 <Typography variant="subtitle1">Total tasks: {tasksData?.totalTask}</Typography>
                 <PieChart
@@ -176,7 +155,10 @@ const Overview = () => {
                     ]}
                 />
             </Card>
-        </Stack>
+            <Card className="p-5">
+
+            </Card>
+        </div>
     </main>
 }
 

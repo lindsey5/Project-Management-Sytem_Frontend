@@ -17,7 +17,7 @@ const Attachments = ({ attachments, remove, openFile}) => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'flex-start',
-                            cursor: 'point',
+                            cursor: 'pointer',
                             ":hover" : {
                                 backgroundColor: '#9CA3AF'
                             }
