@@ -41,7 +41,7 @@ const Home = () => {
             const completedTasks = response.tasks.filter(task => {
                 return new Date(convertToAsiaTime(task.due_date)).getMonth() === new Date().getMonth() &&
                 new Date(convertToAsiaTime(task.due_date)).getFullYear() === new Date().getFullYear() &&
-                task.status === 'Completed' && task.project.status === "Active"
+                task.status === 'Completed'
             }).length;
 
             // Set Pie Chart data
