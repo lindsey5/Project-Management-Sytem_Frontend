@@ -3,15 +3,17 @@ import QrCodeScanner from "./QrCodeScanner"
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { createRequest } from "../../services/RequestService";
 import { toast } from "react-toastify";
 import { CustomButton } from "../button";
+import { SignalContext } from "../../context/signalContext";
 
 const JoinProject = ({ close }) =>{
   const [value, setValue] = useState("manual");
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const { sendRequestNotification } = useContext(SignalContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -27,7 +29,8 @@ const JoinProject = ({ close }) =>{
     const response = await createRequest(code);
     if(response.success) {
         toast.success('Request submitted successfully! Wait for admin approval')
-        close();
+        sendRequestNotification(response.project.id);
+        //close();
     }
     else toast.error(response.message)
     setLoading(false);

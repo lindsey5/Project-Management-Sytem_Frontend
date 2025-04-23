@@ -80,12 +80,14 @@ const Requests = () => {
 
     const handleSubmit = async (id, status) => {
         updateRequest(id, status)
-            .then(response => {
-                if(response.success) return createMember({ project_id: project.id, user_id: userId})
-            })
-            .then(r => {
-                if(r.success)  window.location.href = `/project/team?c=${code}`
-            })
+        .then(response => {
+          if (response.success && status === "Approved") {
+            createMember({ project_id: project.id, user_id: userId });
+            window.location.href = `/project/team?c=${code}`;
+          } else {
+            window.location.reload();
+          }
+        });
     }
 
     return <main className="w-full h-full px-10 py-4">

@@ -3,17 +3,21 @@ import { ProjectContext } from "../../layouts/ProjectLayout"
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Tab from '@mui/material/Tab';
-import { Stack, Tabs } from "@mui/material";
+import { Stack, Tabs, Badge } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { StatusChip } from "../chip";
 import { getMembers } from "../../services/MemberService";
 import { UserContext } from "../../context/userContext";
+import { getRequest } from "../../services/RequestService";
+import { SignalContext } from "../../context/signalContext";
 
 const ProjectHeader = () => {
     const { project, code, role } = useContext(ProjectContext);
     const pathname = useLocation().pathname;
     const [members, setMembers] = useState([]);
     const { user } = useContext(UserContext);
+    const [requests, setRequests] = useState();
+    const { connection } = useContext(SignalContext)
 
     useEffect(() => {
         const fetchMembers = async () => {
@@ -23,10 +27,19 @@ const ProjectHeader = () => {
                 const [item] = response.members.splice(index, 1);
                 response.members.unshift(item);
             }
+            const fetchedRequests = await getRequest({ id: project.id, page: 1, limit: 10, status: 'Pending'});
+            setRequests(fetchedRequests.totalRequests)
             setMembers(response.members);
         }
 
+        if(connection){
+            connection.on("ReceiveRequestNotification", (count) => {
+                setRequests(count);
+              });
+        }
+
         fetchMembers()
+
     }, [])
 
     const handleChange = (e, value) => {
@@ -53,7 +66,26 @@ const ProjectHeader = () => {
                     <Tab label="Overview" value="/project/overview" />
                     <Tab label="Tasks" value="/project/tasks" />
                     <Tab label="Team" value="/project/team" />
-                    {role === "Admin" && <Tab label="Requests" value="/project/requests" />}
+                    {role === "Admin" && (
+                        <Tab 
+                            label={
+                                <Badge 
+                                    badgeContent={requests} 
+                                    color="primary"
+                                    sx={{
+                                        '& .MuiBadge-badge': {
+                                        right: -3,
+                                        top: -5,
+                                        padding: '0 4px',
+                                        },
+                                    }}
+                                >
+                                    Requests
+                                </Badge>
+                            } 
+                            value="/project/requests" 
+                        />
+                    )}
                     {role == "Admin" && <Tab label="Settings" value="/project/settings" />}
                 </Tabs>
                 <AvatarGroup 

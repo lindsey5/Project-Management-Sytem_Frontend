@@ -36,7 +36,7 @@ const GoogleButton = () => {
   
     return (
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <div>
+        <div className="mt-2">
           <GoogleLogin 
             onSuccess={handleSuccess} 
             onError={handleError} 
@@ -45,26 +45,6 @@ const GoogleButton = () => {
             shape="rectangular"
             size="large"
           />
-          <p className="text-center mt-4 text-sm text-gray-600">
-            By signing in, you agree to Google's{" "}
-            <a 
-              className="font-medium text-blue-600 hover:underline" 
-              href="https://policies.google.com/privacy" 
-              target="_blank" 
-              rel="noopener noreferrer"
-            >
-              Privacy Policy
-            </a>{" "}
-            and{" "}
-            <a 
-              className="font-medium text-blue-600 hover:underline" 
-              href="https://policies.google.com/terms" 
-              target="_blank" 
-              rel="noopener noreferrer"
-            >
-              Terms of Service
-            </a>.
-          </p>
         </div>
       </GoogleOAuthProvider>
     );
@@ -96,21 +76,24 @@ const LoginPage = () => {
         }
     }
 
-    return <form className="w-full h-screen flex justify-center items-center" 
+    return <form className="p-20 w-full h-screen flex justify-around items-center bg-[url('/bg.png')] bg-cover bg-center" 
                 onSubmit={handleSubmit}>
-            <div className="w-[360px] shadow-lg shadow-gray-300 border border-gray-300 rounded-lg p-6">
-                <h1 className="font-bold text-4xl mb-8">Login</h1>
+            <div className="w-[360px] flex flex-col shadow-lg shadow-gray-300 border border-gray-300 rounded-lg p-6">
+                <h1 className="font-bold text-4xl mb-4">Login</h1>
                 {errors.map(err => <p className="text-red-600">{err}</p>)}
                 <Input className="w-full" label={"Email Address"} type={"email"} onChange={(e) => handleInput(e, setEmail)}/>
                 <Input className="w-full" label={"Password"} type={"password"}  onChange={(e) => handleInput(e, setPassword)}/>
-                <div className="flex w-full items-center justify-between">
-                    <a className="text-gray-400 hover:underline" href="">Forgot Password?</a>
-                    <button className="cursor-pointer mt-2 text-white bg-black px-6 py-2 rounded-lg mb-2">Login</button>
-                </div>
-                <div className="w-full flex flex-col items-center gap-2 mb-4">
-                    <p className="mt-2">Don't have an account? <a className="underline font-bold" href="">Sign Up</a></p>
+                <button className="cursor-pointer mt-4 text-white px-6 py-2 rounded-lg mb-2
+                bg-[linear-gradient(45deg,_#2A4EC1_,#9532C7)]
+            hover:bg-[linear-gradient(45deg,_#9532C7_,#2A4EC1)]">Login</button>
+                <a className="text-md mt-2 text-center text-gray-400 hover:underline" href="">Forgot Password?</a>
+                <div className="mt-4 mb-2 grid grid-cols-[2fr_0.5fr_2fr] items-center text-center">
+                  <hr className=""/>
+                  <p className="text-gray-400">Or</p>
+                  <hr />
                 </div>
                 <GoogleButton />
+                <p className="text-center mt-10">Don't have an account? <a className="underline font-bold" href="">Sign Up</a></p>
             </div>
     </form>
 }

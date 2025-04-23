@@ -1,4 +1,4 @@
-import { Button, IconButton, Stack, Chip} from "@mui/material";
+import { Button, IconButton, Stack, Chip } from "@mui/material";
 import StarterKit from "@tiptap/starter-kit";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import Placeholder from "@tiptap/extension-placeholder";
@@ -12,80 +12,101 @@ import {
 } from "mui-tiptap";
 import { useRef, useState } from "react";
 import { openFile } from "../../../utils/utils";
+import { createComment, createCommentAttachment } from '../../../services/CommentService';
 
-export default function CommentEditor({ close }) {
+export default function CommentEditor({ task_id, close }) {
   const rteRef = useRef(null);
   const [files, setFiles] = useState([]);
 
   const handleFiles = (e) => {
-    const selectedFiles = Array.from(e.target.files)
-    if(selectedFiles === 0) return
+    const selectedFiles = Array.from(e.target.files);
+    if (selectedFiles.length === 0) return;
     setFiles(prev => [...prev, ...selectedFiles]);
   };
   
   const deleteFile = (index) => {
-    setFiles(files.filter((file, i) => i !== index))
+    setFiles(files.filter((file, i) => i !== index));
+  }
+
+  const getHtml = () => {
+    if (rteRef.current && rteRef.current.editor) {
+      return rteRef.current.editor.getHTML();
+    }
+    return '';
+  }
+
+  const save = async () => {
+    const htmlContent = getHtml();
+    const newComment = await createComment({ task_id, content: htmlContent});
+    if(files.length > 0 && newComment.success){
+      files.forEach(async (file) =>{
+          await createCommentAttachment(newComment.comment.id, file)
+        });
+      }
   }
   
-  return <div className="w-full flex flex-col gap-2 items-end">
-        <RichTextEditor
+  return (
+    <div className="w-full flex flex-col gap-2 items-end">
+      <RichTextEditor
         className="w-full min-h-[250px]"
-          ref={rteRef}
-          extensions={[
-            StarterKit,
-            Placeholder.configure({
-              placeholder: 'Write your comment here',
-              emptyEditorClass: 'is-editor-empty',
-              emptyNodeClass: 'is-node-empty',
-              showOnlyWhenEditable: true,
-              showOnlyCurrent: true,
-            })
-          ]}
-
-          renderControls={() => (
-            <MenuControlsContainer>
-              <MenuSelectHeading />
-              <MenuDivider />
-              <MenuButtonBold />
-              <MenuButtonItalic />
-              <IconButton component="label" size="small">
-                  <AttachFileIcon fontSize="inherit"/>
-                    <input
-                      type="file"
-                      multiple
-                      onChange={handleFiles}
-                      style={{ display: 'none' }}
-                      accept="image/*,application/pdf,doc,.docx"
-                    />
-              </IconButton>
-            </MenuControlsContainer>
-          )}
-        />
-       {files && files.length > 0 && <Stack
+        ref={rteRef}
+        extensions={[
+          StarterKit,
+          Placeholder.configure({
+            placeholder: 'Write your comment here',
+            emptyEditorClass: 'is-editor-empty',
+            emptyNodeClass: 'is-node-empty',
+            showOnlyWhenEditable: true,
+            showOnlyCurrent: true,
+          })
+        ]}
+        renderControls={() => (
+          <MenuControlsContainer>
+            <MenuSelectHeading />
+            <MenuDivider />
+            <MenuButtonBold />
+            <MenuButtonItalic />
+            <IconButton component="label" size="small">
+              <AttachFileIcon fontSize="inherit"/>
+              <input
+                type="file"
+                multiple
+                onChange={handleFiles}
+                style={{ display: 'none' }}
+                accept="image/*,application/pdf,doc,.docx"
+              />
+            </IconButton>
+          </MenuControlsContainer>
+        )}
+      />
+      {files && files.length > 0 && (
+        <Stack
           direction="row"  
           width="100%"
           overflow={'auto'}
           padding={1}
           boxSizing={'border-box'}
           gap={1}
-       >
-          {files.map((file, index) => {
-            return <Chip
-                      label={file.name}
-                      onClick={() => openFile(file)}
-                      onDelete={() => deleteFile(index)}
-                       sx={{ maxWidth: '150px', cursor: 'pointer'}}
-                    />
-          })}
-        </Stack>}
-        <Stack direction="row" gap={2}>
-        <Button sx={{ marginTop: '10px'}} onClick={close}>
-            Cancel
-          </Button>
-        <Button variant="contained"  sx={{ marginTop: '10px'}}>
-            Send
-          </Button>
+        >
+          {files.map((file, index) => (
+            <Chip
+              key={index}
+              label={file.name}
+              onClick={() => openFile(file)}
+              onDelete={() => deleteFile(index)}
+              sx={{ maxWidth: '150px', cursor: 'pointer' }}
+            />
+          ))}
         </Stack>
-        
-  </div>  
+      )}
+      <Stack direction="row" gap={2}>
+        <Button sx={{ marginTop: '10px' }} onClick={close}>
+          Cancel
+        </Button>
+        <Button variant="contained" onClick={save} sx={{ marginTop: '10px' }}>
+          Send
+        </Button>
+      </Stack>
+    </div>
+  );
 }

@@ -54,7 +54,7 @@ const Overview = () => {
                     assignee: `${member.user.firstname} ${member.user.lastname}`, 
                     picture: member.user.profile_pic,
                     numberOfTask,
-                    percentage: ((numberOfTask / totalTask) * 100).toFixed(2) }
+                    percentage: numberOfTask > 1 ? ((numberOfTask / totalTask) * 100).toFixed(2) : 0 }
             })
 
             setWorkloads([...distribution])
@@ -128,11 +128,11 @@ const Overview = () => {
                             followCursor 
                             placement="right"
                         >
-                            <Box className='rounded-lg bg-gray-500 h-full absolute px-3 py-1 text-white cursor-pointer'
+                            {workload.percentage > 0 && <Box className='rounded-lg bg-gray-500 h-full absolute px-3 py-1 text-white cursor-pointer'
                                 style={{ width: `${workload.percentage}%` }}
                             >
                             {workload.percentage}%
-                            </Box>
+                            </Box>}
                         </Tooltip>
                         </div>
                     </Box>
