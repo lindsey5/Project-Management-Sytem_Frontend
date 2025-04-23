@@ -40,9 +40,10 @@ export default function CommentEditor({ task_id, close }) {
     const newComment = await createComment({ task_id, content: htmlContent});
     if(files.length > 0 && newComment.success){
       files.forEach(async (file) =>{
-          await createCommentAttachment(newComment.comment.id, file)
+          const response = await createCommentAttachment(newComment.comment.id, file)
         });
-      }
+    }
+    close()
   }
   
   return (

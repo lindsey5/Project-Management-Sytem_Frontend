@@ -4,7 +4,7 @@ import { EllipsisText } from "../text";
 import { base64ToBlob } from "../../utils/utils";
 
 const Attachments = ({ attachments, remove, openFile}) => {
-    return <Box display="flex" overflow={"auto"} padding={2} gap={2}>
+    return <Box display="flex" overflow={"auto"} gap={2}>
             {attachments.map(a => (
                     <Chip
                         key={a.id}

@@ -15,6 +15,7 @@ import Attachments from "../Attachments";
 import HistoryPanel from "./HistoryPanel";
 import TaskEditor from "./TaskEditor";
 import CommentEditor from "./CommentEditor";
+import CommentsContainer from "./CommentsContainer";
 
 const style = {
     bgcolor: 'background.paper',
@@ -139,10 +140,10 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                                 <TabPanel value="Comments" 
                                     sx={{ 
                                         height: '85%', 
-                                        display: 'flex', 
-                                        flexDirection: 'column', 
                                         boxSizing: 'border-box',
-                                        gap: 2
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: 2,
                                     }}>
                                     <Box 
                                         sx={{ 
@@ -152,10 +153,11 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                                             display: 'flex',
                                             flexDirection: 'column',
                                             gap: 3,
+                                            p: 2,
                                             borderBottom: 1,
                                             borderColor: '#d5d5d5'
                                             }}>
-
+                                        <CommentsContainer task_id={task?.id}/>
                                     </Box>
                                     {!showCommentEditor && <Button 
                                             variant="contained"

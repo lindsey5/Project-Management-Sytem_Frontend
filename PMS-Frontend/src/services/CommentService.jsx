@@ -31,3 +31,31 @@ export const createCommentAttachment = async (comment_id, file) => {
         return error.response ? error.response.data : error.message
     }
 }
+
+export const getComments = async (task_id, page) => {
+    try{
+        const response = await axios.get(`/api/comment/${task_id}?page=${page}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+        });
+        return response.data
+        
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
+}
+
+export const getCommentAttachments = async (comment_id) => {
+    try{
+        const response = await axios.get(`/api/comment/attachment/${comment_id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+        });
+        return response.data
+        
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
+}
