@@ -1,4 +1,4 @@
-import { Modal, Card, Typography, Box, IconButton, TextField, Button } from "@mui/material";
+import { Modal, Card, Typography, Box, IconButton, Button } from "@mui/material";
 import { memo, useContext, useEffect, useState } from "react";
 import { createTaskAttachment, deleteTaskAttachment, getTaskAttachments } from "../../../services/TaskAttachmentService";
 import { ProjectContext } from "../../../layouts/ProjectLayout";
@@ -16,6 +16,7 @@ import HistoryPanel from "./HistoryPanel";
 import TaskEditor from "./TaskEditor";
 import CommentEditor from "./CommentEditor";
 import CommentsContainer from "./CommentsContainer";
+import { CommentContextProvider } from "../../../context/commentContext";
 
 const style = {
     bgcolor: 'background.paper',
@@ -145,28 +146,30 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                                         flexDirection: 'column',
                                         gap: 2,
                                     }}>
-                                    <Box 
-                                        sx={{ 
-                                            width: '100%', 
-                                            height: '100%',  
-                                            overflowY: 'auto',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: 3,
-                                            p: 2,
-                                            borderBottom: 1,
-                                            borderColor: '#d5d5d5'
-                                            }}>
-                                        <CommentsContainer task_id={task?.id}/>
-                                    </Box>
-                                    {!showCommentEditor && <Button 
-                                            variant="contained"
-                                            sx={{ width: '150px'}}
-                                            onClick={() => setShowCommentEditor(true)}
-                                        >
-                                            Add Comment
-                                        </Button>}
-                                    {showCommentEditor && <CommentEditor task_id={task.id} close={() => setShowCommentEditor(false)} />}
+                                    <CommentContextProvider>
+                                        <Box 
+                                            sx={{ 
+                                                width: '100%', 
+                                                height: '100%',  
+                                                overflowY: 'auto',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: 3,
+                                                p: 2,
+                                                borderBottom: 1,
+                                                borderColor: '#d5d5d5'
+                                                }}>
+                                            <CommentsContainer task_id={task?.id}/>
+                                        </Box>
+                                        {!showCommentEditor && <Button 
+                                                variant="contained"
+                                                sx={{ width: '150px'}}
+                                                onClick={() => setShowCommentEditor(true)}
+                                            >
+                                                Add Comment
+                                            </Button>}
+                                        {showCommentEditor && <CommentEditor task_id={task.id} close={() => setShowCommentEditor(false)} />}
+                                    </CommentContextProvider>
                                 </TabPanel>
                                 <HistoryPanel task_id={task?.id}/>
                             </TabContext>

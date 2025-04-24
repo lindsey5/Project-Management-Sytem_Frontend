@@ -11,6 +11,8 @@ import { getTasks } from '../../../services/TaskService';
 import { lazy, Suspense } from 'react';
 import { getTaskAttachments } from '../../../services/TaskAttachmentService';
 import { CircularProgress } from '@mui/material';
+import TasksTable from '../../../components/Task/TasksTable';
+import UserTasks from '../../../components/Task/UserTasks';
 
 const Kanban = lazy(() => import('../../../components/Task/Kanban'));
 
@@ -44,7 +46,7 @@ const Tasks = () => {
         setShowCreate(true)
     }
 
-    return <div className='pt-6 pb-3 px-3 bg-white gap-2'>
+    return <div className='w-full h-full pt-6 pb-3 px-3 bg-white gap-2'>
         <CreateTask open={showCreate} currentStatus={status} close={() => setShowCreate(false)}/>
         <Box sx={{ display: 'flex', gap: 3}}>
             <CustomButton 
@@ -81,11 +83,15 @@ const Tasks = () => {
                 onClick={() => setShowCreate(true)}
             >New Task</CustomButton>}
         </Box>
-        <Suspense fallback={<div className='w-full h-full flex items-center justify-center'>
-            <CircularProgress size={60}/>
-        </div>}>
-            <Kanban showCreate={showCreateWithStatus} tasks={tasks} setTasks={setTasks}/>
-        </Suspense>
+        <Suspense fallback={
+            <div className='w-full h-full flex items-center justify-center'>
+                <CircularProgress size={60}/>
+            </div>
+        }>
+            {alignment === 'Kanban' && <Kanban showCreate={showCreateWithStatus} tasks={tasks} setTasks={setTasks}/>}
+            {alignment === 'Table' && <TasksTable tasks={tasks}/>}
+            {alignment === 'Your Task' && <UserTasks />}
+        </Suspense> 
     </div>
 }
 

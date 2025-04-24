@@ -21,7 +21,7 @@
 
   @keyframes typing {
     from {width: 0;}
-    to {width: 95%;}
+    to {width: 730px;}
   }
 
   @keyframes blink{

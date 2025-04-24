@@ -10,13 +10,15 @@ import {
   MenuSelectHeading,
   RichTextEditor,
 } from "mui-tiptap";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState, useEffect } from "react";
 import { openFile } from "../../../utils/utils";
-import { createComment, createCommentAttachment } from '../../../services/CommentService';
+import { createComment, createCommentAttachment } from "../../../services/CommentService";
+import { CommentContext } from "../../../context/commentContext";
 
 export default function CommentEditor({ task_id, close }) {
   const rteRef = useRef(null);
   const [files, setFiles] = useState([]);
+  const { fetchComments, setTaskId } = useContext(CommentContext)
 
   const handleFiles = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -38,10 +40,13 @@ export default function CommentEditor({ task_id, close }) {
   const save = async () => {
     const htmlContent = getHtml();
     const newComment = await createComment({ task_id, content: htmlContent});
-    if(files.length > 0 && newComment.success){
-      files.forEach(async (file) =>{
-          const response = await createCommentAttachment(newComment.comment.id, file)
-        });
+    if (newComment.success) {
+      await Promise.all(
+        files.map(file => createCommentAttachment(newComment.comment.id, file))
+      );
+
+      await fetchComments(true)
+      close();
     }
     close()
   }

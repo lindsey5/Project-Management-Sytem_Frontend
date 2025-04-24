@@ -1,7 +1,7 @@
 import { StatusChip } from "../chip"
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ProjectContext } from "../../layouts/ProjectLayout";
 import { Card, Stack, Typography } from "@mui/material";
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
@@ -15,7 +15,7 @@ import { UserContext } from "../../context/userContext";
 import TaskDetails from "./TaskDetails/TaskDetails";
 import { statusConfig } from "../config";
 
-const StatusHeader = ({showCreate, currentStatus, showButton, ...rest}) => {
+const StatusHeader = ({currentStatus, showButton, ...rest}) => {
     return <div className="flex items-center justify-between flex-1" {...rest}>
         <StatusChip 
             label={currentStatus}
@@ -23,13 +23,10 @@ const StatusHeader = ({showCreate, currentStatus, showButton, ...rest}) => {
             color={statusConfig[currentStatus]}
             sx={{ fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'white'}}
         />
-        {showButton && <IconButton size="small" onClick={() => showCreate(currentStatus)}>
-            <AddIcon fontSize="medium" sx={{ color: '#2328ff'}}/>
-        </IconButton>}
     </div>
 }
 
-const Kanban = ({ showCreate, tasks, setTasks }) => {
+const Kanban = ({ tasks, setTasks }) => {
     const [loading, setLoading] = useState(false); 
     const { user } = useContext(UserContext);
     const { role } = useContext(ProjectContext);
@@ -70,7 +67,7 @@ const Kanban = ({ showCreate, tasks, setTasks }) => {
         <TaskDetails closeModal={() => setSelectedTask(null)} open={selectedTask != null} task={selectedTask}/>
         <div className="grid grid-cols-5 gap-3 border-b-1 border-gray-300 py-3">
           {statuses.map(status => (
-            <StatusHeader key={status} currentStatus={status} showCreate={showCreate} showButton={role === "Admin"}/>
+            <StatusHeader key={status} currentStatus={status} showButton={role === "Admin"}/>
           ))}
         </div>
         <div className="grid grid-cols-5 py-3 gap-3 box-border">
@@ -123,7 +120,9 @@ const Kanban = ({ showCreate, tasks, setTasks }) => {
                             <Stack direction="row" justifyContent={"space-between"} width="100%">
                               <Stack direction="row" gap={1}>
                                 <IconButton size="small">
-                                  <ChatBubbleOutlineOutlinedIcon fontSize="inherit" />
+                                  <Badge badgeContent={task.comments.length} color="primary">
+                                    <ChatBubbleOutlineOutlinedIcon fontSize="inherit" />
+                                  </Badge>
                                 </IconButton>
                                   <IconButton size="small">
                                     <Badge badgeContent={task.attachments.length} color="primary">

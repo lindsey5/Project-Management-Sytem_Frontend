@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react"
-import { getMembers } from "../../../services/MemberService";
+import { deleteMember, getMembers } from "../../../services/MemberService";
 import { useSearchParams } from "react-router-dom";
 import CustomizedTable from "../../../components/table";
 import { ProjectContext } from "../../../layouts/ProjectLayout";
@@ -57,6 +57,12 @@ const Team = () => {
         fetchMembers();
     },[])
 
+    const handleRemove = async () => {
+        const response = await deleteMember(memberId);
+
+        if(response.success) window.location.reload()
+    }
+
     return <main className="w-full h-full overflow-y-auto py-10 p-5">
         <CustomizedTable
             cols={<TableRow>
@@ -113,6 +119,7 @@ const Team = () => {
             title="Delete"
             text="Are you sure do you want to remove?"
             handleClose={handleCloseRemove} 
+            handleAgree={handleRemove}
             isOpen={memberId}
             variant="error"
         />
