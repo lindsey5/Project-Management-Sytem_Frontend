@@ -5,7 +5,8 @@ const projectState = {
     description: null,
     start_date: null,
     end_date: null,
-    category: null
+    type: null,
+    status: null,
 }
 
 const projectReducer = (state, action) => {
@@ -18,8 +19,12 @@ const projectReducer = (state, action) => {
             return { ...state, start_date: action.payload }
         case 'SET_END_DATE':
             return { ...state, end_date: action.payload }
-        case 'SET_CATEGORY':
+        case 'SET_TYPE':
             return { ... state, type: action.payload }
+        case "SET_PROJECT":
+            return action.payload
+        case "SET_STATUS":
+            return { ...state, status: action.payload }
         case 'CLEAR':
             return projectState
         default: 

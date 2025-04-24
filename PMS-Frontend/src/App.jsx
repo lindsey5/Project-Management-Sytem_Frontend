@@ -18,6 +18,7 @@ import Tasks from "./pages/User/Project/Tasks";
 import Team from "./pages/User/Project/Team";
 import Requests from "./pages/User/Project/Requests";
 import Overview from "./pages/User/Project/Overview";
+import ProjectSettings from "./pages/User/Project/Settings";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +35,7 @@ const router = createBrowserRouter(
             <Route path="team" element={<Team />} />
             <Route path="requests" element={<Requests />} />
             <Route path="overview" element={<Overview />} />
+            <Route path="settings" element={<ProjectSettings />} />
           </Route>
         </Route>
       </Route>

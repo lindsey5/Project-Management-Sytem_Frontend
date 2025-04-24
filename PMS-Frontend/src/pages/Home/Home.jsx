@@ -11,7 +11,7 @@ const HeroSection = () => {
     return (
       <section id="hero" ref={ref} className="w-full flex items-center justify-center px-10 pb-10 pt-[180px] mb-16 text-center">
         <div className="flex flex-col items-center">
-          <h1 className={`w-[150px] py-2 text-shadow-[2px_5px_3px_rgb(0_0_0_/_0.25)] 
+          <h1 className={`md:w-[150px] py-2 text-shadow-[2px_5px_3px_rgb(0_0_0_/_0.25)] 
             md:whitespace-nowrap text-5xl 
             font-bold md:animate-typing md:border-r-4 overflow-hidden`}>
             Manage Your Projects with Ease</h1>

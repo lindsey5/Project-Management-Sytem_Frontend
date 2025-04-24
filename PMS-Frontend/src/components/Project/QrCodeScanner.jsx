@@ -56,7 +56,7 @@ const QrCodeScanner = () => {
 
     return (
         <div className="scanner-container">
-            <div id="reader" style={{ width: '100%' }}></div>
+            <div id="reader" className="notailwind" style={{ width: '100%' }}></div>
             {scanResult && (
                 <div className="scan-result">
                     <p>Scanned: {scanResult.decodedText}</p>

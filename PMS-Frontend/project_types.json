@@ -1,815 +1,194 @@
 [
-    {
-        "name": "Web App",
-        "category": "Software Development"
-      },
-      {
-        "name": "Mobile App",
-        "category": "Software Development"
-      },
-      {
-        "name": "Desktop App",
-        "category": "Software Development"
-      },
-      {
-        "name": "E-commerce Site",
-        "category": "Software Development"
-      },
-      {
-        "name": "Portfolio",
-        "category": "Creative"
-      },
-      {
-        "name": "SaaS Platform",
-        "category": "Software Development"
-      },
-      {
-        "name": "Blog",
-        "category": "Content Creation"
-      },
-      {
-        "name": "CRM System",
-        "category": "Software Development"
-      },
-      {
-        "name": "CMS",
-        "category": "Software Development"
-      },
-      {
-        "name": "Chat App",
-        "category": "Software Development"
-      },
-      {
-        "name": "Task Manager",
-        "category": "Software Development"
-      },
-      {
-        "name": "Video Streaming App",
-        "category": "Software Development"
-      },
-      {
-        "name": "Music Streaming App",
-        "category": "Software Development"
-      },
-      {
-        "name": "Booking System",
-        "category": "Software Development"
-      },
-      {
-        "name": "Inventory System",
-        "category": "Software Development"
-      },
-      {
-        "name": "POS System",
-        "category": "Software Development"
-      },
-      {
-        "name": "News Aggregator",
-        "category": "Software Development"
-      },
-      {
-        "name": "Job Board",
-        "category": "Software Development"
-      },
-      {
-        "name": "Finance Tracker",
-        "category": "Software Development"
-      },
-      {
-        "name": "Budgeting App",
-        "category": "Software Development"
-      },
-      {
-        "name": "Admin Dashboard",
-        "category": "Software Development"
-      },
-      {
-        "name": "Markdown Editor",
-        "category": "Software Development"
-      },
-      {
-        "name": "Note Taking App",
-        "category": "Software Development"
-      },
-      {
-        "name": "Calendar App",
-        "category": "Software Development"
-      },
-      {
-        "name": "Time Tracker",
-        "category": "Software Development"
-      },
-      {
-        "name": "Fitness Tracker",
-        "category": "Software Development"
-      },
-      {
-        "name": "Recipe App",
-        "category": "Software Development"
-      },
-      {
-        "name": "Food Delivery App",
-        "category": "Software Development"
-      },
-      {
-        "name": "Grocery List App",
-        "category": "Software Development"
-      },
-      {
-        "name": "Resume Builder",
-        "category": "Software Development"
-      },
-      {
-        "name": "Business Feasibility Study",
-        "category": "Research"
-      },
-      {
-        "name": "Marketing Research Report",
-        "category": "Research"
-      },
-      {
-        "name": "Social Media Campaign",
-        "category": "Marketing"
-      },
-      {
-        "name": "Book Writing Project",
-        "category": "Creative"
-      },
-      {
-        "name": "Short Film Production",
-        "category": "Creative"
-      },
-      {
-        "name": "Documentary Film",
-        "category": "Creative"
-      },
-      {
-        "name": "Photography Portfolio",
-        "category": "Creative"
-      },
-      {
-        "name": "Art Installation",
-        "category": "Creative"
-      },
-      {
-        "name": "Stage Play Production",
-        "category": "Creative"
-      },
-      {
-        "name": "Music Album",
-        "category": "Creative"
-      },
-      {
-        "name": "Song Composition",
-        "category": "Creative"
-      },
-      {
-        "name": "Theatre Set Design",
-        "category": "Creative"
-      },
-      {
-        "name": "Fashion Collection",
-        "category": "Creative"
-      },
-      {
-        "name": "Interior Design Proposal",
-        "category": "Creative"
-      },
-      {
-        "name": "Architectural Model",
-        "category": "Creative"
-      },
-      {
-        "name": "Bridge Construction Model",
-        "category": "Engineering"
-      },
-      {
-        "name": "Smart Irrigation System",
-        "category": "Engineering"
-      },
-      {
-        "name": "Hydroelectric Prototype",
-        "category": "Engineering"
-      },
-      {
-        "name": "Solar-Powered Fan",
-        "category": "Engineering"
-      },
-      {
-        "name": "Wind Turbine Model",
-        "category": "Engineering"
-      },
-      {
-        "name": "Bamboo Housing Project",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Eco-Friendly Packaging Design",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Product Branding Strategy",
-        "category": "Marketing"
-      },
-      {
-        "name": "Retail Store Layout",
-        "category": "Design"
-      },
-      {
-        "name": "Pop-Up Shop Concept",
-        "category": "Design"
-      },
-      {
-        "name": "Restaurant Menu Design",
-        "category": "Design"
-      },
-      {
-        "name": "Catering Business Plan",
-        "category": "Business"
-      },
-      {
-        "name": "Food Truck Concept",
-        "category": "Business"
-      },
-      {
-        "name": "Mobile Coffee Cart",
-        "category": "Business"
-      },
-      {
-        "name": "Health Awareness Seminar",
-        "category": "Health"
-      },
-      {
-        "name": "Fitness Bootcamp Plan",
-        "category": "Health"
-      },
-      {
-        "name": "Yoga Workshop Series",
-        "category": "Health"
-      },
-      {
-        "name": "Community Clean-Up Drive",
-        "category": "Community"
-      },
-      {
-        "name": "Tree Planting Campaign",
-        "category": "Community"
-      },
-      {
-        "name": "Recycling Program",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Waste Segregation Awareness",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Road Safety Education",
-        "category": "Education"
-      },
-      {
-        "name": "Anti-Bullying Campaign",
-        "category": "Education"
-      },
-      {
-        "name": "Gender Equality Workshop",
-        "category": "Education"
-      },
-      {
-        "name": "Mental Health Awareness Week",
-        "category": "Health"
-      },
-      {
-        "name": "Art for a Cause Exhibit",
-        "category": "Creative"
-      },
-      {
-        "name": "Charity Concert",
-        "category": "Creative"
-      },
-      {
-        "name": "Fundraising Fun Run",
-        "category": "Community"
-      },
-      {
-        "name": "Clothing Donation Drive",
-        "category": "Community"
-      },
-      {
-        "name": "Tutoring Outreach Program",
-        "category": "Education"
-      },
-      {
-        "name": "Literacy Training Program",
-        "category": "Education"
-      },
-      {
-        "name": "Water Purification Prototype",
-        "category": "Engineering"
-      },
-      {
-        "name": "Rainwater Collection System",
-        "category": "Engineering"
-      },
-      {
-        "name": "Vertical Garden Installation",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Composting Project",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Urban Farming Plot",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Birdhouse Construction",
-        "category": "Creative"
-      },
-      {
-        "name": "Dog Shelter Volunteer Program",
-        "category": "Community"
-      },
-      {
-        "name": "Street Animal Feeding Project",
-        "category": "Community"
-      },
-      {
-        "name": "Pet Adoption Fair",
-        "category": "Community"
-      },
-      {
-        "name": "Disaster Relief Logistics Plan",
-        "category": "Emergency Management"
-      },
-      {
-        "name": "Emergency Preparedness Kit",
-        "category": "Emergency Management"
-      },
-      {
-        "name": "Fire Drill Simulation",
-        "category": "Emergency Management"
-      },
-      {
-        "name": "Earthquake Safety Campaign",
-        "category": "Emergency Management"
-      },
-      {
-        "name": "Home Security Awareness",
-        "category": "Safety"
-      },
-      {
-        "name": "School Safety Program",
-        "category": "Safety"
-      },
-      {
-        "name": "Civic Engagement Forum",
-        "category": "Community"
-      },
-      {
-        "name": "Youth Leadership Summit",
-        "category": "Community"
-      },
-      {
-        "name": "Environmental Impact Assessment",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Energy Consumption Audit",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Public Opinion Survey",
-        "category": "Research"
-      },
-      {
-        "name": "Political Literacy Workshop",
-        "category": "Education"
-      },
-      {
-        "name": "Mock Election",
-        "category": "Education"
-      },
-      {
-        "name": "Oral History Collection",
-        "category": "Research"
-      },
-      {
-        "name": "Cultural Heritage Mapping",
-        "category": "Research"
-      },
-      {
-        "name": "Language Documentation",
-        "category": "Research"
-      },
-      {
-        "name": "Storytelling Workshop",
-        "category": "Creative"
-      },
-      {
-        "name": "Poetry Book Compilation",
-        "category": "Creative"
-      },
-      {
-        "name": "Zine Creation Project",
-        "category": "Creative"
-      },
-      {
-        "name": "Board Game Design",
-        "category": "Creative"
-      },
-      {
-        "name": "Card Game Development",
-        "category": "Creative"
-      },
-      {
-        "name": "Educational Poster Series",
-        "category": "Education"
-      },
-      {
-        "name": "Science Experiment Project",
-        "category": "Education"
-      },
-      {
-        "name": "Robotics Prototype",
-        "category": "Engineering"
-      },
-      {
-        "name": "Drone Assembly",
-        "category": "Engineering"
-      },
-      {
-        "name": "RC Car Custom Build",
-        "category": "Engineering"
-      },
-      {
-        "name": "Mechanical Crane Model",
-        "category": "Engineering"
-      },
-      {
-        "name": "Hydraulic Arm Project",
-        "category": "Engineering"
-      },
-      {
-        "name": "Electrical Circuit Board",
-        "category": "Engineering"
-      },
-      {
-        "name": "Soldering Workshop",
-        "category": "Engineering"
-      },
-      {
-        "name": "3D Printing Project",
-        "category": "Engineering"
-      },
-      {
-        "name": "Laser Cutting Project",
-        "category": "Engineering"
-      },
-      {
-        "name": "Woodworking Project",
-        "category": "Creative"
-      },
-      {
-        "name": "DIY Furniture Build",
-        "category": "Creative"
-      },
-      {
-        "name": "Recycled Art Project",
-        "category": "Creative"
-      },
-      {
-        "name": "Mural Painting",
-        "category": "Creative"
-      },
-      {
-        "name": "Calligraphy Set",
-        "category": "Creative"
-      },
-      {
-        "name": "Photography Darkroom Setup",
-        "category": "Creative"
-      },
-      {
-        "name": "Online Portfolio Website",
-        "category": "Software Development"
-      },
-      {
-        "name": "Resume + Cover Letter Build",
-        "category": "Career Development"
-      },
-      {
-        "name": "Thesis Writing Project",
-        "category": "Education"
-      },
-      {
-        "name": "Research Paper",
-        "category": "Research"
-      },
-      {
-        "name": "Capstone Project",
-        "category": "Education"
-      },
-      {
-        "name": "Internship Experience Report",
-        "category": "Career Development"
-      },
-      {
-        "name": "Journal Publication",
-        "category": "Research"
-      },
-      {
-        "name": "Film Script Writing",
-        "category": "Creative"
-      },
-      {
-        "name": "Radio Drama",
-        "category": "Creative"
-      },
-      {
-        "name": "Podcast Series",
-        "category": "Creative"
-      },
-      {
-        "name": "Live Debate",
-        "category": "Creative"
-      },
-      {
-        "name": "Speech Competition",
-        "category": "Creative"
-      },
-      {
-        "name": "Public Speaking Workshop",
-        "category": "Education"
-      },
-      {
-        "name": "Cooking Competition",
-        "category": "Creative"
-      },
-      {
-        "name": "Pastry and Dessert Display",
-        "category": "Creative"
-      },
-      {
-        "name": "Traditional Dance Performance",
-        "category": "Creative"
-      },
-      {
-        "name": "Folk Music Ensemble",
-        "category": "Creative"
-      },
-      {
-        "name": "Music Video Production",
-        "category": "Creative"
-      },
-      {
-        "name": "Haiku Collection",
-        "category": "Creative"
-      },
-      {
-        "name": "Children's Storybook",
-        "category": "Creative"
-      },
-      {
-        "name": "Online Magazine",
-        "category": "Creative"
-      },
-      {
-        "name": "News Publication",
-        "category": "Creative"
-      },
-      {
-        "name": "Cartoon Strip Series",
-        "category": "Creative"
-      },
-      {
-        "name": "Illustration Book",
-        "category": "Creative"
-      },
-      {
-        "name": "Graffiti Art Wall",
-        "category": "Creative"
-      },
-      {
-        "name": "Community Newspaper",
-        "category": "Creative"
-      },
-      {
-        "name": "Reforestation Initiative",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Biodiversity Mapping",
-        "category": "Research"
-      },
-      {
-        "name": "Beach Clean-Up Drive",
-        "category": "Community"
-      },
-      {
-        "name": "Mangrove Replanting",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Wildlife Observation Journal",
-        "category": "Research"
-      },
-      {
-        "name": "Bird Watching Log",
-        "category": "Research"
-      },
-      {
-        "name": "Insect Identification Study",
-        "category": "Research"
-      },
-      {
-        "name": "Aquaponics System Build",
-        "category": "Engineering"
-      },
-      {
-        "name": "Fish Tank Ecosystem",
-        "category": "Engineering"
-      },
-      {
-        "name": "Fertilizer Experiment",
-        "category": "Research"
-      },
-      {
-        "name": "Soil Quality Testing",
-        "category": "Research"
-      },
-      {
-        "name": "Urban Planning Proposal",
-        "category": "Design"
-      },
-      {
-        "name": "City Traffic Study",
-        "category": "Research"
-      },
-      {
-        "name": "Pedestrian Safety Report",
-        "category": "Safety"
-      },
-      {
-        "name": "Noise Pollution Study",
-        "category": "Research"
-      },
-      {
-        "name": "Sustainable Neighborhood Plan",
-        "category": "Design"
-      },
-      {
-        "name": "Disaster-Resilient Housing",
-        "category": "Design"
-      },
-      {
-        "name": "DIY Solar Cooker",
-        "category": "Engineering"
-      },
-      {
-        "name": "Energy-Efficient Lighting Test",
-        "category": "Engineering"
-      },
-      {
-        "name": "Low-Cost Water Filter",
-        "category": "Engineering"
-      },
-      {
-        "name": "Plastic Upcycling Project",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Alternative Fuel Demonstration",
-        "category": "Engineering"
-      },
-      {
-        "name": "Soap Making Project",
-        "category": "Creative"
-      },
-      {
-        "name": "DIY Candle Making",
-        "category": "Creative"
-      },
-      {
-        "name": "Handmade Jewelry Project",
-        "category": "Creative"
-      },
-      {
-        "name": "Woven Bag Crafting",
-        "category": "Creative"
-      },
-      {
-        "name": "Eco-Brick Furniture",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Clothing Recycling Workshop",
-        "category": "Sustainability"
-      },
-      {
-        "name": "Product Branding Strategy",
-        "category": "Business"
-      },
-      {
-        "name": "Catering Business Plan",
-        "category": "Business"
-      },
-      {
-        "name": "Food Truck Concept",
-        "category": "Business"
-      },
-      {
-        "name": "Mobile Coffee Cart",
-        "category": "Business"
-      },
-      {
-        "name": "Retail Store Layout",
-        "category": "Business"
-      },
-      {
-        "name": "Pop-Up Shop Concept",
-        "category": "Business"
-      },
-      {
-        "name": "Business Feasibility Study",
-        "category": "Business"
-      },
-      {
-        "name": "Marketing Research Report",
-        "category": "Business"
-      },
-      {
-        "name": "Product Launch Plan",
-        "category": "Business"
-      },
-      {
-        "name": "Franchise Business Model",
-        "category": "Business"
-      },
-      {
-        "name": "Investor Pitch Deck",
-        "category": "Business"
-      },
-      {
-        "name": "Market Penetration Strategy",
-        "category": "Business"
-      },
-      {
-        "name": "Customer Retention Plan",
-        "category": "Business"
-      },
-      {
-        "name": "Sales Funnel Strategy",
-        "category": "Business"
-      },
-      {
-        "name": "E-commerce Business Model",
-        "category": "Business"
-      },
-      {
-        "name": "Startup Business Plan",
-        "category": "Business"
-      },
-      {
-        "name": "Financial Projection for Startups",
-        "category": "Business"
-      },
-      {
-        "name": "Digital Marketing Strategy",
-        "category": "Business"
-      },
-      {
-        "name": "Social Media Marketing Plan",
-        "category": "Business"
-      },
-      {
-        "name": "Customer Service Training Program",
-        "category": "Business"
-      },
-      {
-        "name": "Supply Chain Optimization Plan",
-        "category": "Business"
-      },
-      {
-        "name": "Operational Efficiency Plan",
-        "category": "Business"
-      },
-      {
-        "name": "Brand Identity Creation",
-        "category": "Business"
-      },
-      {
-        "name": "Business Growth Strategy",
-        "category": "Business"
-      },
-      {
-        "name": "B2B Sales Strategy",
-        "category": "Business"
-      },
-      {
-        "name": "E-commerce Website Development Plan",
-        "category": "Business"
-      }
+  {
+    "name": "Web App",
+    "category": "Software Development"
+  },
+  {
+    "name": "Mobile App",
+    "category": "Software Development"
+  },
+  {
+    "name": "E-commerce Platform",
+    "category": "Business & Sales"
+  },
+  {
+    "name": "Inventory Management System",
+    "category": "Enterprise Solutions"
+  },
+  {
+    "name": "AI Chatbot",
+    "category": "Artificial Intelligence"
+  },
+  {
+    "name": "Machine Learning Model",
+    "category": "Data Science"
+  },
+  {
+    "name": "Portfolio Website",
+    "category": "Personal Branding"
+  },
+  {
+    "name": "Blog Platform",
+    "category": "Content Management"
+  },
+  {
+    "name": "Game Development",
+    "category": "Entertainment"
+  },
+  {
+    "name": "IoT Device Integration",
+    "category": "Hardware & Embedded Systems"
+  },
+  {
+    "name": "Social Networking App",
+    "category": "Communication"
+  },
+  {
+    "name": "CRM System",
+    "category": "Customer Management"
+  },
+  {
+    "name": "Online Learning Platform",
+    "category": "Education"
+  },
+  {
+    "name": "Website Redesign",
+    "category": "Marketing"
+  },
+  {
+    "name": "Mobile App Development",
+    "category": "Software Development"
+  },
+  {
+    "name": "Cloud Migration",
+    "category": "IT Infrastructure"
+  },
+  {
+    "name": "Product Launch Campaign",
+    "category": "Product Management"
+  },
+  {
+    "name": "Customer Onboarding Workflow",
+    "category": "Operations"
+  },
+  {
+    "name": "Data Analytics Dashboard",
+    "category": "Business Intelligence"
+  },
+  {
+    "name": "Social Media Strategy",
+    "category": "Marketing"
+  },
+  {
+    "name": "Internal Tool Automation",
+    "category": "Process Improvement"
+  },
+  {
+    "name": "Cybersecurity Audit",
+    "category": "Security"
+  },
+  {
+    "name": "Employee Training Program",
+    "category": "Human Resources"
+  },
+  {
+    "name": "E-commerce Platform Setup",
+    "category": "Sales"
+  },
+  {
+    "name": "Quality Assurance Testing",
+    "category": "Quality Control"
+  },
+  {
+    "name": "Inventory Tracking System",
+    "category": "Logistics"
+  },
+  {
+    "name": "Customer Feedback System",
+    "category": "User Experience"
+  },
+  {
+    "name": "Digital Transformation Initiative",
+    "category": "Executive Strategy"
+  },
+  {
+    "name": "CRM Integration",
+    "category": "Customer Relationship Management"
+  },
+  {
+    "name": "SaaS Subscription Tracker",
+    "category": "Finance"
+  },
+  {
+    "name": "Remote Work Policy Implementation",
+    "category": "Human Resources"
+  },
+  {
+    "name": "Warehouse Automation System",
+    "category": "Logistics"
+  },
+  {
+    "name": "AI Chatbot Development",
+    "category": "Artificial Intelligence"
+  },
+  {
+    "name": "Bug Tracking and Resolution",
+    "category": "Quality Assurance"
+  },
+  {
+    "name": "Performance Review System",
+    "category": "HR Management"
+  },
+  {
+    "name": "Client Portal Upgrade",
+    "category": "Customer Experience"
+  },
+  {
+    "name": "Digital Marketing Analytics Tool",
+    "category": "Marketing"
+  },
+  {
+    "name": "Legal Compliance Tracker",
+    "category": "Legal"
+  },
+  {
+    "name": "Mobile App Security Testing",
+    "category": "Cybersecurity"
+  },
+  {
+    "name": "Freelancer Task Assignment Board",
+    "category": "Freelance Management"
+  },
+  {
+    "name": "Virtual Reality Product Demo",
+    "category": "Product Innovation"
+  },
+  {
+    "name": "Supplier Management Platform",
+    "category": "Procurement"
+  },
+  {
+    "name": "Multilingual Website Support",
+    "category": "Internationalization"
+  },
+  {
+    "name": "Blockchain Transaction Log",
+    "category": "FinTech"
+  },
+  {
+    "name": "Customer Loyalty App",
+    "category": "Retail"
+  },
+  {
+    "name": "KPI Monitoring Dashboard",
+    "category": "Analytics"
+  },
+  {
+    "name": "Learning Management System (LMS)",
+    "category": "Education"
+  },
+  {
+    "name": "Environmental Impact Report Tool",
+    "category": "Sustainability"
+  }
 ]
-  

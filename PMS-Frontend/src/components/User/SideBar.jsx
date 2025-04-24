@@ -36,7 +36,7 @@ const SideBar = () => {
                 <img className="rounded-full" src={user && user.profile_pic} alt="" />
             </button>
             <Tooltip title="Home" placement="left-end" arrow>
-                <IconButton size="medium" sx={ (!showSearch && pathname.includes('/home')) ? bg : undefined } onClick={() => window.location.href = '/home'}>
+                <IconButton size="medium" sx={ (!showSearch && pathname === '/home') ? bg : undefined } onClick={() => window.location.href = '/home'}>
                     <DashboardOutlinedIcon sx={{ fontSize: 28 }}/>
                 </IconButton>
             </Tooltip>
@@ -51,7 +51,7 @@ const SideBar = () => {
                 </IconButton>
             </Tooltip>
             <Tooltip title="Settings" placement="left-end" arrow>
-                <IconButton size="medium" sx={ (!showSearch && pathname.includes('/settings')) ? bg : undefined } onClick={() => window.location.href = '/settings'}>
+                <IconButton size="medium" sx={ (!showSearch && pathname === '/settings') ? bg : undefined } onClick={() => window.location.href = '/settings'}>
                     <SettingsOutlinedIcon sx={{ fontSize: 28 }}/>
                 </IconButton>
             </Tooltip>
