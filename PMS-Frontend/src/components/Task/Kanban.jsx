@@ -29,7 +29,7 @@ const StatusHeader = ({currentStatus, showButton, ...rest}) => {
 const Kanban = ({ tasks, setTasks }) => {
     const [loading, setLoading] = useState(false); 
     const { user } = useContext(UserContext);
-    const { role } = useContext(ProjectContext);
+    const { project, role } = useContext(ProjectContext);
     const [selectedTask, setSelectedTask] = useState(null);
 
     const handleDragStart = (e, task_id) => {
@@ -75,8 +75,8 @@ const Kanban = ({ tasks, setTasks }) => {
             return <div 
                       key={status}
                       className="min-h-[200px]"
-                      onDragOver={handleDragOver}
-                      onDrop={(e) => handleDrop(e, status)}
+                      onDragOver={project.status === 'Active' ? handleDragOver : undefined}
+                      onDrop={(e) => project.status === 'Active' ? handleDrop(e, status) : undefined}
                     >
                       {tasks && tasks.length > 0 && tasks
                         .filter(task => task.status === status)
@@ -91,8 +91,8 @@ const Kanban = ({ tasks, setTasks }) => {
                               variant="outlined"
                               sx={{ borderRadius: '20px', ':hover' : { backgroundColor: '#F9FAFB'}}}
                               className="shadow-xl flex flex-col gap-3 items-start px-2 py-4 bg-white m-3 cursor-pointer"
-                              draggable={!loading}
-                              onDragStart={(e) => handleDragStart(e, task.id)}
+                              draggable={!loading && project.status === 'Active'}
+                              onDragStart={(e) => project.status === 'Active' ? handleDragStart(e, task.id) : undefined}
                               onClick={() => setSelectedTask(task)}
                           >
                             <StatusChip 

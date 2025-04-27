@@ -55,7 +55,6 @@ export const CommentContextProvider = ({ children }) => {
   
     return (
         <CommentContext.Provider value={{ 
-            setTaskId,
             comments,
             lastItemRef,
             fetchComments,

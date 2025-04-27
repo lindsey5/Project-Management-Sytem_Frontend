@@ -19,6 +19,7 @@ import Team from "./pages/User/Project/Team";
 import Requests from "./pages/User/Project/Requests";
 import Overview from "./pages/User/Project/Overview";
 import ProjectSettings from "./pages/User/Project/Settings";
+import ChatBot from "./components/Chatbot/Chatbot";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,8 +48,9 @@ const router = createBrowserRouter(
 
 const App = () => {
 
-  return <div>
+  return <div className="relative">
     <RouterProvider router={router} />
+    <ChatBot />
     <ToastContainer />
   </div>
 }

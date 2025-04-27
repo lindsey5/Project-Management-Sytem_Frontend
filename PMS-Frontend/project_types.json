@@ -4,10 +4,6 @@
     "category": "Software Development"
   },
   {
-    "name": "Mobile App",
-    "category": "Software Development"
-  },
-  {
     "name": "E-commerce Platform",
     "category": "Business & Sales"
   },
@@ -128,10 +124,6 @@
     "category": "Logistics"
   },
   {
-    "name": "AI Chatbot Development",
-    "category": "Artificial Intelligence"
-  },
-  {
     "name": "Bug Tracking and Resolution",
     "category": "Quality Assurance"
   },
@@ -190,5 +182,25 @@
   {
     "name": "Environmental Impact Report Tool",
     "category": "Sustainability"
-  }
+  },
+  { "name": "Bug Tracking System", "category": "Software QA" },
+  { "name": "Blockchain Wallet", "category": "Fintech" },
+  { "name": "E-Learning Platform", "category": "Education" },
+  { "name": "HR Management System", "category": "Human Resources" },
+  { "name": "Job Portal", "category": "Recruitment" },
+  { "name": "Content Management System (CMS)", "category": "Web Development" },
+  { "name": "Online Voting System", "category": "Civic Tech" },
+  { "name": "Help Desk Ticketing System", "category": "IT Support" },
+  { "name": "Property Listing Platform", "category": "Real Estate" },
+  { "name": "News Aggregator App", "category": "Media & News" },
+  { "name": "Online Examination System", "category": "Education" },
+  { "name": "Library Management System", "category": "Education" },
+  { "name": "Donation Platform", "category": "Nonprofit" },
+  { "name": "Freelance Marketplace", "category": "Business" },
+  { "name": "Survey & Feedback Tool", "category": "Analytics" },
+  { "name": "Smart Home Control App", "category": "IoT" },
+  { "name": "Voice Assistant Integration", "category": "AI/ML" },
+  { "name": "Augmented Reality App", "category": "AR/VR" },
+  { "name": "Cybersecurity Monitoring Tool", "category": "Security" },
+  { "name": "Time Tracking App", "category": "Productivity" }
 ]

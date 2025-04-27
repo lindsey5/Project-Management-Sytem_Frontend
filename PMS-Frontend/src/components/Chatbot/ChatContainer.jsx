@@ -1,0 +1,172 @@
+import CloseIcon from '@mui/icons-material/Close';
+import SendIcon from '@mui/icons-material/Send';
+import { IconButton, TextField } from '@mui/material';
+import { useState, useRef } from 'react';
+import { GoogleGenAI, createUserContent, createPartFromUri, } from "@google/genai";
+import MicIcon from '@mui/icons-material/Mic';
+import CheckIcon from '@mui/icons-material/Check';
+
+const ai = new GoogleGenAI({ apiKey: "AIzaSyA4CX6hyhMv2Xb4y9-l3zh8t-ZCplI13SU" }); 
+
+const ChatbotContainer = ({ onClose }) => {
+    const [message, setMessage] = useState('');
+    const [chats, setChats] = useState([
+        { from: 'bot', message: 'Hi, how can I help you?' }
+    ]);
+    const mediaRecorderRef = useRef(null);
+    const audioChunksRef = useRef([]);
+    const [isRecording, setIsRecording] = useState(false);
+    const [isAudioSending, setIsAudioSending] = useState(false);
+
+    const handleSubmit = async () => {
+        if (!message.trim()) return;
+        setChats(prev => [...prev, { from: 'user', message }]);
+        setMessage('');
+        try {
+            const response = await ai.models.generateContent({
+                model: "gemini-2.0-flash",
+                contents: message,
+                config: {
+                    systemInstruction: "You are a chatbot for project management system ",
+                },
+            });
+            const text = response.text; 
+            if (text) {
+                setChats(prev => [...prev, { from: 'bot', message: text }]);
+            } else {
+                console.error('AI Response Error: No text in response');
+                setChats(prev => [...prev, { from: 'bot', message: 'Sorry, I didn\'t get a text response.' }]);
+            }
+        } catch (error) {
+            setChats(prev => [...prev, { from: 'bot', message: 'Sorry, there was an error communicating with the AI.' }]);
+        }
+    };
+
+    const startRecording = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorderRef.current = new MediaRecorder(stream);
+            audioChunksRef.current = [];
+
+            mediaRecorderRef.current.ondataavailable = (event) => {
+                audioChunksRef.current.push(event.data);
+            };
+
+            mediaRecorderRef.current.onstop = async () => {
+                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' }); // More common format
+                const audioUrl = URL.createObjectURL(audioBlob);
+                setChats(prev => [...prev, { from: 'user', type: "audio", message: audioUrl }]);
+                audioChunksRef.current = [];
+                setIsAudioSending(true);
+                mediaRecorderRef.current.onstop = async () => {
+                    const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' }); // More common format
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    setChats(prev => [...prev, { from: 'user', type: "audio", message: audioUrl }]);
+                    audioChunksRef.current = [];
+                    setIsAudioSending(true);
+                    try {
+                        const arrayBuffer = await audioBlob.arrayBuffer();
+                        const base64Audio = btoa(new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+    
+                        const response = await ai.models.generateContent({
+                            model: "gemini-2.0-flash",
+                            contents: [{
+                                parts: [{
+                                    inlineData: {
+                                        data: base64Audio,
+                                        mimeType: 'audio/webm',
+                                    },
+                                }],
+                            }],
+                            config: {
+                                systemInstruction: "You are a chatbot for project management system. Transcribe and answer the user's query from the audio.",
+                            },
+                        });
+                        const text = response.text;
+                        if (text) {
+                            setChats(prev => [...prev, { from: 'bot', message: text }]);
+                        } else {
+                            console.error('AI Audio Response Error: No text in response');
+                            setChats(prev => [...prev, { from: 'bot', message: 'Sorry, I didn\'t understand the audio.' }]);
+                        }
+                    } catch (error) {
+                        console.error('AI Audio Error:', error);
+                        setChats(prev => [...prev, { from: 'bot', message: 'Sorry, I couldn\'t process the audio.' }]);
+                    } finally {
+                        setIsRecording(false);
+                        setIsAudioSending(false);
+                    }
+                };
+            };
+
+            mediaRecorderRef.current.start();
+            setIsRecording(true);
+        } catch (err) {
+            console.error('Failed to start recording:', err);
+            setChats(prev => [...prev, { from: 'bot', message: 'Failed to access your microphone.' }]);
+        }
+    };
+
+    const stopRecording = () => {
+        if (mediaRecorderRef.current) {
+            mediaRecorderRef.current.stop();
+        }
+    };
+
+    return (
+        <div className='flex flex-col absolute bg-white w-[350px] h-[500px]
+            transition-all duration-500 ease-in-out -top-127 left-1/2
+            -translate-x-full rounded-lg shadow-purple-500 shadow-md'>
+            <div className='bg-purple-500 p-3 rounded-tl-md rounded-tr-md flex justify-between items-center'>
+                <h1 className='text-white font-bold text-xl'>ProjexBot</h1>
+                <IconButton size='medium' onClick={onClose}>
+                    <CloseIcon fontSize='inherit' sx={{ color: 'white' }} />
+                </IconButton>
+            </div>
+            <div className='flex-1 flex flex-col overflow-y-auto'>
+                {chats.map((chat, index) => (
+                    <div key={index} className={`w-full p-3 flex gap-5 p-3 list-none items-center ${chat.from === 'bot' ? 'justify-start' : 'justify-end'}`}>
+                        <li
+                            className={`border-1 border-gray-200 rounded-md ${chat.from === 'bot' ? 'bg-purple-500 text-white' : 'bg-white'}
+                            shadow-md p-3`}
+                        >{chat.type === 'audio' ? <audio controls src={chat.message} className="mt-4"></audio> : chat.message}</li>
+                    </div>
+                ))}
+            </div>
+
+            <div className='w-full p-3 flex gap-3 items-center'>
+                {!isAudioSending && !isRecording && <TextField
+                    onChange={(e) => setMessage(e.target.value)}
+                    value={message}
+                    sx={{
+                        flex: 1,
+                        '& .MuiOutlinedInput-root': {
+                            height: '45px',
+                            '&:hover fieldset': {
+                                borderColor: '#A855F7',
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: '#A855F7',
+                            },
+                        },
+                        input: { fontSize: '15px', borderColor: '#A855F7' }
+                    }}
+                />} 
+                {<div className='flex-1'>{isAudioSending && 'Processing audio...'}</div>}
+                <div>
+                    {!isRecording && <IconButton onClick={handleSubmit} disabled={isAudioSending}>
+                        <SendIcon sx={{ color: '#A855F7' }} />
+                    </IconButton>}
+                    <IconButton onClick={!isRecording ? startRecording : stopRecording} disabled={isAudioSending}>
+                        {!isRecording ? <MicIcon sx={{ color: '#A855F7' }} /> : <CloseIcon />}
+                    </IconButton>
+                    {isRecording && <IconButton onClick={stopRecording} disabled={isAudioSending}>
+                        <CheckIcon color={!isAudioSending ? 'success' : ''} fontSize="large" />
+                    </IconButton>}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default ChatbotContainer;

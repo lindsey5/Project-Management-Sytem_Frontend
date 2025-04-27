@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material"
+import { Button, TextField } from "@mui/material"
 import { useContext, useEffect, useState } from "react"
 import { ProjectContext } from "../../../layouts/ProjectLayout"
 import useProjectReducer from "../../../hooks/projectReducer"
@@ -12,10 +12,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import project_types from '../../../../project_types.json';
+import { updateProject } from "../../../services/ProjectService";
+import { convertToAsiaTime, formatDate } from "../../../utils/utils";
+import { ConfirmDialog } from "../../../components/dialog";
 
 const filter = createFilterOptions();
 
-const GroupHeader = styled('div')(({ theme }) => ({
+const GroupHeader = styled('div')(() => ({
     position: 'sticky',
     top: '-8px',
     padding: '4px 10px',
@@ -27,8 +30,8 @@ const GroupHeader = styled('div')(({ theme }) => ({
     padding: 0,
   });
 
-const CustomTextField = ({label, value, ...rest}) =>{
-    return <div className="flex flex-col gap-3">
+const CustomTextField = ({label, value, width, ...rest}) =>{
+    return <div className="flex flex-col gap-3" style={{ width }}>
         <p className="text-lg font-bold">{label}</p>
         <TextField 
             sx={{ width: '100%' }}
@@ -39,9 +42,10 @@ const CustomTextField = ({label, value, ...rest}) =>{
 }
 
 const ProjectSettings = () => {
-    const { project } = useContext(ProjectContext)
+    const { project, role } = useContext(ProjectContext)
     const { state, dispatch } = useProjectReducer();
     const [value, setValue] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false);
 
     useEffect(() => {
         if(project) {
@@ -62,24 +66,40 @@ const ProjectSettings = () => {
         (option, index, self) =>
             index === self.findIndex((o) => o.name === option.name)
     ).sort((a, b) => a.category.localeCompare(b.category));
+
+    const saveUpdate = async () =>{
+        const response = await updateProject({  
+            ...state,
+            id: project.id,
+            type: value,
+            start_date: formatDate(state.start_date),
+            end_date: formatDate(state.end_date)
+        })
+
+        if(response.success) window.location.reload();
+    }
     
 
-    return <main className="px-10 py-6 flex flex-col gap-5 md:grid grid-cols-[2fr_1fr] gap-10">
-            <div className="bg-white flex flex-col gap-10">
+    return <main className="px-10 py-6 flex flex-col gap-5 lg:grid grid-cols-[2fr_1fr] gap-10">
+            <div className="bg-white flex flex-col gap-10 items-end">
                 <CustomTextField 
+                    width={"100%"}
                     label="Title" 
                     value={state.title}
                     onChange={(e) => dispatch({ type: "SET_TITLE", payload: e.target.value})} 
+                    disabled={role !== 'Admin'}
                 />
-                <CustomTextField 
+                <CustomTextField
+                    width={"100%"}
                     label="Description"
                     value={state.description} 
                     multiline 
                     maxRows={5}
                     inputProps={{ maxLength: 500 }}
                     onChange={(e) => dispatch({ type: "SET_DESCRIPTION", payload: e.target.value})} 
+                    disabled={role !== 'Admin'}
                 />
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 w-full">
                     <p className="text-lg font-bold">Project Type</p>
                     <Autocomplete
                         value={value}
@@ -110,6 +130,7 @@ const ProjectSettings = () => {
 
                             return filtered;
                         }}
+                        disabled={role !== 'Admin'}
                         selectOnFocus
                         clearOnBlur
                         handleHomeEndKeys
@@ -150,8 +171,8 @@ const ProjectSettings = () => {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker 
                                 className="w-full"
-                                minDate={dayjs(state.start_date)}
-                                value={dayjs()}
+                                value={dayjs(state.start_date)}
+                                disabled={role !== 'Admin'}
                                 onChange={(value) => dispatch({type: 'SET_START_DATE', payload: value.$d})}
                             />
                         </LocalizationProvider>
@@ -163,6 +184,7 @@ const ProjectSettings = () => {
                                 className="w-full"
                                 minDate={dayjs(state.start_date)}
                                 value={dayjs(state.end_date)}
+                                disabled={role !== 'Admin'}
                                 onChange={(value) => dispatch({type: 'SET_END_DATE', payload: value.$d})}
                             />
                         </LocalizationProvider>
@@ -174,18 +196,35 @@ const ProjectSettings = () => {
                         width={"100%"}
                         item={[ { name: 'Active', color: green[500]}, { name: 'On Hold', color: grey[500]}, { name: 'Closed', color: red[500]}]}
                         value={state.status}
+                        disabled={role !== 'Admin'}
                         onChange={(e) => dispatch({ type: "SET_STATUS", payload: e.target.value})}
                     />
                 </div>
+                <Button 
+                    variant="contained"
+                    onClick={() => setOpenDialog(true)}
+                >
+                    Save changes
+                </Button>
+                <ConfirmDialog 
+                    handleAgree={saveUpdate}
+                    handleClose={() => setOpenDialog(false)}
+                    isOpen={openDialog}
+                    text="Are you sure you want to save these changes?"
+                    title="Update"
+                    variant="info"
+                />
             </div>
             <div className="flex flex-col items-center">
+                <h1 className="mt-4">Project code: {project.project_code}</h1>
                 <QRCode
                     style={{ width: '50%',  }}
 
-                    value={project.code || ''}
+                    value={project.project_code || ''}
                     viewBox={`0 0 256 256`}
                 />
-                <p className="">Project code: {project.project_code}</p>
+                <h1>Created: {formatDate(convertToAsiaTime(project.created_At))}</h1>
+                <h1>Creator: {project.user.firstname} {project.user.lastname}</h1>
             </div>
     </main>
 

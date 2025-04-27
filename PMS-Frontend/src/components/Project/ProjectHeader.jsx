@@ -86,7 +86,7 @@ const ProjectHeader = () => {
                             value="/project/requests" 
                         />
                     )}
-                    {role == "Admin" && <Tab label="Settings" value="/project/settings" />}
+                    <Tab label="Settings" value="/project/settings" />
                 </Tabs>
                 <AvatarGroup 
                     max={3} 

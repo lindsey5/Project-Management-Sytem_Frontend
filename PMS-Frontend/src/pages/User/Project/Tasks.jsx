@@ -18,10 +18,9 @@ const Kanban = lazy(() => import('../../../components/Task/Kanban'));
 
 const Tasks = () => {
     const [alignment, setAlignment] = useState('Kanban');
-    const { role } = useContext(ProjectContext)
     const [showCreate, setShowCreate] = useState(false);
     const [status, setStatus] = useState(null);
-    const { project } = useContext(ProjectContext);
+    const { project, role } = useContext(ProjectContext);
     const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
@@ -80,6 +79,7 @@ const Tasks = () => {
             {role === 'Admin' && <CustomButton 
                 sx={{ backgroundColor: '#2263e7', '&:hover' : { backgroundColor: 'rgb(13, 71, 187)' }}}
                 icon={<AddIcon fontSize='small' />}
+                disabled={project.status !== "Active"}
                 onClick={() => setShowCreate(true)}
             >New Task</CustomButton>}
         </Box>

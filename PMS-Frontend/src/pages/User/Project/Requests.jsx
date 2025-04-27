@@ -17,6 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { ConfirmDialog } from "../../../components/dialog";
 import { createMember } from "../../../services/MemberService";
+import { useNavigate } from "react-router-dom";
 
 const requestPaginationState = {
     page:  1,
@@ -45,11 +46,17 @@ const requestReducer = (state, action) => {
 const Requests = () => {
     const [state, dispatch] = useReducer(requestReducer, requestPaginationState)
     const [requests, setRequests] = useState([]);
-    const { project, code } = useContext(ProjectContext);
+    const { project, code, role } = useContext(ProjectContext);
     const [id, setId] = useState();
     const [userId, setUserId] = useState();
     const [showAprrove, setShowApprove] = useState(false);
     const [showDecline, setShowDecline] = useState(false);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(role !== 'Admin')  navigate(-1);
+    }, [role])
 
     const fetchRequests = async (id, state) => {
         const response = await getRequest({

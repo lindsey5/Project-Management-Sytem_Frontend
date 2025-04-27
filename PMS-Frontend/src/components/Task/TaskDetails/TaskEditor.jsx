@@ -7,17 +7,19 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { Box, TextField, Stack, Card, Button, Typography, Avatar} from "@mui/material";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import useTaskReducer from "../../../hooks/taskReducer";
 import { useState } from "react";
 import { formatDateTime, convertToAsiaTime, timeAgo } from "../../../utils/utils";
 import { updateTask } from "../../../services/TaskService";
 import { updateAssignees } from "../../../services/AssigneeService";
+import { ProjectContext } from "../../../layouts/ProjectLayout";
 
 const TaskEditor = ({ members, role, task}) => {
     const [savedAssignees, setSavedAssignees] = useState([]);
     const [currentValue, setCurrentValue] = useState([]);
     const { state, dispatch } = useTaskReducer();
+    const { project } = useContext(ProjectContext);
 
     useEffect(() => {
         setSavedAssignees(task.assignees.map(t => ({...t.member, assigneeId: t.id})));
@@ -150,7 +152,7 @@ const TaskEditor = ({ members, role, task}) => {
                         </Typography> 
                     </Stack>
                 </Card> 
-                    <Button variant="contained" onClick={handleSave}>
+                    <Button variant="contained" onClick={handleSave} disabled={project.status !== "Active"}>
                         Save
                     </Button>
                 </Stack>
