@@ -125,18 +125,18 @@ const ChatbotContainer = ({ onClose, show}) => {
     return (
         <div className={`flex flex-col absolute bg-white w-[350px] h-[500px]
             transition-all duration-500 ease-in-out -top-127 left-1/2
-            -translate-x-full rounded-lg shadow-purple-500 shadow-md ${show ? 'flex' : 'hidden'}`}>
-            <div className='bg-purple-500 p-3 rounded-tl-md rounded-tr-md flex justify-between items-center'>
+            -translate-x-full rounded-lg shadow-md ${show ? 'flex' : 'hidden'}`}>
+            <div className='bg-black p-3 rounded-tl-md rounded-tr-md flex justify-between items-center'>
                 <h1 className='text-white font-bold text-xl'>ProjexBot</h1>
                 <IconButton size='medium' onClick={onClose}>
                     <CloseIcon fontSize='inherit' sx={{ color: 'white' }} />
                 </IconButton>
             </div>
-            <div className='flex-1 flex flex-col overflow-y-auto'>
+            <div className='flex-1 flex flex-col overflow-y-auto' id="container">
                 {chats.map((chat, index) => (
                     <div key={index} className={`w-full p-3 flex gap-5 p-3 list-none items-center ${chat.from === 'bot' ? 'justify-start' : 'justify-end'}`}>
                         <li
-                            className={`border-1 border-gray-200 rounded-md ${chat.from === 'bot' ? 'bg-purple-500 text-white' : 'bg-white'}
+                            className={`border-1 border-gray-200 rounded-md ${chat.from === 'bot' ? 'bg-black text-white' : 'bg-white'}
                             shadow-md p-3`}
                         >{chat.type === 'audio' ? <audio controls src={chat.message} className="mt-4"></audio> : chat.message}</li>
                     </div>
@@ -152,23 +152,23 @@ const ChatbotContainer = ({ onClose, show}) => {
                         '& .MuiOutlinedInput-root': {
                             height: '45px',
                             '&:hover fieldset': {
-                                borderColor: '#A855F7',
+                                borderColor: 'black',
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: '#A855F7',
+                                borderColor: 'black',
                             },
                         },
-                        input: { fontSize: '15px', borderColor: '#A855F7' }
+                        input: { fontSize: '15px', borderColor: 'black' }
                     }}
                 />} 
                 {!isAudioSending && isRecording && <div className='flex-1'>Recording audio...</div>}
                 {isAudioSending && <div className='flex-1'>Bot is thinking...</div>}
                 <div>
                     {!isRecording && <IconButton onClick={handleSubmit} disabled={isAudioSending}>
-                        <SendIcon sx={{ color: '#A855F7' }} />
+                        <SendIcon sx={{ color: 'black' }} />
                     </IconButton>}
                     <IconButton onClick={!isRecording ? startRecording : stopRecording} disabled={isAudioSending}>
-                        {!isRecording ? <MicIcon sx={{ color: '#A855F7' }} /> : <CloseIcon />}
+                        {!isRecording ? <MicIcon sx={{ color: 'black' }} /> : <CloseIcon />}
                     </IconButton>
                 </div>
             </div>
