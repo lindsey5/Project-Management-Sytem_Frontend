@@ -1,23 +1,35 @@
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
 import { IconButton, TextField } from '@mui/material';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import MicIcon from '@mui/icons-material/Mic';
-import CheckIcon from '@mui/icons-material/Check';
 
 const ai = new GoogleGenAI({ apiKey: "AIzaSyA4CX6hyhMv2Xb4y9-l3zh8t-ZCplI13SU" }); 
 
-const ChatbotContainer = ({ onClose }) => {
+const ChatbotContainer = ({ onClose, show}) => {
     const [message, setMessage] = useState('');
     const [chats, setChats] = useState([
-        { from: 'bot', message: 'Hi, how can I help you?' }
+        { from: 'bot', message: 'Hello. How can I help you today?' }
     ]);
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
     const [isRecording, setIsRecording] = useState(false);
     const [isAudioSending, setIsAudioSending] = useState(false);
-    const [audioUrl, setAudioUrl] = useState(null);
+    const [selectedVoice, setSelectedVoice] = useState(null);
+
+    useEffect(() => {
+        const loadVoices = () => {
+          const availableVoices = window.speechSynthesis.getVoices();
+          const femaleVoices = availableVoices.filter(voice => voice.name.toLowerCase().includes('female'));
+          if (femaleVoices.length > 0) {
+            setSelectedVoice(femaleVoices[0]); 
+          }
+        };
+    
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+      }, []);
 
     const handleSubmit = async () => {
         if (!message.trim()) return;
@@ -79,6 +91,9 @@ const ChatbotContainer = ({ onClose }) => {
                     });
                     const text = response.text;
                     if (text) {
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        utterance.voice = selectedVoice;
+                        speechSynthesis.speak(utterance);
                         setChats(prev => [...prev, { from: 'bot', message: text }]);
                     } else {
                         console.error('AI Audio Response Error: No text in response');
@@ -108,9 +123,9 @@ const ChatbotContainer = ({ onClose }) => {
     };
 
     return (
-        <div className='flex flex-col absolute bg-white w-[350px] h-[500px]
+        <div className={`flex flex-col absolute bg-white w-[350px] h-[500px]
             transition-all duration-500 ease-in-out -top-127 left-1/2
-            -translate-x-full rounded-lg shadow-purple-500 shadow-md'>
+            -translate-x-full rounded-lg shadow-purple-500 shadow-md ${show ? 'flex' : 'hidden'}`}>
             <div className='bg-purple-500 p-3 rounded-tl-md rounded-tr-md flex justify-between items-center'>
                 <h1 className='text-white font-bold text-xl'>ProjexBot</h1>
                 <IconButton size='medium' onClick={onClose}>
