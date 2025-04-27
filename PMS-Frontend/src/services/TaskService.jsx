@@ -31,7 +31,6 @@ export const getTasks = async (id) => {
 }
 
 export const updateTask = async (id, updatedTask) => {
-    console.log(updatedTask)
     try{
         const response = await axios.put(`/api/task/${id}`, updatedTask, {
             headers: {

@@ -51,7 +51,8 @@ const CreateProjectModal = ({close}) => {
                 ...state, 
                 type: value.name,
                 start_date: formatDate(state.start_date),
-                end_date: formatDate(state.end_date)
+                end_date: formatDate(state.end_date),
+                status: 'Active'
             })
             if(response.success) {
                 dispatch({type: 'CLEAR'})
