@@ -2,7 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
 import { IconButton, TextField } from '@mui/material';
 import { useState, useRef } from 'react';
-import { GoogleGenAI, createUserContent, createPartFromUri, } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import MicIcon from '@mui/icons-material/Mic';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -17,6 +17,7 @@ const ChatbotContainer = ({ onClose }) => {
     const audioChunksRef = useRef([]);
     const [isRecording, setIsRecording] = useState(false);
     const [isAudioSending, setIsAudioSending] = useState(false);
+    const [audioUrl, setAudioUrl] = useState(null);
 
     const handleSubmit = async () => {
         if (!message.trim()) return;
@@ -53,50 +54,43 @@ const ChatbotContainer = ({ onClose }) => {
             };
 
             mediaRecorderRef.current.onstop = async () => {
-                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' }); // More common format
+                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' }); 
                 const audioUrl = URL.createObjectURL(audioBlob);
                 setChats(prev => [...prev, { from: 'user', type: "audio", message: audioUrl }]);
                 audioChunksRef.current = [];
                 setIsAudioSending(true);
-                mediaRecorderRef.current.onstop = async () => {
-                    const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' }); // More common format
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    setChats(prev => [...prev, { from: 'user', type: "audio", message: audioUrl }]);
-                    audioChunksRef.current = [];
-                    setIsAudioSending(true);
-                    try {
-                        const arrayBuffer = await audioBlob.arrayBuffer();
-                        const base64Audio = btoa(new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
-    
-                        const response = await ai.models.generateContent({
-                            model: "gemini-2.0-flash",
-                            contents: [{
-                                parts: [{
-                                    inlineData: {
-                                        data: base64Audio,
-                                        mimeType: 'audio/webm',
-                                    },
-                                }],
+                try {
+                    const arrayBuffer = await audioBlob.arrayBuffer();
+                    const base64Audio = btoa(new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+
+                    const response = await ai.models.generateContent({
+                        model: "gemini-2.0-flash",
+                        contents: [{
+                            parts: [{
+                                inlineData: {
+                                    data: base64Audio,
+                                    mimeType: 'audio/webm',
+                                },
                             }],
-                            config: {
-                                systemInstruction: "You are a chatbot for project management system. Transcribe and answer the user's query from the audio.",
-                            },
-                        });
-                        const text = response.text;
-                        if (text) {
-                            setChats(prev => [...prev, { from: 'bot', message: text }]);
-                        } else {
-                            console.error('AI Audio Response Error: No text in response');
-                            setChats(prev => [...prev, { from: 'bot', message: 'Sorry, I didn\'t understand the audio.' }]);
-                        }
-                    } catch (error) {
-                        console.error('AI Audio Error:', error);
-                        setChats(prev => [...prev, { from: 'bot', message: 'Sorry, I couldn\'t process the audio.' }]);
-                    } finally {
-                        setIsRecording(false);
-                        setIsAudioSending(false);
+                        }],
+                        config: {
+                            systemInstruction: "You are a chatbot for project management system. Transcribe and answer the user's query from the audio.",
+                        },
+                    });
+                    const text = response.text;
+                    if (text) {
+                        setChats(prev => [...prev, { from: 'bot', message: text }]);
+                    } else {
+                        console.error('AI Audio Response Error: No text in response');
+                        setChats(prev => [...prev, { from: 'bot', message: 'Sorry, I didn\'t understand the audio.' }]);
                     }
-                };
+                } catch (error) {
+                    console.error('AI Audio Error:', error);
+                    setChats(prev => [...prev, { from: 'bot', message: 'Sorry, I couldn\'t process the audio.' }]);
+                } finally {
+                    setIsRecording(false);
+                    setIsAudioSending(false);
+                }
             };
 
             mediaRecorderRef.current.start();
@@ -152,7 +146,8 @@ const ChatbotContainer = ({ onClose }) => {
                         input: { fontSize: '15px', borderColor: '#A855F7' }
                     }}
                 />} 
-                {<div className='flex-1'>{isAudioSending && 'Processing audio...'}</div>}
+                {!isAudioSending && isRecording && <div className='flex-1'>Recording audio...</div>}
+                {isAudioSending && <div className='flex-1'>Bot is thinking...</div>}
                 <div>
                     {!isRecording && <IconButton onClick={handleSubmit} disabled={isAudioSending}>
                         <SendIcon sx={{ color: '#A855F7' }} />
@@ -160,9 +155,6 @@ const ChatbotContainer = ({ onClose }) => {
                     <IconButton onClick={!isRecording ? startRecording : stopRecording} disabled={isAudioSending}>
                         {!isRecording ? <MicIcon sx={{ color: '#A855F7' }} /> : <CloseIcon />}
                     </IconButton>
-                    {isRecording && <IconButton onClick={stopRecording} disabled={isAudioSending}>
-                        <CheckIcon color={!isAudioSending ? 'success' : ''} fontSize="large" />
-                    </IconButton>}
                 </div>
             </div>
         </div>
