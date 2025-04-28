@@ -50,11 +50,12 @@ const Overview = () => {
                     return task.assignees
                     .filter(assignee => assignee.member.id === member.id).length > 0
                 }).length
+
                 return { 
                     assignee: `${member.user.firstname} ${member.user.lastname}`, 
                     picture: member.user.profile_pic,
                     numberOfTask,
-                    percentage: numberOfTask > 1 ? ((numberOfTask / totalTask) * 100).toFixed(2) : 0 }
+                    percentage: numberOfTask > 0 ? ((numberOfTask / totalTask) * 100).toFixed(2) : 0 }
             })
 
             setWorkloads([...distribution])
