@@ -136,8 +136,7 @@ const ChatbotContainer = ({ onClose, show}) => {
                 {chats.map((chat, index) => (
                     <div key={index} className={`w-full p-3 flex gap-5 p-3 list-none items-center ${chat.from === 'bot' ? 'justify-start' : 'justify-end'}`}>
                         <li
-                            className={`border-1 border-gray-200 rounded-md ${chat.from === 'bot' ? 'bg-black text-white' : 'bg-white'}
-                            shadow-md p-3`}
+                            className={`border-1 border-gray-200 shadow-sm p-3 rounded-md ${chat.from === 'bot' ?  'bg-white shadow-purple-500' : 'bg-black text-white'}`}
                         >{chat.type === 'audio' ? <audio controls src={chat.message} className="mt-4"></audio> : chat.message}</li>
                     </div>
                 ))}
@@ -152,10 +151,10 @@ const ChatbotContainer = ({ onClose, show}) => {
                         '& .MuiOutlinedInput-root': {
                             height: '45px',
                             '&:hover fieldset': {
-                                borderColor: 'black',
+                                borderColor: '#9137db',
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: 'black',
+                                borderColor: '#9137db',
                             },
                         },
                         input: { fontSize: '15px', borderColor: 'black' }
