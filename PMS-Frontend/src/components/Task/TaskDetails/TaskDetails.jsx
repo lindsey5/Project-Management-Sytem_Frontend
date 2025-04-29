@@ -42,14 +42,13 @@ const TaskDetails = memo(({task, open, closeModal}) => {
         const selectedFiles = Array.from(e.target.files || []);
   
         if (selectedFiles.length === 0) return;
-
+        console.log(selectedFiles)
         await Promise.all(
             selectedFiles.map(async (file) => {
                 const newAttachment = await createTaskAttachment(task.id, file)
-                setAttachments(prev => [...prev, newAttachment.attachment]);
+                if(newAttachment.success) setAttachments(prev => [...prev, newAttachment.attachment]);
             })
         );
-
         toast.success("Attachments successfully saved")
     };
 
@@ -80,7 +79,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
             toast.success("Attachment removed.");
             setSelectedAttachment(false);
         }else{
-            toast.success("Attachment failed to remove");
+            toast.error("Attachment failed to remove");
         }
     }
 

@@ -29,6 +29,8 @@ const ChatbotContainer = ({ onClose, show}) => {
     
         window.speechSynthesis.onvoiceschanged = loadVoices;
         loadVoices();
+
+        return () => speechSynthesis.cancel();
       }, []);
 
     const handleSubmit = async () => {
@@ -40,11 +42,15 @@ const ChatbotContainer = ({ onClose, show}) => {
                 model: "gemini-2.0-flash",
                 contents: message,
                 config: {
-                    systemInstruction: "You are a chatbot for project management system ",
+                    systemInstruction: "You are a chatbot for project management system don't use asterisk",
                 },
             });
             const text = response.text; 
             if (text) {
+                speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text.replace(/\*/g, ''));
+                utterance.voice = selectedVoice;
+                speechSynthesis.speak(utterance);
                 setChats(prev => [...prev, { from: 'bot', message: text }]);
             } else {
                 console.error('AI Response Error: No text in response');
@@ -66,6 +72,7 @@ const ChatbotContainer = ({ onClose, show}) => {
             };
 
             mediaRecorderRef.current.onstop = async () => {
+                speechSynthesis.cancel();
                 const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' }); 
                 const audioUrl = URL.createObjectURL(audioBlob);
                 setChats(prev => [...prev, { from: 'user', type: "audio", message: audioUrl }]);
@@ -91,7 +98,7 @@ const ChatbotContainer = ({ onClose, show}) => {
                     });
                     const text = response.text;
                     if (text) {
-                        const utterance = new SpeechSynthesisUtterance(text);
+                        const utterance = new SpeechSynthesisUtterance(text.replace(/\*/g, ''));
                         utterance.voice = selectedVoice;
                         speechSynthesis.speak(utterance);
                         setChats(prev => [...prev, { from: 'bot', message: text }]);

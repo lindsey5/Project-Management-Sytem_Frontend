@@ -35,7 +35,7 @@ const ProjectHeader = () => {
         if(connection){
             connection.on("ReceiveRequestNotification", (count) => {
                 setRequests(count);
-              });
+            });
         }
 
         fetchMembers()

@@ -14,6 +14,7 @@ import { formatDateTime, convertToAsiaTime, timeAgo } from "../../../utils/utils
 import { updateTask } from "../../../services/TaskService";
 import { updateAssignees } from "../../../services/AssigneeService";
 import { ProjectContext } from "../../../layouts/ProjectLayout";
+import { toast } from "react-toastify";
 
 const TaskEditor = ({ members, role, task}) => {
     const [savedAssignees, setSavedAssignees] = useState([]);
@@ -53,17 +54,22 @@ const TaskEditor = ({ members, role, task}) => {
                 assigneesToRemove
             }
     
-            await updateTask(task.id, {
+            const updateResponse = await updateTask(task.id, {
                 task_name: state.task_name,
                 description: state.description,
                 priority: state.priority,
                 status: state.status,
                 due_date: new Date(state.due_date)
             })
-    
-            await updateAssignees(task.id, assigneesToUpdate)
-            window.location.reload();
-            
+            if(updateResponse.success){
+                const updateAssigneeResponse = await updateAssignees(task.id, assigneesToUpdate)
+
+                if(updateAssigneeResponse.success){
+                    window.location.reload();
+                }else{
+                    toast.error("Error please try again.");
+                }
+            }
     }
 
     return <Box padding={2} flex={1} display={"flex"} flexDirection={"column"} overflow={"auto"}>

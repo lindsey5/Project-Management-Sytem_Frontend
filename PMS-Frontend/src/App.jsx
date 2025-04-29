@@ -20,6 +20,7 @@ import Requests from "./pages/User/Project/Requests";
 import Overview from "./pages/User/Project/Overview";
 import ProjectSettings from "./pages/User/Project/Settings";
 import ChatBot from "./components/Chatbot/Chatbot";
+import Notifications from "./pages/User/Notifications";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
       </Route>
       <Route element={<UserLayout />}>
         <Route path="/home" element={<Home />}/>
+        <Route path="/notifications" element={<Notifications />} />
         <Route path="/project">
           <Route element={<ProjectLayout />}>
             <Route path="tasks" element={<Tasks />}/>
