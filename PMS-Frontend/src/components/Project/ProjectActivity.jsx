@@ -7,6 +7,7 @@ import { StatusChip } from "../chip";
 import { EllipsisText } from "../text";
 import { getProjectTaskHistory } from "../../services/TaskService";
 import { ProjectContext } from "../../layouts/ProjectLayout";
+import { useNavigate } from "react-router-dom";
 
 const ProjectActivity = () => {
     const [history, setHistory] = useState([]);
@@ -15,6 +16,7 @@ const ProjectActivity = () => {
     const [loading, setLoading] = useState(false);
     const observer = useRef();
     const { project } = useContext(ProjectContext);
+    const navigate = useNavigate();
 
     const lastItemRef = useCallback((node) => {
         if (observer.current) observer.current.disconnect();
@@ -37,6 +39,7 @@ const ProjectActivity = () => {
                 setHasMore(false);
                 return;
             }
+        
             setHistory([...history, ...fetchedHistory.history])
         }
         fetchHistory()
@@ -44,8 +47,10 @@ const ProjectActivity = () => {
 
     return (
         <div className="min-h-0 flex-grow overflow-y-auto">
-            {history.map((h, index) => (
+            {history.map((h, index) => {
+                return (
                 <Card
+                    onClick={() => navigate(`/project/tasks?c=${project.project_code}`, { state: { task : h.task_Id } })}
                     ref={index === history.length -1 ? lastItemRef : null}
                     key={index}
                     sx={{
@@ -57,11 +62,16 @@ const ProjectActivity = () => {
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         gap: 2,
-                        flexWrap: 'wrap'
+                        flexWrap: 'wrap',
+                        cursor: 'pointer',
+                        ":hover": {
+                            backgroundColor: '#f9fafb'
+                        }
                     }}
                 >
                     <Box display="flex" flexDirection="column" gap={1} flex={1}>
-                        <Typography>{h.action_Description} in "{h.task.task_Name}"</Typography>
+                        <Typography fontWeight={"bold"}>{h.task.task_Name}</Typography>
+                        <Typography>{h.action_Description}</Typography>
 
                         {!(h.new_Value == null && h.prev_Value == null) && (
                             <Box display="flex" gap={1} alignItems="center" flexWrap="wrap">
@@ -108,7 +118,8 @@ const ProjectActivity = () => {
                         {timeAgo(new Date(h.date_Time), new Date())}
                     </Typography>
                 </Card>
-            ))}
+            )
+            })}
             {loading && <CircularProgress />}
         </div>
     );

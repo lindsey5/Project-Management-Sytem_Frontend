@@ -37,7 +37,7 @@ const Kanban = ({ tasks, setTasks }) => {
     useEffect(() => {
       const getTaskAsync = async () => {
         const response = await getTask(task);
-        setSelectedTask(response.task.status !== 'Deleted' ? response.task.status : null);
+        setSelectedTask(response.task.status !== 'Deleted' ? response.task : null);
       }
 
       if(task) {
