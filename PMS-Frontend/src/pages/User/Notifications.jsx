@@ -105,22 +105,20 @@ const Notifications = () => {
     }, [connection])
 
     return <main className="p-10 flex flex-col h-screen">
+        <h1 className="text-3xl font-bold mb-10">All Notifications</h1>
         {notifications.length > 0 ? 
-        <>
-            <h1 className="text-3xl font-bold mb-10">All Notifications</h1>
-            <div className="py-3 flex-grow min-h-0 flex flex-col gap-5 overflow-y-auto">
-                {notifications.map((notification, i) => <NotficationContainer 
-                    key={i}
-                    ref={notifications.length - 1 === i ? lastItemRef : null} 
-                    notification={notification}
-                />)}
-            </div> 
-        </>
+        <div className="py-3 flex-grow min-h-0 flex flex-col gap-5 overflow-y-auto">
+            {notifications.map((notification, i) => <NotficationContainer 
+                key={i}
+                ref={notifications.length - 1 === i ? lastItemRef : null} 
+                notification={notification}
+            />)}
+        </div> 
         :
-        <div className="flex-grow min-h-0 flex flex-col justify-center items-center text-center">
-            <h1 className="text-gray-700 text-3xl font-bold">Notifications are empty</h1>
-            <p className="text-gray-700 text-lg">You don't have any notifications yet.</p>
-            <img className="w-[70%] h-[90%]" src="empty.jpg"/>
+        <div className="flex-grow min-h-0 flex flex-col items-center text-center">
+            <img className="w-[60%] h-[70%]" src="no-data.jpg"/>
+            <h1 className="-mt-5 text-gray-700 text-3xl font-bold">Notifications are empty</h1>
+            <p className=" text-gray-700 text-lg">You don't have any notifications yet.</p>
         </div>}
     </main>
 }
