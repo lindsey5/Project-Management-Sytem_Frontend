@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import MicIcon from '@mui/icons-material/Mic';
 
-const ai = new GoogleGenAI({ apiKey: "AIzaSyA4CX6hyhMv2Xb4y9-l3zh8t-ZCplI13SU" }); 
+const ai = new GoogleGenAI({ apiKey: import.meta.env.GEMINI_API_KEY }); 
 
 const ChatbotContainer = ({ onClose, show}) => {
     const [message, setMessage] = useState('');

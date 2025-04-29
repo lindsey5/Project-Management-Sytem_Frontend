@@ -103,11 +103,8 @@ const Team = () => {
                             anchorEl={anchorEl}
                             open={open}
                             onClose={handleClose}
-                            MenuListProps={{
-                            'aria-labelledby': 'basic-button',
-                            }}
                         >
-                            <MenuItem onClick={handleClose}>Edit</MenuItem>
+                            <MenuItem onClick={handleClose}>{member.role === "Admin" ? "Demote" : "Make admin"}</MenuItem>
                             <MenuItem onClick={() => handleShowRemove(member.id)}>Remove</MenuItem>
                         </Menu>
                         </>}
@@ -120,7 +117,7 @@ const Team = () => {
             text="Are you sure do you want to remove?"
             handleClose={handleCloseRemove} 
             handleAgree={handleRemove}
-            isOpen={memberId}
+            isOpen={memberId != null}
             variant="error"
         />
     </main>

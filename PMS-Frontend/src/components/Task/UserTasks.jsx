@@ -5,7 +5,7 @@ import { convertToAsiaTime, formatDateTime } from "../../utils/utils"
 import { statusConfig } from "../config"
 import CircleIcon from '@mui/icons-material/Circle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useEffect, useState, useMemo, useContext} from "react"
+import { useEffect, useState, useMemo } from "react"
 import TaskDetails from "./TaskDetails/TaskDetails"
 import { getUserTasks } from "../../services/TaskService"
 import StatusSelect from "../Select"
@@ -29,7 +29,6 @@ const UserTasks = () => {
     useEffect(() => {
         const fetchTasks = async () => {
             const response = await getUserTasks();
-            console.log(response)
 
             setTasks(response.tasks);
         }

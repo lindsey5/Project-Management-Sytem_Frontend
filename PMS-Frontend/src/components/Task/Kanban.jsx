@@ -13,7 +13,7 @@ import Badge from '@mui/material/Badge';
 import { UserContext } from "../../context/userContext";
 import TaskDetails from "./TaskDetails/TaskDetails";
 import { statusConfig } from "../config";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const StatusHeader = ({currentStatus, showButton, ...rest}) => {
     return <div className="flex items-center justify-between flex-1" {...rest}>
