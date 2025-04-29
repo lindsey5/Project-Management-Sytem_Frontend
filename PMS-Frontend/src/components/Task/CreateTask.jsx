@@ -53,6 +53,7 @@ const CreateTask = ({open, close, currentStatus}) => {
         if(!data.task_name) setError('Task name is required.')
         else if(!data.priority) setError('Set priority.')
         else if(!data.status) setError('Set status.')
+        else if(!data.due_date) setError('Due date is required.')
         else {
             setLoading(true);
             const response = await createTask({
@@ -175,9 +176,19 @@ const CreateTask = ({open, close, currentStatus}) => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DateTimePicker']}>
                     <DateTimePicker
+                        label="Start date"
+                        value={dayjs(state.start_date)}
+                        minDate={today}
+                        onChange={(newValue) => handleChange(newValue.$d, "SET_START_DATE")}
+                    />
+                    </DemoContainer>
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DateTimePicker']}>
+                    <DateTimePicker
                         label="Due date"
                         value={dayjs(state.due_date)}
-                        minDate={today}
+                        minDate={dayjs(state.start_date)}
                         onChange={(newValue) => handleChange(newValue.$d, "SET_DUE_DATE")}
                     />
                     </DemoContainer>

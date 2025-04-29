@@ -8,7 +8,8 @@ const newTaskState = {
     description: "",
     priority: '',
     status: '',
-    due_date: today,
+    start_date: today,
+    due_date: null,
     assigneesMemberId: []
 }
 
@@ -22,6 +23,8 @@ const taskReducer = (state, action) => {
             return {...state, priority: action.payload}
         case 'SET_STATUS':
             return {...state, status: action.payload}
+        case 'SET_START_DATE':
+            return {...state, start_date: action.payload}
         case 'SET_DUE_DATE':
             return {...state, due_date: action.payload}
         case 'SET_ASSIGNEES':

@@ -34,6 +34,7 @@ const TaskEditor = ({ members, role, task}) => {
             description: task.description,
             priority: task.priority,
             status: task.status,
+            start_date: task.start_date,
             due_date: convertToAsiaTime(task.due_date),
         } })
 
@@ -45,6 +46,7 @@ const TaskEditor = ({ members, role, task}) => {
     }, [])
 
     const handleSave = async () => {
+        if(new Date(state.start_date) < new Date(state.due_date)){
             const assigneesToRemove = savedAssignees
                 .filter(a => !currentValue.some(cur => cur.id == a.id))
                 .map(a => ({ id: a.assigneeId, member_Id: a.id, task_Id: task.id}))
@@ -63,6 +65,7 @@ const TaskEditor = ({ members, role, task}) => {
                 description: state.description,
                 priority: state.priority,
                 status: state.status,
+                start_date: new Date(state.start_date),
                 due_date: new Date(state.due_date)
             })
             if(updateResponse.success){
@@ -74,6 +77,7 @@ const TaskEditor = ({ members, role, task}) => {
                     toast.error("Error please try again.");
                 }
             }
+        }
     }
 
     const handleDelete = async () => {
@@ -82,6 +86,7 @@ const TaskEditor = ({ members, role, task}) => {
             description: state.description,
             priority: state.priority,
             status: 'Deleted',
+            start_date: new Date(state.start_date),
             due_date: new Date(state.due_date)
         })
 
@@ -139,8 +144,24 @@ const TaskEditor = ({ members, role, task}) => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DateTimePicker']}>
                     <DateTimePicker
+                        label="Start date"
+                        value={dayjs(state.start_date)}
+                        readOnly={role != 'Admin'}
+                        slotProps={{
+                            input: {
+                            readOnly: role != 'Admin',
+                            },
+                        }}
+                        onChange={(newValue) => dispatch({type: "SET_START_DATE", payload: newValue.$d})}
+                    />
+                    </DemoContainer>
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DateTimePicker']}>
+                    <DateTimePicker
                         label="Due date"
                         value={dayjs(state.due_date)}
+                        minDate={dayjs(state.start_date)}
                         readOnly={role != 'Admin'}
                         slotProps={{
                             input: {
