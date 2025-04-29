@@ -12,7 +12,7 @@ export const CommentContextProvider = ({ children }) => {
 
     const fetchComments = async (reset) => {
         if (!taskId) return;
-
+        
         const currentPage = reset ? 1 : page;
         const fetchedComments = await getComments(taskId, currentPage);
     
@@ -38,8 +38,8 @@ export const CommentContextProvider = ({ children }) => {
       };
 
     useEffect(() => {
-        if(taskId) fetchComments(false)
-    }, [taskId, page]);
+        fetchComments(false)
+    }, [taskId]);
 
     const lastItemRef = useCallback((node) => {
         if (observer.current) observer.current.disconnect();

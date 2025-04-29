@@ -16,7 +16,7 @@ export const getNotifications = async (page, limit = 10) => {
 
 export const updateNotifications = async () => {
     try{
-        const response = await axios.put('/api/notification', {},  {
+        const response = await axios.put(`/api/notification`, {},  {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },

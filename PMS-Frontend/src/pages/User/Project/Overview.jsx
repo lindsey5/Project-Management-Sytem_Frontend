@@ -11,6 +11,7 @@ import { getMembers } from "../../../services/MemberService";
 import { DashboardCard } from "../../../components/card";
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
+import ProjectActivity from "../../../components/Project/ProjectActivity";
 
 const Overview = () => {
     const { project } = useContext(ProjectContext);
@@ -102,6 +103,34 @@ const Overview = () => {
         <div
             className="mt-[50px] md:grid md:grid-cols-[2fr_1fr] gap-5"
         >
+            <Card sx={{ 
+                display: 'flex',
+                flexDirection: 'column', 
+                height: '400px', 
+                padding: 3,
+                gap: 3,
+                 boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}
+            >
+                <Typography variant="h6">Recent Activity</Typography>
+                <ProjectActivity />
+            </Card>
+            <Card className="h-[400px] md:mt-0 mt-20" sx={{ padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
+                <Typography variant="h6">Status overview</Typography>
+                <Typography variant="subtitle1">Total tasks: {tasksData?.totalTask}</Typography>
+                <PieChart
+                    sx={{ marginTop: '30px'}}
+                    height={250}
+                    width={250}
+                    series={[
+                        {
+                            arcLabel: (item) => `${item.percentage}%`,
+                            data: pieChartData,
+                            innerRadius: 90,
+                            arcLabelMinAngle: 20,
+                        },
+                    ]}
+                />
+            </Card>
             <Card sx={{ height: '400px', padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
                 <Typography variant="h6">Team workload</Typography>
                 <Box 
@@ -139,23 +168,6 @@ const Overview = () => {
                     </Box>
                 })}
                 </Box>
-            </Card>
-            <Card className="h-[400px] md:mt-0 mt-20" sx={{ padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
-                <Typography variant="h6">Status overview</Typography>
-                <Typography variant="subtitle1">Total tasks: {tasksData?.totalTask}</Typography>
-                <PieChart
-                    sx={{ marginTop: '30px'}}
-                    height={250}
-                    width={250}
-                    series={[
-                        {
-                            arcLabel: (item) => `${item.percentage}%`,
-                            data: pieChartData,
-                            innerRadius: 90,
-                            arcLabelMinAngle: 20,
-                        },
-                    ]}
-                />
             </Card>
         </div>
     </main>

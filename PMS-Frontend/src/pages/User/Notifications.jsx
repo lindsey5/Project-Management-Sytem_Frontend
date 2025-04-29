@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState, useCallback, useContext, forwardRef } from "react"
-import { getNotifications } from "../../services/NotificationService";
+import { getNotifications, updateNotifications } from "../../services/NotificationService";
 import { SignalContext } from "../../context/signalContext";
 import { Avatar } from "@mui/material";
 import { formatDateTime } from "../../utils/utils";
 import CircleIcon from '@mui/icons-material/Circle';
-import { updateNotifications } from "../../services/NotificationService";
+import { getProject } from "../../services/ProjectService";
+import { useNavigate } from "react-router-dom";
 
 const NotficationContainer = forwardRef(({ notification }, ref) => {
     var messageType;
+    const navigate = useNavigate();
 
     if(notification.type === 'TaskAssigned'){
         messageType = "assigned a task to you";
@@ -23,10 +25,19 @@ const NotficationContainer = forwardRef(({ notification }, ref) => {
         messageType = "removed you in a project";
     }else if(notification.type === "AddedToProject"){
         messageType = "added you in a project"
+    }else if(notification.type === "CommentAdded"){
+        messageType = "added a comment"
+    }
+
+    const handleClick = async () => {
+        if(notification.type !== "RemovedToProject"){
+            const response = await getProject(notification.project_id);
+            if(response.success) navigate(`/project/tasks?c=${response.project.project_code}`, { state: { task : notification.task_id } });
+        }
     }
 
     return <div 
-            onClick={() => window.location.href = `/project/tasks?c=${notification.project.project_code}`}
+            onClick={handleClick}
             ref={ref} 
             className={`hover:bg-purple-50 cursor-pointer flex gap-5 w-full shadow-md 
                 p-6 rounded-lg border-1 border-gray-200 ${!notification.isRead && 'font-bold'}`}
@@ -66,7 +77,6 @@ const Notifications = () => {
     useEffect(() => {
         const fetchData = async () => {
             const fetchedNotifications = await getNotifications(page, 20);
-            await updateNotifications();
             if(fetchedNotifications.notifications.length === 0){
                 setHasMore(false);
                 return;
@@ -83,17 +93,33 @@ const Notifications = () => {
                 setNotifications(prev => [newNotification, ...prev])
             })
         }
+
+        return () => {
+            const updateNotificationsAsync = async () => {
+                await updateNotifications();
+            };
+            updateNotificationsAsync();
+        }
     }, [connection])
 
     return <main className="p-10 flex flex-col h-screen">
-        <h1 className="text-3xl font-bold mb-10">Notifications</h1>
-        <div className="py-3 flex flex-col gap-5">
-            {notifications.map((notification, i) => <NotficationContainer 
-                key={i}
-                ref={notifications.length-1 === i ? lastItemRef : null} 
-                notification={notification}
-            />)}
-        </div>
+        {notifications.length > 0 ? 
+        <>
+            <h1 className="text-3xl font-bold mb-10">All Notifications</h1>
+            <div className="py-3 flex-grow min-h-0 flex flex-col gap-5 overflow-y-auto">
+                {notifications.map((notification, i) => <NotficationContainer 
+                    key={i}
+                    ref={notifications.length-1 === i ? lastItemRef : null} 
+                    notification={notification}
+                />)}
+            </div> 
+        </>
+        :
+        <div className="flex-grow min-h-0 flex flex-col justify-center items-center text-center">
+            <h1 className="text-gray-700 text-3xl font-bold">Notifications are empty</h1>
+            <p className="text-gray-700 text-lg">You don't have any notifications yet.</p>
+            <img className="w-[70%] h-[90%]" src="empty.jpg"/>
+        </div>}
     </main>
 }
 

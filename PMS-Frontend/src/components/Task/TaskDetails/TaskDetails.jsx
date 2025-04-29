@@ -42,7 +42,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
         const selectedFiles = Array.from(e.target.files || []);
   
         if (selectedFiles.length === 0) return;
-        console.log(selectedFiles)
+
         await Promise.all(
             selectedFiles.map(async (file) => {
                 const newAttachment = await createTaskAttachment(task.id, file)

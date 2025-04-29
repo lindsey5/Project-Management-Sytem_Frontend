@@ -1,5 +1,4 @@
 import { StatusChip } from "../chip"
-import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import { useContext, useEffect, useState } from "react";
 import { ProjectContext } from "../../layouts/ProjectLayout";
@@ -9,11 +8,12 @@ import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import { convertToAsiaTime, formatDateTime } from "../../utils/utils";
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import { updateTask } from "../../services/TaskService";
+import { getTask, updateTask } from "../../services/TaskService";
 import Badge from '@mui/material/Badge';
 import { UserContext } from "../../context/userContext";
 import TaskDetails from "./TaskDetails/TaskDetails";
 import { statusConfig } from "../config";
+import { useLocation } from "react-router-dom";
 
 const StatusHeader = ({currentStatus, showButton, ...rest}) => {
     return <div className="flex items-center justify-between flex-1" {...rest}>
@@ -31,6 +31,19 @@ const Kanban = ({ tasks, setTasks }) => {
     const { user } = useContext(UserContext);
     const { project, role } = useContext(ProjectContext);
     const [selectedTask, setSelectedTask] = useState(null);
+    const location = useLocation();
+    const task = location.state?.task;
+
+    useEffect(() => {
+      const getTaskAsync = async () => {
+        const response = await getTask(task);
+        setSelectedTask(response.task)
+      }
+
+      if(task) {
+        getTaskAsync()
+      }
+    }, [task])
 
     const handleDragStart = (e, task_id) => {
       e.dataTransfer.setData('task_id', task_id);
