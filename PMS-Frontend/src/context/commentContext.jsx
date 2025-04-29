@@ -32,14 +32,14 @@ export const CommentContextProvider = ({ children }) => {
           setComments(commentsArr);
           setPage(1);
           setHasMore(true);
-        } else {
-          setComments(prev => [...prev, ...commentsArr]);
+        }else {
+          setComments(prev => [...new Map([...prev, ...commentsArr].map(item => [item.id, item])).values()]);
         }
       };
 
     useEffect(() => {
         fetchComments(false)
-    }, [taskId]);
+    }, [taskId, page]);
 
     const lastItemRef = useCallback((node) => {
         if (observer.current) observer.current.disconnect();

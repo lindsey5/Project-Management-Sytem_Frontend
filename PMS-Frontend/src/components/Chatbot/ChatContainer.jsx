@@ -5,8 +5,6 @@ import { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import MicIcon from '@mui/icons-material/Mic';
 
-const ai = new GoogleGenAI({ apiKey: import.meta.env.GEMINI_API_KEY }); 
-
 const ChatbotContainer = ({ onClose, show}) => {
     const [message, setMessage] = useState('');
     const [chats, setChats] = useState([
@@ -17,6 +15,8 @@ const ChatbotContainer = ({ onClose, show}) => {
     const [isRecording, setIsRecording] = useState(false);
     const [isAudioSending, setIsAudioSending] = useState(false);
     const [selectedVoice, setSelectedVoice] = useState(null);
+
+    const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY}); 
 
     useEffect(() => {
         const loadVoices = () => {
