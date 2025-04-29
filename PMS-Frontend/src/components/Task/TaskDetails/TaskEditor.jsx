@@ -15,12 +15,16 @@ import { updateTask } from "../../../services/TaskService";
 import { updateAssignees } from "../../../services/AssigneeService";
 import { ProjectContext } from "../../../layouts/ProjectLayout";
 import { toast } from "react-toastify";
+import { ConfirmDialog } from "../../dialog";
+import { useNavigate } from "react-router-dom";
 
 const TaskEditor = ({ members, role, task}) => {
     const [savedAssignees, setSavedAssignees] = useState([]);
     const [currentValue, setCurrentValue] = useState([]);
     const { state, dispatch } = useTaskReducer();
     const { project } = useContext(ProjectContext);
+    const [openDelete, setOpenDelete] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setSavedAssignees(task.assignees.map(t => ({...t.member, assigneeId: t.id})));
@@ -70,6 +74,21 @@ const TaskEditor = ({ members, role, task}) => {
                     toast.error("Error please try again.");
                 }
             }
+    }
+
+    const handleDelete = async () => {
+        const response = await updateTask(task.id, {
+            task_name: state.task_name,
+            description: state.description,
+            priority: state.priority,
+            status: 'Deleted',
+            due_date: new Date(state.due_date)
+        })
+
+        if(response.success) {
+            navigate(`/project/tasks?c=${project.project_code}`, { replace: true });
+            window.location.reload();
+        }
     }
 
     return <Box padding={2} flex={1} display={"flex"} flexDirection={"column"} overflow={"auto"}>
@@ -158,9 +177,22 @@ const TaskEditor = ({ members, role, task}) => {
                         </Typography> 
                     </Stack>
                 </Card> 
-                    <Button variant="contained" onClick={handleSave} disabled={project.status !== "Active"}>
-                        Save
-                    </Button>
+                    <ConfirmDialog 
+                        handleAgree={handleDelete}
+                        isOpen={openDelete}
+                        text={"Are you sure do you want to delete the task?"}
+                        title={"Delete"}
+                        handleClose={() => setOpenDelete(false)}
+                        variant="error"
+                    />
+                    <Stack flexDirection={"row"} justifyContent={"flex-end"} gap={3}>
+                        {role === 'Admin' && <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} disabled={project.status !== "Active"}>
+                            Delete Task
+                        </Button>}
+                        <Button variant="contained" onClick={handleSave} disabled={project.status !== "Active"}>
+                            Save
+                        </Button>
+                    </Stack>
                 </Stack>
     </Box>
 }

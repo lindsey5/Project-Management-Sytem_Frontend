@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState, useContext } from "react";
 import { getMembers } from "../../services/MemberService";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -46,6 +46,7 @@ const CreateTask = ({open, close, currentStatus}) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { project } = useContext(ProjectContext);
+    const navigate = useNavigate();
 
     const handleSubmit = async (data) => {
         setError('');
@@ -64,6 +65,7 @@ const CreateTask = ({open, close, currentStatus}) => {
                     await createTaskAttachment(response.task.id, file);
                 })
                   
+                navigate(`/project/tasks?c=${project.project_code}`, { replace: true });
                 window.location.reload();
             }
 

@@ -7,15 +7,13 @@ import CircleIcon from '@mui/icons-material/Circle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useEffect, useState, useMemo, useContext} from "react"
 import TaskDetails from "./TaskDetails/TaskDetails"
-import { getTasks, getUserTasks } from "../../services/TaskService"
+import { getUserTasks } from "../../services/TaskService"
 import StatusSelect from "../Select"
 import { status } from "../../data/taskData"
-import { ProjectContext } from "../../layouts/ProjectLayout"
 
 const UserTasks = () => {
     const [selectedTask, setSelectedTask] = useState(null);
     const [tasks, setTasks] = useState([]);
-    const { project } = useContext(ProjectContext)
     const [selectedStatus, setSelectedStatus] = useState('All');
     
     const filteredTasks = useMemo(() => {
@@ -30,7 +28,7 @@ const UserTasks = () => {
 
     useEffect(() => {
         const fetchTasks = async () => {
-            const response = await getTasks(project.id);
+            const response = await getUserTasks();
             console.log(response)
 
             setTasks(response.tasks);

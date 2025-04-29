@@ -27,6 +27,8 @@ const NotficationContainer = forwardRef(({ notification }, ref) => {
         messageType = "added you in a project"
     }else if(notification.type === "CommentAdded"){
         messageType = "added a comment"
+    }else if(notification.type === "TaskDeleted"){
+        messageType = "deleted a task"
     }
 
     const handleClick = async () => {
@@ -81,11 +83,11 @@ const Notifications = () => {
                 setHasMore(false);
                 return;
             }
-            setNotifications(fetchedNotifications.notifications);
+            setNotifications([...notifications, ...fetchedNotifications.notifications]);
         }
         fetchData()
 
-    },[])
+    },[page])
 
     useEffect(() => {
         if(connection){
@@ -109,7 +111,7 @@ const Notifications = () => {
             <div className="py-3 flex-grow min-h-0 flex flex-col gap-5 overflow-y-auto">
                 {notifications.map((notification, i) => <NotficationContainer 
                     key={i}
-                    ref={notifications.length-1 === i ? lastItemRef : null} 
+                    ref={notifications.length - 1 === i ? lastItemRef : null} 
                     notification={notification}
                 />)}
             </div> 

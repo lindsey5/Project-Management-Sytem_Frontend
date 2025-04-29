@@ -200,12 +200,12 @@ const ProjectSettings = () => {
                         onChange={(e) => dispatch({ type: "SET_STATUS", payload: e.target.value})}
                     />
                 </div>
-                <Button 
+                {role === 'Admin' && <Button 
                     variant="contained"
                     onClick={() => setOpenDialog(true)}
                 >
                     Save changes
-                </Button>
+                </Button>}
                 <ConfirmDialog 
                     handleAgree={saveUpdate}
                     handleClose={() => setOpenDialog(false)}
