@@ -24,6 +24,7 @@ export const StatusChip = ({label, color, ...rest}) => {
           marginLeft: '6px',
           marginRight: '0px',
         },
+        fontSize: '15px',
         backgroundColor: '#f3f4f6',
       }}
     />

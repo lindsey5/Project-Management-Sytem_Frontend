@@ -32,7 +32,9 @@ const style = {
     boxShadow: 24,
     borderRadius: '10px',
     width: '90%',
-    maxWidth: '450px'
+    maxWidth: '450px',
+    height: '95%',
+    overflowY: 'auto'
 };
 
 const today = dayjs();

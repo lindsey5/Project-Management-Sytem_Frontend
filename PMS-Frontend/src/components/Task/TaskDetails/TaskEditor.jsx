@@ -34,7 +34,7 @@ const TaskEditor = ({ members, role, task}) => {
             description: task.description,
             priority: task.priority,
             status: task.status,
-            start_date: task.start_date,
+            start_date: convertToAsiaTime(task.start_date),
             due_date: convertToAsiaTime(task.due_date),
         } })
 
@@ -77,6 +77,8 @@ const TaskEditor = ({ members, role, task}) => {
                     toast.error("Error please try again.");
                 }
             }
+        }else{
+            toast.error("Start date should be earlier than the due date.")
         }
     }
 

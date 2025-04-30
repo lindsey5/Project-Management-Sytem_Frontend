@@ -34,7 +34,7 @@ const ProjectActivity = () => {
             setLoading(true)
             const fetchedHistory = await getProjectTaskHistory(project.id, page);
             setLoading(false)
-            console.log(fetchedHistory)
+            
             if (fetchedHistory.history.length === 0) {
                 setHasMore(false);
                 return;

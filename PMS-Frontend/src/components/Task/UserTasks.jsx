@@ -5,17 +5,19 @@ import { convertToAsiaTime, formatDateTime } from "../../utils/utils"
 import { statusConfig } from "../config"
 import CircleIcon from '@mui/icons-material/Circle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo, useContext } from "react"
 import TaskDetails from "./TaskDetails/TaskDetails"
 import { getUserTasks } from "../../services/TaskService"
 import StatusSelect from "../Select"
 import { status } from "../../data/taskData"
+import { UserContext } from "../../context/userContext"
 
-const UserTasks = () => {
+const UserTasks = ({ allTasks }) => {
     const [selectedTask, setSelectedTask] = useState(null);
     const [tasks, setTasks] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState('All');
-    
+    const { user } = useContext(UserContext);
+
     const filteredTasks = useMemo(() => {
         if(selectedStatus === 'All'){
             return tasks
@@ -27,13 +29,11 @@ const UserTasks = () => {
     
 
     useEffect(() => {
-        const fetchTasks = async () => {
-            const response = await getUserTasks();
-
-            setTasks(response.tasks);
+        if(allTasks){
+            console.log(allTasks.filter(task => task.assignees.find(a => a.member.user.email === user.email)))
+            setTasks(allTasks.filter(task => task.assignees.find(a => a.member.user.email === user.email)));
         }
-        fetchTasks()
-    }, [])
+    }, [allTasks])
     
 
     return <main className="w-full h-full py-10 px-4">
@@ -52,7 +52,6 @@ const UserTasks = () => {
         <CustomizedTable
             cols={<TableRow>
                         <StyledTableCell align="center">Task name</StyledTableCell>
-                        <StyledTableCell align="center">Description</StyledTableCell>
                         <StyledTableCell align="center">Due date</StyledTableCell>
                         <StyledTableCell align="center">Priority</StyledTableCell>
                         <StyledTableCell align="center">Status</StyledTableCell>
@@ -65,7 +64,6 @@ const UserTasks = () => {
             rows={filteredTasks.length > 0 && filteredTasks.map((task, i) => {
                             return <StyledTableRow key={i}>
                                 <StyledTableCell align="center">{task.task_Name}</StyledTableCell>
-                                <StyledTableCell align="center">{task.description}</StyledTableCell>
                                 <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.due_date))}</StyledTableCell>
                                 <StyledTableCell align="center">
                                     <div className="flex items-center gap-2">

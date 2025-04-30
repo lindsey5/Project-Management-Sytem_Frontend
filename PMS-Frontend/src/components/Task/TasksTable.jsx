@@ -38,7 +38,6 @@ const TasksTable = ({ tasks }) => {
         <CustomizedTable
             cols={<TableRow>
                         <StyledTableCell align="center">Task name</StyledTableCell>
-                        <StyledTableCell align="center">Description</StyledTableCell>
                         <StyledTableCell align="center">Due date</StyledTableCell>
                         <StyledTableCell align="center">Priority</StyledTableCell>
                         <StyledTableCell align="center">Status</StyledTableCell>
@@ -51,7 +50,6 @@ const TasksTable = ({ tasks }) => {
             rows={filteredTasks.length > 0 && filteredTasks.map((task, i) => {
                             return <StyledTableRow key={i}>
                                 <StyledTableCell align="center">{task.task_Name}</StyledTableCell>
-                                <StyledTableCell align="center">{task.description}</StyledTableCell>
                                 <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.due_date))}</StyledTableCell>
                                 <StyledTableCell align="center">
                                     <div className="flex items-center gap-2">

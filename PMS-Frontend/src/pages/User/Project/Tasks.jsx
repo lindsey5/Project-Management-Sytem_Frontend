@@ -105,7 +105,7 @@ const Tasks = () => {
         }>
             {alignment === 'Kanban' && <Kanban showCreate={showCreateWithStatus} tasks={tasks} setTasks={setTasks}/>}
             {alignment === 'Table' && <TasksTable tasks={tasks}/>}
-            {alignment === 'Your Task' && <UserTasks />}
+            {alignment === 'Your Task' && <UserTasks allTasks={tasks}/>}
             {alignment === 'Calendar' && <Calendar tasks={tasks}/>}
         </Suspense> 
     </div>
