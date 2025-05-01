@@ -7,7 +7,6 @@ import CircleIcon from '@mui/icons-material/Circle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useEffect, useState, useMemo, useContext } from "react"
 import TaskDetails from "./TaskDetails/TaskDetails"
-import { getUserTasks } from "../../services/TaskService"
 import StatusSelect from "../Select"
 import { status } from "../../data/taskData"
 import { UserContext } from "../../context/userContext"

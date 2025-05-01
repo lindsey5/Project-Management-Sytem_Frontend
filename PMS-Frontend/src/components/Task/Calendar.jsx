@@ -16,7 +16,8 @@ const Calendar = ({ tasks}) => {
             setEvents(tasks.map(task => {
                 return ({ 
                     title: task.task_Name, 
-                    date: formatDate(task.start_date),
+                    start: formatDate(task.start_date),
+                    end: formatDate(task.due_date),
                     backgroundColor: statusConfig[task.status],
                     task
                 })

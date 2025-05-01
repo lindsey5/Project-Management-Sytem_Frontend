@@ -64,7 +64,7 @@ const Overview = () => {
                     picture: member.user.profile_pic,
                     numberOfTask,
                     percentage: numberOfTask > 0 ? ((numberOfTask / totalTask) * 100).toFixed(2) : 0 }
-            })
+            }).sort((a, b) => b.percentage - a.percentage )
 
             setWorkloads([...distribution])
 

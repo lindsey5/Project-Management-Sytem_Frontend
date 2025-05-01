@@ -13,7 +13,7 @@ import Badge from '@mui/material/Badge';
 import { UserContext } from "../../context/userContext";
 import TaskDetails from "./TaskDetails/TaskDetails";
 import { statusConfig } from "../config";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const StatusHeader = ({currentStatus, showButton, ...rest}) => {
     return <div className="flex items-center justify-between flex-1" {...rest}>
@@ -33,6 +33,7 @@ const Kanban = ({ tasks, setTasks }) => {
     const [selectedTask, setSelectedTask] = useState(null);
     const location = useLocation();
     const task = location.state?.task;
+    const navigate = useNavigate();
 
     useEffect(() => {
       const getTaskAsync = async () => {
@@ -77,7 +78,14 @@ const Kanban = ({ tasks, setTasks }) => {
   
     return (
       <div className="w-full p-3 min-w-[1000px]">
-        <TaskDetails closeModal={() => setSelectedTask(null)} open={selectedTask != null} task={selectedTask}/>
+        <TaskDetails 
+          closeModal={() => {
+            navigate(`${location.pathname}?c=${project.project_code}`, { state: { task : null }})
+            setSelectedTask(null);
+          }} 
+          open={selectedTask != null} 
+          task={selectedTask}
+        />
         <div className="grid grid-cols-5 gap-3 border-b-1 border-gray-300 py-3">
           {statuses.map(status => (
             <StatusHeader key={status} currentStatus={status} showButton={role === "Admin"}/>

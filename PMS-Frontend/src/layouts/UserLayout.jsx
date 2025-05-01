@@ -9,7 +9,7 @@ const UserLayout = () => {
     }
     return <UserContextProvider>    
             <SignalContextProvider>
-                <div className="pl-19">
+                <div className="h-screen pl-19">
                     <SideBar />
                     <Outlet />
                 </div>

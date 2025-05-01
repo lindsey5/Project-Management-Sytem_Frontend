@@ -15,6 +15,8 @@ import { CircularProgress } from '@mui/material';
 import TasksTable from '../../../components/Task/TasksTable';
 import UserTasks from '../../../components/Task/UserTasks';
 import Calendar from '../../../components/Task/Calendar';
+import MyGanttComponent from '../../../components/Task/GantChart';
+import ViewTimelineOutlinedIcon from '@mui/icons-material/ViewTimelineOutlined';
 
 const Kanban = lazy(() => import('../../../components/Task/Kanban'));
 
@@ -47,7 +49,7 @@ const Tasks = () => {
         setShowCreate(true)
     }
 
-    return <div className='pt-6 pb-3 px-3 bg-white gap-2'>
+    return <div className='flex flex-col pt-6 pb-3 px-3 bg-white gap-2 h-full'>
         <CreateTask open={showCreate} currentStatus={status} close={() => setShowCreate(false)}/>
         <Box sx={{ display: 'flex', gap: 3}}>
             <CustomButton 
@@ -82,6 +84,16 @@ const Tasks = () => {
             >Calendar</CustomButton>
 
             <CustomButton 
+                icon={<ViewTimelineOutlinedIcon fontSize='small'/>}
+                sx={{
+                    backgroundColor: alignment === "Timeline" ? 'black' : '#f3f4f6',
+                    color: alignment == "Timeline" ? 'white' : 'black',
+                    '&:hover': { backgroundColor: alignment === "Timeline" ? '#6b7280' : '#e5e7eb'} 
+                }}
+                onClick={() => handleChange("Timeline")}
+            >Timeline</CustomButton>
+
+            <CustomButton 
                 icon={<AssignmentTurnedInOutlinedIcon fontSize='small'/>}
                 sx={{
                     backgroundColor: alignment === "Your Task" ? 'black' : '#f3f4f6',
@@ -107,6 +119,7 @@ const Tasks = () => {
             {alignment === 'Table' && <TasksTable tasks={tasks}/>}
             {alignment === 'Your Task' && <UserTasks allTasks={tasks}/>}
             {alignment === 'Calendar' && <Calendar tasks={tasks}/>}
+            {alignment === 'Timeline' && <MyGanttComponent tasks={tasks}/>}
         </Suspense> 
     </div>
 }
