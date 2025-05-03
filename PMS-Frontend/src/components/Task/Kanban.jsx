@@ -103,17 +103,23 @@ const Kanban = ({ tasks, setTasks }) => {
                         .filter(task => task.status === status)
                         .map(task => {
                           const index = task.assignees.findIndex(a => a.member.user.email == user.email);
+                          
+                          const isDraggable = !loading &&
+                          project.status === 'Active' &&
+                          (role === 'Admin' || task.assignees.some(a => a.member.user.email === user.email));
+
                           if (index > -1) {
                               const [item] = task.assignees.splice(index, 1);
                               task.assignees.unshift(item);
                           }
+
                             return <Card
                               key={task.id}
                               variant="outlined"
                               sx={{ borderRadius: '20px', ':hover' : { backgroundColor: '#F9FAFB'}}}
                               className="shadow-xl flex flex-col gap-3 items-start px-2 py-4 bg-white m-3 cursor-pointer"
-                              draggable={!loading && project.status === 'Active'}
-                              onDragStart={(e) => project.status === 'Active' ? handleDragStart(e, task.id) : undefined}
+                              draggable={isDraggable}
+                              onDragStart={(e) => isDraggable ? handleDragStart(e, task.id) : undefined}
                               onClick={() => setSelectedTask(task)}
                           >
                             <StatusChip 

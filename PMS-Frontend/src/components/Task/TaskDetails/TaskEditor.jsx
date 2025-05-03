@@ -17,9 +17,11 @@ import { ProjectContext } from "../../../layouts/ProjectLayout";
 import { toast } from "react-toastify";
 import { ConfirmDialog } from "../../dialog";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../context/userContext";
 
 const TaskEditor = ({ members, role, task}) => {
     const [savedAssignees, setSavedAssignees] = useState([]);
+    const { user } = useContext(UserContext);
     const [currentValue, setCurrentValue] = useState([]);
     const { state, dispatch } = useTaskReducer();
     const { project } = useContext(ProjectContext);
@@ -212,7 +214,10 @@ const TaskEditor = ({ members, role, task}) => {
                         {role === 'Admin' && <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} disabled={project.status !== "Active"}>
                             Delete Task
                         </Button>}
-                        <Button variant="contained" onClick={handleSave} disabled={project.status !== "Active"}>
+                        <Button 
+                            variant="contained" 
+                            onClick={handleSave} 
+                            disabled={project.status !== "Active" || (role !== 'Admin' && !task.assignees.some(a => a.member.user.email === user.email))}>
                             Save
                         </Button>
                     </Stack>

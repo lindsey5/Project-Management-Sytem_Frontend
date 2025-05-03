@@ -29,7 +29,6 @@ const UserTasks = ({ allTasks }) => {
 
     useEffect(() => {
         if(allTasks){
-            console.log(allTasks.filter(task => task.assignees.find(a => a.member.user.email === user.email)))
             setTasks(allTasks.filter(task => task.assignees.find(a => a.member.user.email === user.email)));
         }
     }, [allTasks])
@@ -51,6 +50,7 @@ const UserTasks = ({ allTasks }) => {
         <CustomizedTable
             cols={<TableRow>
                         <StyledTableCell align="center">Task name</StyledTableCell>
+                        <StyledTableCell align="center">Start date</StyledTableCell>
                         <StyledTableCell align="center">Due date</StyledTableCell>
                         <StyledTableCell align="center">Priority</StyledTableCell>
                         <StyledTableCell align="center">Status</StyledTableCell>
@@ -63,6 +63,7 @@ const UserTasks = ({ allTasks }) => {
             rows={filteredTasks.length > 0 && filteredTasks.map((task, i) => {
                             return <StyledTableRow key={i}>
                                 <StyledTableCell align="center">{task.task_Name}</StyledTableCell>
+                                <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.start_date))}</StyledTableCell>
                                 <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.due_date))}</StyledTableCell>
                                 <StyledTableCell align="center">
                                     <div className="flex items-center gap-2">

@@ -67,8 +67,8 @@ const SideBar = () => {
                     <FolderCopyOutlinedIcon sx={{ fontSize: 28 }}/>
                 </IconButton>
             </Tooltip>
-            <Tooltip title="Task" placement="left-end" arrow>
-                <IconButton size="medium">
+            <Tooltip title="Tasks" placement="left-end" arrow>
+                <IconButton size="medium" sx={ (!showSearch && pathname === '/tasks') ? bg : undefined } onClick={() => window.location.href = '/tasks'}>
                     <TaskOutlinedIcon sx={{ fontSize: 28 }}/>
                 </IconButton>
             </Tooltip>
