@@ -1,15 +1,17 @@
-import { useEffect, useState, useMemo } from "react"
-import { getUserTasks } from "../../../services/TaskService";
+import { useEffect, useState, useMemo, useContext } from "react"
+import { getUserTasks } from "../../services/TaskService";
 import { Card, TextField } from "@mui/material";
-import CustomizedTable, { StyledTableCell, StyledTableRow} from "../../../components/table";
+import CustomizedTable, { StyledTableCell, StyledTableRow} from "../../components/table";
 import { TableRow } from "@mui/material";
-import { formatDateTime, convertToAsiaTime } from "../../../utils/utils";
+import { formatDateTime, convertToAsiaTime } from "../../utils/utils";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import InputAdornment from '@mui/material/InputAdornment';
 import CircleIcon from '@mui/icons-material/Circle';
-import { statusConfig } from "../../../components/config";
-import StatusSelect from "../../../components/Select";
-import { status } from "../../../data/taskData";
+import { statusConfig } from "../../components/config";
+import StatusSelect from "../../components/Select";
+import { status } from "../../data/taskData";
+import { useNavigate } from "react-router-dom";
+import { ProjectContext } from "../../layouts/ProjectLayout";
 
 const items = [
     { name: 'All', color: '#808080' },      
@@ -23,6 +25,11 @@ const YourTasks = () => {
     const [selectedStatus, setSelectedStatus] = useState('All');
     const [selectedProjectStatus, setSelectedProjectStatus] = useState('Active');
     const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
+
+    const handleClick = (project_code, id) => {
+        navigate(`/project/tasks?c=${project_code}`, { state: { task : id } });
+    }
 
     useEffect(() => {
         const getTasksAsync = async () => {
@@ -55,7 +62,7 @@ const YourTasks = () => {
         <div className="w-full flex justify-between">
             <TextField
                 id="input-with-icon-textfield"
-                placeholder='Search Project'
+                placeholder='Search'
                 onChange={(e) => setSearchTerm(e.target.value)}
                 sx={{
                     '& .MuiOutlinedInput-root': {
@@ -107,7 +114,7 @@ const YourTasks = () => {
                 </TableRow>}
 
                 rows={filteredTasks.length > 0 && filteredTasks.map((task, i) => {
-                    return <StyledTableRow key={i}>
+                    return <StyledTableRow key={i} style={{ cursor: 'pointer'}} onClick={() => handleClick(task.project.project_code, task.id) }>
                         <StyledTableCell align="center">{task.task_Name}</StyledTableCell>
                         <StyledTableCell align="center">{task.project.title}</StyledTableCell>
                         <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.start_date))}</StyledTableCell>

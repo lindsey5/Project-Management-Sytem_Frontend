@@ -21,7 +21,7 @@ import Overview from "./pages/User/Project/Overview";
 import ProjectSettings from "./pages/User/Project/Settings";
 import ChatBot from "./components/Chatbot/Chatbot";
 import Notifications from "./pages/User/Notifications";
-import YourTasks from "./pages/User/Project/YourTask";
+import YourTasks from "./pages/User/YourTask";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
