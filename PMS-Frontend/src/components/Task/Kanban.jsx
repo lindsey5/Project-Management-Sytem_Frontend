@@ -136,6 +136,15 @@ const Kanban = ({ tasks, setTasks }) => {
                                 variant="subtitle1" 
                                 fontSize={'14px'}
                             >
+                              Start: {formatDateTime(convertToAsiaTime(task.start_date))}
+                            </Typography>
+                            <Typography sx={{ 
+                                color: new Date(convertToAsiaTime(task.due_date)) <= new Date() && 
+                                task.status != "Completed" ? "red" : "gray",
+                              }} 
+                                variant="subtitle1" 
+                                fontSize={'14px'}
+                            >
                               Due: {formatDateTime(convertToAsiaTime(task.due_date))}
                             </Typography>
                             {task.attachments.find(a => a.type.includes('image/')) && 
