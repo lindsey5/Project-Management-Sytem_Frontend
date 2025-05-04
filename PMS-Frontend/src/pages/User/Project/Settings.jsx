@@ -214,7 +214,7 @@ const ProjectSettings = () => {
                     isOpen={openDialog}
                     text="Are you sure you want to save these changes?"
                     title="Update"
-                    variant="info"
+                    variant="success"
                 />
             </div>
             <div className="flex flex-col items-center">

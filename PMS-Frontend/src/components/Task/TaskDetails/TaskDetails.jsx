@@ -167,7 +167,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                                             >
                                                 Add Comment
                                             </Button>}
-                                        {showCommentEditor && <CommentEditor task_id={task.id} close={() => setShowCommentEditor(false)} />}
+                                        {showCommentEditor && <CommentEditor task_id={task?.id} close={() => setShowCommentEditor(false)} />}
                                     </CommentContextProvider>
                                 </TabPanel>
                                 <HistoryPanel task_id={task?.id}/>
