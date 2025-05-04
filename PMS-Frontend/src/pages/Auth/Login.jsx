@@ -26,7 +26,7 @@ const LoginPage = () => {
         }else if(!response?.success){
             setErrors([response.message])
         }else{
-            //toast.success("Login successful")
+           window.location.href = "/home"
         }
     }
 

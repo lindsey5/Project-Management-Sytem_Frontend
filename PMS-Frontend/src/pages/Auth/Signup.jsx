@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { signupVerificationCode } from "../../services/AuthService";
+import { signup, signupVerificationCode } from "../../services/AuthService";
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import { IconButton, TextField } from "@mui/material";
 import GoogleButton from "./GoogleButton";
@@ -40,6 +40,7 @@ const VerifyCode = ({ newUser }) => {
     const [error, setError] = useState('');
 
     useEffect(() => {
+        console.log(newUser)
         if(newUser) setUser(newUser)
     }, [newUser])
 
@@ -51,13 +52,18 @@ const VerifyCode = ({ newUser }) => {
 
     }
 
-    const verify = (e) => {
+    const verify = async (e) => {
         e.preventDefault();
         setError('')
         if(!code) return setError('Please enter a code.');
 
-        if(code === user.verificationCode) console.log("Success")
-        else setError("Incorrect code.")
+        if(code == user.verificationCode) {
+            const { verificationCode, confirmPassword, ...rest} = user;
+            const response = await signup({...rest});
+            if(response.success) window.location.href = '/home';
+            else setError(response.message);
+
+        }else setError("Incorrect code.")
     }
 
     return <form 

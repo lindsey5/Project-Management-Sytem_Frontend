@@ -8,7 +8,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Badge, Tooltip } from "@mui/material";
+import { Avatar, Badge, Tooltip } from "@mui/material";
 import ProjectSearch from "../Project/ProjectSearch";
 import { SignalContext } from "../../context/signalContext";
 import { getNotifications } from '../../services/NotificationService';
@@ -54,9 +54,7 @@ const SideBar = () => {
 
     return <aside className="flex z-50 px-4 py-10 fixed top-0 left-0 bottom-0 bg-white flex-col gap-3 border-r-1 border-gray-200">
         {showSearch && <ProjectSearch close={() => setShowSearch(false)}/>}
-            <button className="w-10 cursor-pointer">
-                <img className="rounded-full" src={user && user.profile_pic} alt="" />
-            </button>
+            <Avatar src={user?.profile_pic} />
             <Tooltip title="Home" placement="left-end" arrow>
                 <IconButton size="medium" sx={ (!showSearch && pathname === '/home') ? bg : undefined } onClick={() => window.location.href = '/home'}>
                     <DashboardOutlinedIcon sx={{ fontSize: 28 }}/>
