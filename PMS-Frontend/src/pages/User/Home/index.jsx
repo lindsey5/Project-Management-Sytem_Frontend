@@ -1,7 +1,7 @@
 import { useContext, useEffect, useMemo, useState } from "react"
 import { UserContext } from "../../../context/userContext"
 import { DashboardCard } from "../../../components/card";
-import { getUserTasks } from "../../../services/TaskService";
+import { getAllUserTasks } from "../../../services/TaskService";
 import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
 import { convertToAsiaTime, formatDate, formatDateTime } from "../../../utils/utils";
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
@@ -23,7 +23,7 @@ const Home = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await getUserTasks();
+            const response = await getAllUserTasks();
             
             const totalTasks = response.tasks.filter(task => task.project.status === "Active").length
 

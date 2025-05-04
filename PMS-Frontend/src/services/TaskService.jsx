@@ -102,3 +102,17 @@ export const getUserTasks = async (page, searchTerm, status, projectStatus) => {
         return error.response ? error.response.data : error.message
     }
 }
+
+export const getAllUserTasks = async () => {
+    try{
+        const response = await axios.get(`/api/task/user/all`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        return response.data
+
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
+}
