@@ -1,4 +1,4 @@
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { GoogleOAuthProvider, GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import { downloadImageAsBase64 } from "../../utils/utils";
 import { googleLogin } from "../../services/AuthService";
 
@@ -37,10 +37,6 @@ const GoogleButton = () => {
           <GoogleLogin 
             onSuccess={handleSuccess} 
             onError={handleError} 
-            useOneTap={true}
-            auto_select={true}
-            shape="rectangular"
-            size="large"
           />
         </div>
       </GoogleOAuthProvider>
