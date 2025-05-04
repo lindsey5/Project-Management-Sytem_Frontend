@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 
 export const createTask = async (data) => {
     try{
@@ -90,9 +89,9 @@ export const getTaskHistory = async (task_id, page) => {
     }
 }
 
-export const getUserTasks = async () => {
+export const getUserTasks = async (page, searchTerm, status, projectStatus) => {
     try{
-        const response = await axios.get('/api/task/user', {
+        const response = await axios.get(`/api/task/user?page=${page}&searchTerm=${searchTerm}&status=${status}&projectStatus=${projectStatus}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },

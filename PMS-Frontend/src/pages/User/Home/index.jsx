@@ -3,7 +3,7 @@ import { UserContext } from "../../../context/userContext"
 import { DashboardCard } from "../../../components/card";
 import { getUserTasks } from "../../../services/TaskService";
 import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
-import { convertToAsiaTime, formatDateTime } from "../../../utils/utils";
+import { convertToAsiaTime, formatDate, formatDateTime } from "../../../utils/utils";
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
@@ -55,7 +55,7 @@ const Home = () => {
             }))
 
             setTasksDetails({
-                allTasks: response.tasks.filter(task => task.project.status === "Active"),
+                allTasks: response.tasks.filter(task => task.project.status === "Active" && formatDate(convertToAsiaTime(task.start_date)) === formatDate(new Date())),
                 activeTasks,
                 overDueTask,
                 completedTasks,
@@ -107,7 +107,7 @@ const Home = () => {
             className="mt-[50px] md:grid md:grid-cols-[2fr_1fr] gap-5"
         >
             <Card className="border-1 border-gray-200 h-[500px] border-box px-5 py-10 gap-5 flex flex-col" sx={{ boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}} >
-                <Typography variant="h5">Your Tasks</Typography>
+                <Typography variant="h5">Tasks today</Typography>
                 <Box className="flex">
                     <StatusSelect 
                         width={'200px'}

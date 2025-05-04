@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useContext } from "react"
 import { getUserTasks } from "../../services/TaskService";
-import { Card, TextField } from "@mui/material";
+import { Card, Pagination, TextField } from "@mui/material";
 import CustomizedTable, { StyledTableCell, StyledTableRow} from "../../components/table";
 import { TableRow } from "@mui/material";
 import { formatDateTime, convertToAsiaTime } from "../../utils/utils";
@@ -25,6 +25,8 @@ const YourTasks = () => {
     const [selectedProjectStatus, setSelectedProjectStatus] = useState('Active');
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
+    const [totalPages, setTotalPages] = useState(0);
+    const [page, setPage] = useState(1);
 
     const handleClick = (project_code, id) => {
         navigate(`/project/tasks?c=${project_code}`, { state: { task : id } });
@@ -32,30 +34,24 @@ const YourTasks = () => {
 
     useEffect(() => {
         const getTasksAsync = async () => {
-            const response = await getUserTasks();
-            console.log(response)
+            const response = await getUserTasks(page, searchTerm, selectedStatus, selectedProjectStatus);
             setTasks(response.tasks)
+            setTotalPages(response.totalPages)
         }
-        getTasksAsync();
 
-    }, []);
-
-    const filteredTasks = useMemo(() => {
-        if(selectedProjectStatus === 'All' && selectedStatus === 'All')
-            return tasks
-        else if(selectedStatus){
-            return tasks.filter(task => {
-                return (selectedStatus != 'All' && selectedProjectStatus != 'All' ? 
-                    task.status === selectedStatus && task.project.status === selectedProjectStatus : 
-                    task.status === selectedStatus || task.project.status === selectedProjectStatus) && 
-                    (
-                        task.task_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        task.project.title.toLowerCase().includes(searchTerm.toLowerCase())
-                    )
-            })
-        }
+        const delayDebounce = setTimeout(() => {
+                getTasksAsync();
+          }, 300); 
         
-    },[selectedStatus, selectedProjectStatus, tasks, searchTerm])
+        return () => clearTimeout(delayDebounce);
+    }, [page, searchTerm, selectedStatus, selectedProjectStatus]);
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            setPage(1)
+        }, 300); 
+        return () => clearTimeout(delayDebounce);
+    }, [searchTerm, selectedStatus, selectedProjectStatus])
 
     return <main className="p-10 flex flex-col gap-5 h-full">
         <h1 className="text-3xl font-bold">Your Tasks</h1>
@@ -113,7 +109,7 @@ const YourTasks = () => {
                     <StyledTableCell align="center">Creator</StyledTableCell>
                 </TableRow>}
 
-                rows={filteredTasks.length > 0 && filteredTasks.map((task, i) => {
+                rows={tasks.length > 0 && tasks.map((task, i) => {
                     return <StyledTableRow key={i} style={{ cursor: 'pointer'}} onClick={() => handleClick(task.project.project_code, task.id) }>
                         <StyledTableCell align="center">{task.task_Name}</StyledTableCell>
                         <StyledTableCell align="center">{task.project.title}</StyledTableCell>
@@ -138,6 +134,11 @@ const YourTasks = () => {
                 })}
             />
         </div>
+        <Pagination
+                count={totalPages} 
+                page={page} 
+                onChange={(e, value) => setPage(value)} 
+            />
     </main>
 }
 
