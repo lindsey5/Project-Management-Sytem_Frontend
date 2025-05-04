@@ -4,6 +4,7 @@ import { IconButton, TextField } from '@mui/material';
 import { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import MicIcon from '@mui/icons-material/Mic';
+import axios from 'axios';
 
 const ChatbotContainer = ({ onClose, show}) => {
     const [message, setMessage] = useState('');
@@ -15,6 +16,16 @@ const ChatbotContainer = ({ onClose, show}) => {
     const [isRecording, setIsRecording] = useState(false);
     const [isAudioSending, setIsAudioSending] = useState(false);
     const [selectedVoice, setSelectedVoice] = useState(null);
+    const [systemInstruction, setSystemInstruction] = useState('');
+
+    useEffect(() => {
+        const getSystemInstruction = async () => {
+            const response = await axios('../../../FAQ.md');
+            setSystemInstruction(response.data)
+        }
+
+        getSystemInstruction()
+    }, [])
 
     const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY}); 
 
@@ -42,7 +53,11 @@ const ChatbotContainer = ({ onClose, show}) => {
                 model: "gemini-2.0-flash",
                 contents: message,
                 config: {
-                    systemInstruction: "You are a chatbot for project management system don't use asterisk",
+                    systemInstruction: `You are a chatbot designed specifically for a Project Collaboration Platform named ProJex. 
+                    Please respond only to questions related to ProJex.
+                    Possible question to answer:
+                    ${systemInstruction}
+                    `,
                 },
             });
             const text = response.text; 
@@ -96,7 +111,12 @@ const ChatbotContainer = ({ onClose, show}) => {
                             }],
                         }],
                         config: {
-                            systemInstruction: "You are a chatbot for project management system. Transcribe and answer the user's query from the audio.",
+                            systemInstruction:`You are a chatbot designed specifically for a Project Collaboration Platform named ProJex. 
+                            Please respond only to questions related to ProJex.
+                            Transcribe and answer the user's query from the audio.
+                            Possible question to answer:
+                            ${systemInstruction}
+                            `,
                         },
                     });
                     const text = response.text;
