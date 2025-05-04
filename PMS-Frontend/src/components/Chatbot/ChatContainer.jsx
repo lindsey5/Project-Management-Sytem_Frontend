@@ -49,7 +49,6 @@ const ChatbotContainer = ({ onClose, show}) => {
             if (text) {
                 speechSynthesis.cancel();
                 const chunks = text.match(/[^.!?]+[.!?]+/g) || [text];
-                console.log(chunks)
                 chunks.forEach((chunk) => {
                     const utterance = new SpeechSynthesisUtterance(chunk.replace(/\*/g, ''));
                     utterance.voice = selectedVoice;
@@ -103,7 +102,6 @@ const ChatbotContainer = ({ onClose, show}) => {
                     const text = response.text;
                     if (text) {
                         const chunks = text.match(/[^.!?]+[.!?]+/g) || [text];
-                        console.log(chunks)
                         chunks.forEach((chunk) => {
                             const utterance = new SpeechSynthesisUtterance(chunk.replace(/\*/g, ''));
                             utterance.voice = selectedVoice;
