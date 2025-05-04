@@ -48,9 +48,13 @@ const ChatbotContainer = ({ onClose, show}) => {
             const text = response.text; 
             if (text) {
                 speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text.replace(/\*/g, ''));
-                utterance.voice = selectedVoice;
-                speechSynthesis.speak(utterance);
+                const chunks = text.match(/[^.!?]+[.!?]+/g) || [text];
+                console.log(chunks)
+                chunks.forEach((chunk, index) => {
+                    const utterance = new SpeechSynthesisUtterance(chunk.replace(/\*/g, ''));
+                    utterance.voice = selectedVoice;
+                    speechSynthesis.speak(utterance);
+                });
                 setChats(prev => [...prev, { from: 'bot', message: text }]);
             } else {
                 console.error('AI Response Error: No text in response');
@@ -98,9 +102,13 @@ const ChatbotContainer = ({ onClose, show}) => {
                     });
                     const text = response.text;
                     if (text) {
-                        const utterance = new SpeechSynthesisUtterance(text.replace(/\*/g, ''));
-                        utterance.voice = selectedVoice;
-                        speechSynthesis.speak(utterance);
+                        const chunks = text.match(/[^.!?]+[.!?]+/g) || [text];
+                        console.log(chunks)
+                        chunks.forEach((chunk, index) => {
+                            const utterance = new SpeechSynthesisUtterance(chunk.replace(/\*/g, ''));
+                            utterance.voice = selectedVoice;
+                            speechSynthesis.speak(utterance);
+                        });
                         setChats(prev => [...prev, { from: 'bot', message: text }]);
                     } else {
                         console.error('AI Audio Response Error: No text in response');
