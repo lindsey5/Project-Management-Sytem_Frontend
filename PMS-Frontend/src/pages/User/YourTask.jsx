@@ -100,6 +100,7 @@ const YourTasks = () => {
                 cols={<TableRow>
                     <StyledTableCell align="center">Task name</StyledTableCell>
                     <StyledTableCell align="center">Project title</StyledTableCell>
+                    <StyledTableCell align="center">Project status</StyledTableCell>
                     <StyledTableCell align="center">Start date</StyledTableCell>
                     <StyledTableCell align="center">Due date</StyledTableCell>
                     <StyledTableCell align="center">Priority</StyledTableCell>
@@ -113,6 +114,7 @@ const YourTasks = () => {
                     return <StyledTableRow key={i} style={{ cursor: 'pointer'}} onClick={() => handleClick(task.project.project_code, task.id) }>
                         <StyledTableCell align="center">{task.task_Name}</StyledTableCell>
                         <StyledTableCell align="center">{task.project.title}</StyledTableCell>
+                        <StyledTableCell align="center">{task.project.status}</StyledTableCell>
                         <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.start_date))}</StyledTableCell>
                         <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.due_date))}</StyledTableCell>
                         <StyledTableCell align="center">

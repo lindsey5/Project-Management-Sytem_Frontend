@@ -50,7 +50,7 @@ const Home = () => {
                 .map(task => task.status))];
             
             setPieChartData(tasksStatus.map(status => {
-                const numberOfTask = response.tasks.filter(task => task.status == status).length
+                const numberOfTask = response.tasks.filter(task => task.project.status === "Active" && task.status == status).length
                 return { value: numberOfTask, percentage: (( numberOfTask / totalTasks) * 100).toFixed(2), label: status, color: statusConfig[status]}
             }))
 
