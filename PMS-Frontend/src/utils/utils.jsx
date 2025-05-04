@@ -10,6 +10,33 @@ export const cn = (...inputs) => {
   return twMerge(clsx(inputs));
 }
 
+export const isStrongPassword = (password) => {
+  // Regex pattern to match password strength criteria
+  const minLength = /^(?=.{8,})/;               
+  const hasUpperCase = /[A-Z]/;                  
+  const hasLowerCase = /[a-z]/;                  
+  const hasDigit = /\d/;                       
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/; 
+
+  if (!minLength.test(password)) {
+    return "Password must be at least 8 characters long.";
+  }
+  if (!hasUpperCase.test(password)) {
+      return "Password must contain at least one uppercase letter.";
+  }
+  if (!hasLowerCase.test(password)) {
+      return "Password must contain at least one lowercase letter.";
+  }
+  if (!hasDigit.test(password)) {
+      return "Password must contain at least one number.";
+  }
+  if (!hasSpecialChar.test(password)) {
+      return "Password must contain at least one special character.";
+  }
+
+  return null
+}
+
 export const formatDate = (input) => {
   const date = new Date(input);
 

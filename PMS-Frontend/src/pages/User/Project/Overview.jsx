@@ -11,6 +11,9 @@ import { getMembers } from "../../../services/MemberService";
 import { DashboardCard } from "../../../components/card";
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
+import ProjectActivity from "../../../components/Project/ProjectActivity";
+import { BarChart } from '@mui/x-charts/BarChart';
+import { priority } from "../../../data/taskData";
 
 const Overview = () => {
     const { project } = useContext(ProjectContext);
@@ -22,6 +25,11 @@ const Overview = () => {
         const fetchData = async () => {
             const response = await getTasks(project.id);
             const totalTask = response.tasks.length
+
+            const priorityData = priority.map(p => {
+                return response.tasks.filter(task => task.priority === p.name).length
+            })
+
             // Set Pie Chart data
             const tasksStatus = [...new Set(response.tasks.map(task => task.status))];
 
@@ -50,12 +58,13 @@ const Overview = () => {
                     return task.assignees
                     .filter(assignee => assignee.member.id === member.id).length > 0
                 }).length
+
                 return { 
                     assignee: `${member.user.firstname} ${member.user.lastname}`, 
                     picture: member.user.profile_pic,
                     numberOfTask,
-                    percentage: numberOfTask > 1 ? ((numberOfTask / totalTask) * 100).toFixed(2) : 0 }
-            })
+                    percentage: numberOfTask > 0 ? ((numberOfTask / totalTask) * 100).toFixed(2) : 0 }
+            }).sort((a, b) => b.percentage - a.percentage )
 
             setWorkloads([...distribution])
 
@@ -64,7 +73,8 @@ const Overview = () => {
                 overDueTasks,
                 tasksDueSoon,
                 tasksToday,
-                totalTask
+                totalTask,
+                priorityData
             })
         }
         if(project) fetchData()
@@ -101,7 +111,7 @@ const Overview = () => {
         <div
             className="mt-[50px] md:grid md:grid-cols-[2fr_1fr] gap-5"
         >
-            <Card sx={{ height: '400px', padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
+                        <Card sx={{ height: '400px', padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
                 <Typography variant="h6">Team workload</Typography>
                 <Box 
                     marginTop={"30px"} 
@@ -116,8 +126,8 @@ const Overview = () => {
                     <Typography variant="subtitle1" width={"35%"}>Assignee</Typography>
                     <Typography variant="subtitle1" width={"70%"}>Work Distribution</Typography>
                 </Stack>
-                {workloads.map(workload => {
-                    return <Box width={"100%"} display={"flex"} alignItems={"center"} gap={3}>
+                {workloads.map((workload, i) => {
+                    return <Box key={i} width={"100%"} display={"flex"} alignItems={"center"} gap={3}>
                         <div className="flex w-[30%] gap-3 items-center">
                             <Avatar src={`data:image/jpeg;base64,${workload.picture}`}/>
                             <Typography width={"100%"}>{workload.assignee}</Typography>
@@ -139,6 +149,7 @@ const Overview = () => {
                 })}
                 </Box>
             </Card>
+            
             <Card className="h-[400px] md:mt-0 mt-20" sx={{ padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
                 <Typography variant="h6">Status overview</Typography>
                 <Typography variant="subtitle1">Total tasks: {tasksData?.totalTask}</Typography>
@@ -156,6 +167,29 @@ const Overview = () => {
                     ]}
                 />
             </Card>
+            <Card sx={{ 
+                display: 'flex',
+                flexDirection: 'column', 
+                height: '400px', 
+                padding: 3,
+                gap: 3,
+                 boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}
+            >
+                <Typography variant="h6">Recent Activity</Typography>
+                <ProjectActivity />
+            </Card>
+            <Card sx={{ height: '400px', padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
+                <Typography variant="h6" sx={{ marginBottom: '20px'}}>Priority Overview</Typography>
+                {tasksData.priorityData && <BarChart
+                    height={300}
+                    series={[
+                        { data: tasksData?.priorityData },
+                    ]}
+                    xAxis={[{ data: priority.map(p => p.name), scaleType: 'band' }]}
+                    yAxis={[{ width: 50 }]}
+                    />}
+            </Card>
+                
         </div>
     </main>
 }

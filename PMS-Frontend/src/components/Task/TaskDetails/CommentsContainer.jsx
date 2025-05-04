@@ -14,7 +14,7 @@ const CommentsContainer = ({ task_id }) => {
     }, [task_id])
 
     return <div className="w-full h-full flex flex-col gap-5">
-        {comments.length > 0 && comments.map(comment => {
+        {comments.length > 0 ? comments.map(comment => {
             return <div 
                 key={comment.id} 
                 ref={lastItemRef} 
@@ -50,7 +50,7 @@ const CommentsContainer = ({ task_id }) => {
                     ))}
                </div>
             </div>
-        })}
+        }) : <p>No comments.</p>}
     </div>
 
 }

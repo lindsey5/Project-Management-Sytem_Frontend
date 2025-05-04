@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState, useContext } from "react";
 import { getMembers } from "../../services/MemberService";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -32,7 +32,9 @@ const style = {
     boxShadow: 24,
     borderRadius: '10px',
     width: '90%',
-    maxWidth: '450px'
+    maxWidth: '450px',
+    height: '95%',
+    overflowY: 'auto'
 };
 
 const today = dayjs();
@@ -46,12 +48,14 @@ const CreateTask = ({open, close, currentStatus}) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { project } = useContext(ProjectContext);
+    const navigate = useNavigate();
 
     const handleSubmit = async (data) => {
         setError('');
         if(!data.task_name) setError('Task name is required.')
         else if(!data.priority) setError('Set priority.')
         else if(!data.status) setError('Set status.')
+        else if(!data.due_date) setError('Due date is required.')
         else {
             setLoading(true);
             const response = await createTask({
@@ -64,6 +68,7 @@ const CreateTask = ({open, close, currentStatus}) => {
                     await createTaskAttachment(response.task.id, file);
                 })
                   
+                navigate(`/project/tasks?c=${project.project_code}`, { replace: true });
                 window.location.reload();
             }
 
@@ -173,9 +178,19 @@ const CreateTask = ({open, close, currentStatus}) => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DateTimePicker']}>
                     <DateTimePicker
+                        label="Start date"
+                        value={dayjs(state.start_date)}
+                        minDate={today}
+                        onChange={(newValue) => handleChange(newValue.$d, "SET_START_DATE")}
+                    />
+                    </DemoContainer>
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DateTimePicker']}>
+                    <DateTimePicker
                         label="Due date"
                         value={dayjs(state.due_date)}
-                        minDate={today}
+                        minDate={dayjs(state.start_date)}
                         onChange={(newValue) => handleChange(newValue.$d, "SET_DUE_DATE")}
                     />
                     </DemoContainer>

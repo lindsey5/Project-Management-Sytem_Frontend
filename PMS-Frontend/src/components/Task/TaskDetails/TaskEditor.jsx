@@ -14,12 +14,19 @@ import { formatDateTime, convertToAsiaTime, timeAgo } from "../../../utils/utils
 import { updateTask } from "../../../services/TaskService";
 import { updateAssignees } from "../../../services/AssigneeService";
 import { ProjectContext } from "../../../layouts/ProjectLayout";
+import { toast } from "react-toastify";
+import { ConfirmDialog } from "../../dialog";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../context/userContext";
 
 const TaskEditor = ({ members, role, task}) => {
     const [savedAssignees, setSavedAssignees] = useState([]);
+    const { user } = useContext(UserContext);
     const [currentValue, setCurrentValue] = useState([]);
     const { state, dispatch } = useTaskReducer();
     const { project } = useContext(ProjectContext);
+    const [openDelete, setOpenDelete] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setSavedAssignees(task.assignees.map(t => ({...t.member, assigneeId: t.id})));
@@ -29,6 +36,7 @@ const TaskEditor = ({ members, role, task}) => {
             description: task.description,
             priority: task.priority,
             status: task.status,
+            start_date: convertToAsiaTime(task.start_date),
             due_date: convertToAsiaTime(task.due_date),
         } })
 
@@ -40,6 +48,7 @@ const TaskEditor = ({ members, role, task}) => {
     }, [])
 
     const handleSave = async () => {
+        if(new Date(state.start_date) < new Date(state.due_date)){
             const assigneesToRemove = savedAssignees
                 .filter(a => !currentValue.some(cur => cur.id == a.id))
                 .map(a => ({ id: a.assigneeId, member_Id: a.id, task_Id: task.id}))
@@ -53,17 +62,42 @@ const TaskEditor = ({ members, role, task}) => {
                 assigneesToRemove
             }
     
-            await updateTask(task.id, {
+            const updateResponse = await updateTask(task.id, {
                 task_name: state.task_name,
                 description: state.description,
                 priority: state.priority,
                 status: state.status,
+                start_date: new Date(state.start_date),
                 due_date: new Date(state.due_date)
             })
-    
-            await updateAssignees(task.id, assigneesToUpdate)
+            if(updateResponse.success){
+                const updateAssigneeResponse = await updateAssignees(task.id, assigneesToUpdate)
+
+                if(updateAssigneeResponse.success){
+                    window.location.reload();
+                }else{
+                    toast.error("Error please try again.");
+                }
+            }
+        }else{
+            toast.error("Start date should be earlier than the due date.")
+        }
+    }
+
+    const handleDelete = async () => {
+        const response = await updateTask(task.id, {
+            task_name: state.task_name,
+            description: state.description,
+            priority: state.priority,
+            status: 'Deleted',
+            start_date: new Date(state.start_date),
+            due_date: new Date(state.due_date)
+        })
+
+        if(response.success) {
+            navigate(`/project/tasks?c=${project.project_code}`, { replace: true });
             window.location.reload();
-            
+        }
     }
 
     return <Box padding={2} flex={1} display={"flex"} flexDirection={"column"} overflow={"auto"}>
@@ -114,8 +148,24 @@ const TaskEditor = ({ members, role, task}) => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DateTimePicker']}>
                     <DateTimePicker
+                        label="Start date"
+                        value={dayjs(state.start_date)}
+                        readOnly={role != 'Admin'}
+                        slotProps={{
+                            input: {
+                            readOnly: role != 'Admin',
+                            },
+                        }}
+                        onChange={(newValue) => dispatch({type: "SET_START_DATE", payload: newValue.$d})}
+                    />
+                    </DemoContainer>
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DateTimePicker']}>
+                    <DateTimePicker
                         label="Due date"
                         value={dayjs(state.due_date)}
+                        minDate={dayjs(state.start_date)}
                         readOnly={role != 'Admin'}
                         slotProps={{
                             input: {
@@ -152,9 +202,25 @@ const TaskEditor = ({ members, role, task}) => {
                         </Typography> 
                     </Stack>
                 </Card> 
-                    <Button variant="contained" onClick={handleSave} disabled={project.status !== "Active"}>
-                        Save
-                    </Button>
+                    <ConfirmDialog 
+                        handleAgree={handleDelete}
+                        isOpen={openDelete}
+                        text={"Are you sure do you want to delete the task?"}
+                        title={"Delete"}
+                        handleClose={() => setOpenDelete(false)}
+                        variant="error"
+                    />
+                    <Stack flexDirection={"row"} justifyContent={"flex-end"} gap={3}>
+                        {role === 'Admin' && <Button variant="contained" color="error" onClick={() => setOpenDelete(true)} disabled={project.status !== "Active"}>
+                            Delete Task
+                        </Button>}
+                        <Button 
+                            variant="contained" 
+                            onClick={handleSave} 
+                            disabled={project.status !== "Active" || (role !== 'Admin' && !task.assignees.some(a => a.member.user.email === user.email))}>
+                            Save
+                        </Button>
+                    </Stack>
                 </Stack>
     </Box>
 }

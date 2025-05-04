@@ -12,7 +12,7 @@ export const CommentContextProvider = ({ children }) => {
 
     const fetchComments = async (reset) => {
         if (!taskId) return;
-
+        
         const currentPage = reset ? 1 : page;
         const fetchedComments = await getComments(taskId, currentPage);
     
@@ -32,13 +32,13 @@ export const CommentContextProvider = ({ children }) => {
           setComments(commentsArr);
           setPage(1);
           setHasMore(true);
-        } else {
-          setComments(prev => [...prev, ...commentsArr]);
+        }else {
+          setComments(prev => [...new Map([...prev, ...commentsArr].map(item => [item.id, item])).values()]);
         }
       };
 
     useEffect(() => {
-        if(taskId) fetchComments(false)
+        fetchComments(false)
     }, [taskId, page]);
 
     const lastItemRef = useCallback((node) => {

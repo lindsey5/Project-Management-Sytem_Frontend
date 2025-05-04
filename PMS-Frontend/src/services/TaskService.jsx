@@ -14,6 +14,22 @@ export const createTask = async (data) => {
     }
 }
 
+export const getTask = async (id) => {
+    try{
+        const response = await axios.get(`/api/task/${id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+
+        return response.data
+
+    }catch(error){
+        console.log(error)
+        return error.response ? error.response.data : error.message
+    }
+}
+
 export const getTasks = async (id) => {
     try{
         const response = await axios.get(`/api/task?project_id=${id}`, {
@@ -31,7 +47,6 @@ export const getTasks = async (id) => {
 }
 
 export const updateTask = async (id, updatedTask) => {
-    console.log(updatedTask)
     try{
         const response = await axios.put(`/api/task/${id}`, updatedTask, {
             headers: {
@@ -44,6 +59,21 @@ export const updateTask = async (id, updatedTask) => {
         return error.response ? error.response.data : error.message
     }
 }
+
+export const getProjectTaskHistory = async (project_id, page) => {
+    try{
+        const response = await axios.get(`/api/task_history/project/${project_id}?page=${page}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        return response.data
+
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
+}
+
 
 export const getTaskHistory = async (task_id, page) => {
     try{
@@ -59,9 +89,23 @@ export const getTaskHistory = async (task_id, page) => {
     }
 }
 
-export const getUserTasks = async () => {
+export const getUserTasks = async (page, searchTerm, status, projectStatus) => {
     try{
-        const response = await axios.get('/api/task/user', {
+        const response = await axios.get(`/api/task/user?page=${page}&searchTerm=${searchTerm}&status=${status}&projectStatus=${projectStatus}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        return response.data
+
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
+}
+
+export const getAllUserTasks = async () => {
+    try{
+        const response = await axios.get(`/api/task/user/all`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },

@@ -4,8 +4,7 @@ import { IconButton, TextField } from '@mui/material';
 import { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import MicIcon from '@mui/icons-material/Mic';
-
-const ai = new GoogleGenAI({ apiKey: "AIzaSyA4CX6hyhMv2Xb4y9-l3zh8t-ZCplI13SU" }); 
+import axios from 'axios';
 
 const ChatbotContainer = ({ onClose, show}) => {
     const [message, setMessage] = useState('');
@@ -17,6 +16,18 @@ const ChatbotContainer = ({ onClose, show}) => {
     const [isRecording, setIsRecording] = useState(false);
     const [isAudioSending, setIsAudioSending] = useState(false);
     const [selectedVoice, setSelectedVoice] = useState(null);
+    const [systemInstruction, setSystemInstruction] = useState('');
+
+    useEffect(() => {
+        const getSystemInstruction = async () => {
+            const response = await axios('../../../FAQ.md');
+            setSystemInstruction(response.data)
+        }
+
+        getSystemInstruction()
+    }, [])
+
+    const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY}); 
 
     useEffect(() => {
         const loadVoices = () => {
@@ -29,6 +40,8 @@ const ChatbotContainer = ({ onClose, show}) => {
     
         window.speechSynthesis.onvoiceschanged = loadVoices;
         loadVoices();
+
+        return () => speechSynthesis.cancel();
       }, []);
 
     const handleSubmit = async () => {
@@ -40,11 +53,22 @@ const ChatbotContainer = ({ onClose, show}) => {
                 model: "gemini-2.0-flash",
                 contents: message,
                 config: {
-                    systemInstruction: "You are a chatbot for project management system ",
+                    systemInstruction: `You are a chatbot designed specifically for a Project Collaboration Platform named ProJex. 
+                    Please respond only to questions related to ProJex.
+                    Possible question to answer:
+                    ${systemInstruction}
+                    `,
                 },
             });
             const text = response.text; 
             if (text) {
+                speechSynthesis.cancel();
+                const chunks = text.match(/[^.!?]+[.!?]+/g) || [text];
+                chunks.forEach((chunk) => {
+                    const utterance = new SpeechSynthesisUtterance(chunk.replace(/\*/g, ''));
+                    utterance.voice = selectedVoice;
+                    speechSynthesis.speak(utterance);
+                });
                 setChats(prev => [...prev, { from: 'bot', message: text }]);
             } else {
                 console.error('AI Response Error: No text in response');
@@ -66,6 +90,7 @@ const ChatbotContainer = ({ onClose, show}) => {
             };
 
             mediaRecorderRef.current.onstop = async () => {
+                speechSynthesis.cancel();
                 const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' }); 
                 const audioUrl = URL.createObjectURL(audioBlob);
                 setChats(prev => [...prev, { from: 'user', type: "audio", message: audioUrl }]);
@@ -86,14 +111,22 @@ const ChatbotContainer = ({ onClose, show}) => {
                             }],
                         }],
                         config: {
-                            systemInstruction: "You are a chatbot for project management system. Transcribe and answer the user's query from the audio.",
+                            systemInstruction:`You are a chatbot designed specifically for a Project Collaboration Platform named ProJex. 
+                            Please respond only to questions related to ProJex.
+                            Transcribe and answer the user's query from the audio.
+                            Possible question to answer:
+                            ${systemInstruction}
+                            `,
                         },
                     });
                     const text = response.text;
                     if (text) {
-                        const utterance = new SpeechSynthesisUtterance(text);
-                        utterance.voice = selectedVoice;
-                        speechSynthesis.speak(utterance);
+                        const chunks = text.match(/[^.!?]+[.!?]+/g) || [text];
+                        chunks.forEach((chunk) => {
+                            const utterance = new SpeechSynthesisUtterance(chunk.replace(/\*/g, ''));
+                            utterance.voice = selectedVoice;
+                            speechSynthesis.speak(utterance);
+                        });
                         setChats(prev => [...prev, { from: 'bot', message: text }]);
                     } else {
                         console.error('AI Audio Response Error: No text in response');
@@ -136,8 +169,7 @@ const ChatbotContainer = ({ onClose, show}) => {
                 {chats.map((chat, index) => (
                     <div key={index} className={`w-full p-3 flex gap-5 p-3 list-none items-center ${chat.from === 'bot' ? 'justify-start' : 'justify-end'}`}>
                         <li
-                            className={`border-1 border-gray-200 rounded-md ${chat.from === 'bot' ? 'bg-black text-white' : 'bg-white'}
-                            shadow-md p-3`}
+                            className={`border-1 border-gray-200 shadow-sm p-3 rounded-md ${chat.from === 'bot' ?  'bg-white shadow-purple-500' : 'bg-black text-white'}`}
                         >{chat.type === 'audio' ? <audio controls src={chat.message} className="mt-4"></audio> : chat.message}</li>
                     </div>
                 ))}
@@ -152,10 +184,10 @@ const ChatbotContainer = ({ onClose, show}) => {
                         '& .MuiOutlinedInput-root': {
                             height: '45px',
                             '&:hover fieldset': {
-                                borderColor: 'black',
+                                borderColor: '#9137db',
                             },
                             '&.Mui-focused fieldset': {
-                                borderColor: 'black',
+                                borderColor: '#9137db',
                             },
                         },
                         input: { fontSize: '15px', borderColor: 'black' }

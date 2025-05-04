@@ -1,16 +1,12 @@
-import { useContext, useEffect, useState } from "react"
-import { deleteMember, getMembers } from "../../../services/MemberService";
+import { useContext, useEffect, useState } from "react";
+import { deleteMember, getMembers, updateMember } from "../../../services/MemberService";
 import { useSearchParams } from "react-router-dom";
 import CustomizedTable from "../../../components/table";
 import { ProjectContext } from "../../../layouts/ProjectLayout";
 import { StyledTableCell, StyledTableRow } from "../../../components/table";
-import { Avatar } from "@mui/material";
-import IconButton from '@mui/material/IconButton';
+import { Avatar, IconButton, Menu, MenuItem, TableRow } from "@mui/material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import { UserContext } from "../../../context/userContext";
-import { TableRow } from "@mui/material";
 import { ConfirmDialog } from "../../../components/dialog";
 import { formatDateTime, convertToAsiaTime } from "../../../utils/utils";
 
@@ -21,109 +17,167 @@ const Team = () => {
     const [searchParams] = useSearchParams();
     const project_code = searchParams.get('c');
     const [anchorEl, setAnchorEl] = useState(null);
+    const [menuMemberId, setMenuMemberId] = useState(null);
     const open = Boolean(anchorEl);
     const [memberId, setMemberId] = useState(null);
+    const [openRemove, setOpenRemove] = useState(false);
+    const [openUpdate, setOpenUpdate] = useState(false);
+    const [memberRole, setMemberRole] = useState(null);
+
+    const handleShowUpdate = (id, memberRole) => {
+        setMemberId(id);
+        setMemberRole(memberRole);
+        setOpenUpdate(true);
+    };
+
+    const handleCloseUpdate = () => {
+        setMemberId(null);
+        setOpenUpdate(false);
+        setMemberRole(null);
+    };
 
     const handleShowRemove = (id) => {
         setMemberId(id);
-    }
+        setOpenRemove(true);
+    };
 
     const handleCloseRemove = () => {
-        setMemberId(null)
-    }
+        setMemberId(null);
+        setOpenRemove(false);
+    };
 
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
+    const handleClick = (event, memberId) => {
+        setAnchorEl(event.currentTarget);
+        setMenuMemberId(memberId);
     };
 
     const handleClose = () => {
-      setAnchorEl(null);
+        setAnchorEl(null);
+        setMenuMemberId(null);
     };
 
     useEffect(() => {
         const fetchMembers = async () => {
             const response = await getMembers(project_code);
-
-            if(response.success){
+            if (response.success) {
                 const fetchedMembers = response.members.map(r => {
-                    const { user, ...rest } = r
-                    const { id, ...userWithoutId } = user
-                    return {...rest, ...userWithoutId}
-                })
+                    const { user, ...rest } = r;
+                    const { id, ...userWithoutId } = user;
+                    return { ...rest, ...userWithoutId };
+                });
                 setMembers(fetchedMembers);
             }
-        }
+        };
 
         fetchMembers();
-    },[])
+    }, []);
+
+    const handleUpdate = async () => {
+        const response = await updateMember(memberId, { role: memberRole });
+        console.log(response);
+        if (response.success) window.location.reload();
+    };
 
     const handleRemove = async () => {
         const response = await deleteMember(memberId);
+        if (response.success) window.location.reload();
+    };
 
-        if(response.success) window.location.reload()
-    }
+    return (
+        <main className="w-full h-full overflow-y-auto py-10 p-5">
+            <CustomizedTable
+                cols={
+                    <TableRow>
+                        <StyledTableCell align="left">Fullname</StyledTableCell>
+                        <StyledTableCell align="left">Email</StyledTableCell>
+                        <StyledTableCell align="left">Role</StyledTableCell>
+                        <StyledTableCell align="left">Joined At</StyledTableCell>
+                        {role === 'Admin' && <StyledTableCell align="left">Action</StyledTableCell>}
+                    </TableRow>
+                }
+                rows={
+                    members.length > 0 && members.map((member, i) => (
+                        <StyledTableRow key={i}>
+                            <StyledTableCell sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                <Avatar
+                                    src={`data:image/jpeg;base64,${member.profile_pic}`}
+                                    sx={{ width: 40, height: 40 }}
+                                />
+                                {member.firstname} {member.lastname}
+                            </StyledTableCell>
+                            <StyledTableCell align="left">{member.email}</StyledTableCell>
+                            <StyledTableCell align="left">{member.role}</StyledTableCell>
+                            <StyledTableCell align="left">
+                                {formatDateTime(convertToAsiaTime(member.joined_At))}
+                            </StyledTableCell>
+                            {role === 'Admin' && (
+                                <StyledTableCell align="left">
+                                    {((user.email === project.user.email && user.email !== member.email) ||
+                                        (member.user_Id !== project.user_id && member.role !== 'Admin')) && (
+                                        <>
+                                            <IconButton
+                                                id={`basic-button-${member.id}`}
+                                                aria-controls={open && menuMemberId === member.id ? 'basic-menu' : undefined}
+                                                aria-haspopup="true"
+                                                aria-expanded={open && menuMemberId === member.id ? 'true' : undefined}
+                                                onClick={(e) => handleClick(e, member.id)}
+                                            >
+                                                <MoreHorizIcon fontSize="inherit" />
+                                            </IconButton>
 
-    return <main className="w-full h-full overflow-y-auto py-10 p-5">
-        <CustomizedTable
-            cols={<TableRow>
-                    <StyledTableCell align="left">Fullname</StyledTableCell>
-                    <StyledTableCell align="left">Email</StyledTableCell>
-                    <StyledTableCell align="left">Role</StyledTableCell>
-                    <StyledTableCell align="left">Joined At</StyledTableCell>
-                    {role === 'Admin' && <StyledTableCell align="left">Action</StyledTableCell>}
-            </TableRow>}
-            rows={members.length > 0 && members.map((member, i) => {
-                return <StyledTableRow key={i}>
-                    <StyledTableCell
-                        sx={{display: 'flex', alignItems: 'center', gap: 2}}
-                    >
-                        <Avatar
-                            src={`data:image/jpeg;base64,${member.profile_pic}`}
-                            sx={{ width: 40, height: 40 }}
-                        />
-                        {member.firstname} {member.lastname}
-                    </StyledTableCell>
-                    <StyledTableCell align="left">{member.email}</StyledTableCell>
-                    <StyledTableCell align="left">{member.role}</StyledTableCell>
-                    <StyledTableCell align="left">{formatDateTime(convertToAsiaTime(member.joined_At))}</StyledTableCell>
-                    {role === 'Admin' &&  <StyledTableCell align="left">
-                        {((user.email === project.user.email && user.email !== member.email) ||
-                        (member.user_Id !== project.user_id && member.role !== 'Admin')) && <>
-                        <IconButton 
-                            id="basic-button"
-                            aria-controls={open ? 'basic-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                            onClick={handleClick}
-                        >
-                            <MoreHorizIcon fontSize="inherit" />
-                        </IconButton>
-                        <Menu
-                            id="basic-menu"
-                            anchorEl={anchorEl}
-                            open={open}
-                            onClose={handleClose}
-                            MenuListProps={{
-                            'aria-labelledby': 'basic-button',
-                            }}
-                        >
-                            <MenuItem onClick={handleClose}>Edit</MenuItem>
-                            <MenuItem onClick={() => handleShowRemove(member.id)}>Remove</MenuItem>
-                        </Menu>
-                        </>}
-                    </StyledTableCell>}
-                </StyledTableRow>
-            })}
-        />
-        <ConfirmDialog
-            title="Delete"
-            text="Are you sure do you want to remove?"
-            handleClose={handleCloseRemove} 
-            handleAgree={handleRemove}
-            isOpen={memberId}
-            variant="error"
-        />
-    </main>
-}
+                                            {menuMemberId === member.id && (
+                                                <Menu
+                                                    id="basic-menu"
+                                                    anchorEl={anchorEl}
+                                                    open={open}
+                                                    onClose={handleClose}
+                                                >
+                                                    <MenuItem
+                                                        onClick={() => {
+                                                            handleShowUpdate(member.id, member.role === "Admin" ? "Member" : "Admin");
+                                                            handleClose();
+                                                        }}
+                                                    >
+                                                        {member.role === "Admin" ? "Demote" : "Make admin"}
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        onClick={() => {
+                                                            handleShowRemove(member.id);
+                                                            handleClose();
+                                                        }}
+                                                    >
+                                                        Remove
+                                                    </MenuItem>
+                                                </Menu>
+                                            )}
+                                        </>
+                                    )}
+                                </StyledTableCell>
+                            )}
+                        </StyledTableRow>
+                    ))
+                }
+            />
 
-export default Team
+            <ConfirmDialog
+                title={memberRole === "Admin" ? "Promote to admin" : "Demote from admin"}
+                text={memberRole === "Admin" ? "Promote this user to admin?" : "Remove admin privileges from this user?"}
+                handleClose={handleCloseUpdate}
+                handleAgree={handleUpdate}
+                isOpen={memberId != null && openUpdate}
+                variant={memberRole === "Admin" ? 'success' : 'error'}
+            />
+
+            <ConfirmDialog
+                title="Delete"
+                text="Are you sure you want to remove this user?"
+                handleClose={handleCloseRemove}
+                handleAgree={handleRemove}
+                isOpen={memberId != null && openRemove}
+                variant="error"
+            />
+        </main>
+    );
+};
+
+export default Team;

@@ -8,6 +8,14 @@
   all: revert;
 }
 
+.bg-1 {
+  background-image: url('bg (1).png');
+}
+
+.bg-2 {
+  background-image: url('bg (2).png');
+}
+
 @theme {
   --text-shadow-xl: 4px 4px rgb(0, 0, 0 / 0.25); 
   --animate-slide-right: slide-right 1s ease-in-out forwards;

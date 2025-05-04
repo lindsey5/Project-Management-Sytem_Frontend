@@ -1,5 +1,4 @@
 import { StatusChip } from "../chip"
-import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import { useContext, useEffect, useState } from "react";
 import { ProjectContext } from "../../layouts/ProjectLayout";
@@ -9,11 +8,12 @@ import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
 import { convertToAsiaTime, formatDateTime } from "../../utils/utils";
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import { updateTask } from "../../services/TaskService";
+import { getTask, updateTask } from "../../services/TaskService";
 import Badge from '@mui/material/Badge';
 import { UserContext } from "../../context/userContext";
 import TaskDetails from "./TaskDetails/TaskDetails";
 import { statusConfig } from "../config";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const StatusHeader = ({currentStatus, showButton, ...rest}) => {
     return <div className="flex items-center justify-between flex-1" {...rest}>
@@ -31,6 +31,20 @@ const Kanban = ({ tasks, setTasks }) => {
     const { user } = useContext(UserContext);
     const { project, role } = useContext(ProjectContext);
     const [selectedTask, setSelectedTask] = useState(null);
+    const location = useLocation();
+    const task = location.state?.task;
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      const getTaskAsync = async () => {
+        const response = await getTask(task);
+        setSelectedTask(response.task.status !== 'Deleted' ? response.task : null);
+      }
+
+      if(task) {
+        getTaskAsync()
+      }
+    }, [task])
 
     const handleDragStart = (e, task_id) => {
       e.dataTransfer.setData('task_id', task_id);
@@ -64,7 +78,14 @@ const Kanban = ({ tasks, setTasks }) => {
   
     return (
       <div className="w-full p-3 min-w-[1000px]">
-        <TaskDetails closeModal={() => setSelectedTask(null)} open={selectedTask != null} task={selectedTask}/>
+        <TaskDetails 
+          closeModal={() => {
+            navigate(`${location.pathname}?c=${project.project_code}`, { state: { task : null }})
+            setSelectedTask(null);
+          }} 
+          open={selectedTask != null} 
+          task={selectedTask}
+        />
         <div className="grid grid-cols-5 gap-3 border-b-1 border-gray-300 py-3">
           {statuses.map(status => (
             <StatusHeader key={status} currentStatus={status} showButton={role === "Admin"}/>
@@ -82,17 +103,23 @@ const Kanban = ({ tasks, setTasks }) => {
                         .filter(task => task.status === status)
                         .map(task => {
                           const index = task.assignees.findIndex(a => a.member.user.email == user.email);
+                          
+                          const isDraggable = !loading &&
+                          project.status === 'Active' &&
+                          (role === 'Admin' || task.assignees.some(a => a.member.user.email === user.email));
+
                           if (index > -1) {
                               const [item] = task.assignees.splice(index, 1);
                               task.assignees.unshift(item);
                           }
+
                             return <Card
                               key={task.id}
                               variant="outlined"
                               sx={{ borderRadius: '20px', ':hover' : { backgroundColor: '#F9FAFB'}}}
                               className="shadow-xl flex flex-col gap-3 items-start px-2 py-4 bg-white m-3 cursor-pointer"
-                              draggable={!loading && project.status === 'Active'}
-                              onDragStart={(e) => project.status === 'Active' ? handleDragStart(e, task.id) : undefined}
+                              draggable={isDraggable}
+                              onDragStart={(e) => isDraggable ? handleDragStart(e, task.id) : undefined}
                               onClick={() => setSelectedTask(task)}
                           >
                             <StatusChip 
@@ -101,6 +128,15 @@ const Kanban = ({ tasks, setTasks }) => {
                             />
                             <Typography variant="h6">
                               {task.task_Name}
+                            </Typography>
+                            <Typography sx={{ 
+                                color: new Date(convertToAsiaTime(task.due_date)) <= new Date() && 
+                                task.status != "Completed" ? "red" : "gray",
+                              }} 
+                                variant="subtitle1" 
+                                fontSize={'14px'}
+                            >
+                              Start: {formatDateTime(convertToAsiaTime(task.start_date))}
                             </Typography>
                             <Typography sx={{ 
                                 color: new Date(convertToAsiaTime(task.due_date)) <= new Date() && 

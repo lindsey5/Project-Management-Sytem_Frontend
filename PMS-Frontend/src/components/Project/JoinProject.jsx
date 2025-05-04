@@ -30,7 +30,7 @@ const JoinProject = ({ close }) =>{
     if(response.success) {
         toast.success('Done! An admin will check it out your request.')
         sendRequestNotification(response.project.id);
-        //close();
+        close();
     }
     else toast.error(response.message)
     setLoading(false);

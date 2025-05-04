@@ -18,7 +18,7 @@ import { CommentContext } from "../../../context/commentContext";
 export default function CommentEditor({ task_id, close }) {
   const rteRef = useRef(null);
   const [files, setFiles] = useState([]);
-  const { fetchComments, setTaskId } = useContext(CommentContext)
+  const { fetchComments } = useContext(CommentContext)
 
   const handleFiles = (e) => {
     const selectedFiles = Array.from(e.target.files);

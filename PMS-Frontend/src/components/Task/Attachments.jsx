@@ -5,7 +5,7 @@ import { base64ToBlob } from "../../utils/utils";
 
 const Attachments = ({ attachments, remove, openFile}) => {
     return <Box display="flex" overflow={"auto"} gap={2}>
-            {attachments.map(a => (
+            {attachments.length > 0 ? attachments.map(a => (
                     <Chip
                         key={a.id}
                         icon={<AttachmentIcon />}
@@ -14,6 +14,7 @@ const Attachments = ({ attachments, remove, openFile}) => {
                         sx={{
                             maxWidth: '300px',
                             padding: '0 8px',
+                            marginY: '5px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'flex-start',
@@ -26,7 +27,7 @@ const Attachments = ({ attachments, remove, openFile}) => {
                         
                         }
                     />                              
-                ))}
+                )) : <p className="my-5">No attachments</p>}
     </Box>
 }
 

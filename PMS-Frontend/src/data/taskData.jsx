@@ -7,7 +7,7 @@ export const status = [
 ]
 
 export const priority = [
-    { name: "High", color: "red"},
-    { name: "Medium", color: "orange"},
-    { name: "Low", color: "green"}
-]
+    { name: "Low", color: "#22c55e" },     
+    { name: "Medium", color: "#f97316" },  
+    { name: "High", color: "#ef4444" },   
+  ];

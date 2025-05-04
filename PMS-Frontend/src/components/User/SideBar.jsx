@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom"
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../context/userContext";
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import IconButton from '@mui/material/IconButton';
@@ -8,8 +8,11 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Tooltip } from "@mui/material";
+import { Badge, Tooltip } from "@mui/material";
 import ProjectSearch from "../Project/ProjectSearch";
+import { SignalContext } from "../../context/signalContext";
+import { getNotifications } from '../../services/NotificationService';
+import { toast } from "react-toastify";
 
 const gradientColor = { 
     default: "linear-gradient(45deg, #2328ff, #a1ffaa)",
@@ -29,8 +32,27 @@ const SideBar = () => {
     const pathname = useLocation().pathname;
     const { user } = useContext(UserContext);
     const [showSearch, setShowSearch] = useState(false);
+    const [count, setCount] = useState(0);
 
-    return <aside className="hidden sm:flex z-50 px-4 py-10 fixed top-0 left-0 bottom-0 bg-white flex-col gap-3 border-r-1 border-gray-200">
+    const { connection } = useContext(SignalContext)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await getNotifications(1);
+            setCount(response.unreadNotifications);
+        }
+
+        fetchData()
+
+        if(connection){
+            connection.on("ReceiveTaskNotification", async (count, newNotification) => {
+                setCount(prev => prev + count)
+            })
+        }
+
+    }, [connection])
+
+    return <aside className="flex z-50 px-4 py-10 fixed top-0 left-0 bottom-0 bg-white flex-col gap-3 border-r-1 border-gray-200">
         {showSearch && <ProjectSearch close={() => setShowSearch(false)}/>}
             <button className="w-10 cursor-pointer">
                 <img className="rounded-full" src={user && user.profile_pic} alt="" />
@@ -45,8 +67,8 @@ const SideBar = () => {
                     <FolderCopyOutlinedIcon sx={{ fontSize: 28 }}/>
                 </IconButton>
             </Tooltip>
-            <Tooltip title="Task" placement="left-end" arrow>
-                <IconButton size="medium">
+            <Tooltip title="Tasks" placement="left-end" arrow>
+                <IconButton size="medium" sx={ (!showSearch && pathname === '/tasks') ? bg : undefined } onClick={() => window.location.href = '/tasks'}>
                     <TaskOutlinedIcon sx={{ fontSize: 28 }}/>
                 </IconButton>
             </Tooltip>
@@ -56,9 +78,11 @@ const SideBar = () => {
                 </IconButton>
             </Tooltip>
             <Tooltip title="Notifications" placement="left-end" arrow>
-                <IconButton size="medium">
-                    <NotificationsNoneOutlinedIcon sx={{ fontSize: 28 }}/>
-                </IconButton>
+                    <IconButton size="medium" sx={ (!showSearch && pathname === '/notifications') ? bg : undefined } onClick={() => window.location.href = '/notifications'}>
+                        <Badge badgeContent={count} color="primary">
+                            <NotificationsNoneOutlinedIcon sx={{ fontSize: 28 }}/>
+                        </Badge>
+                    </IconButton>
             </Tooltip>
             <Tooltip title="Log out" placement="left-end" arrow>
                 <IconButton size="medium" onClick={() => {
