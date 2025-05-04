@@ -1,54 +1,8 @@
 import { useState, useEffect } from "react"
 import Input from "../../components/input"
-import { googleLogin, Login } from "../../services/AuthService";
+import { Login } from "../../services/AuthService";
 import { toast } from "react-toastify";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { downloadImageAsBase64 } from "../../utils/utils";
-
-const GoogleButton = () => {
-
-    const handleSuccess = async (response) => {
-      try {
-        const credential = response.credential;
-        const decoded = JSON.parse(atob(credential.split('.')[1]));
-        const byteImage = await downloadImageAsBase64(decoded.picture);
-        
-        const r = await googleLogin({
-          google_id: decoded.sub, 
-          firstname: decoded.given_name, 
-          lastname: decoded.family_name,
-          email: decoded.email,
-          profile_pic: byteImage
-        });
-  
-        if(r?.success) window.location.href = '/home';
-        else toast.error("Login Error")
-      } catch (error) {
-        console.error('Login processing error:', error);
-        toast.error("Login Error")
-      }
-    };
-  
-    const handleError = (error) => {
-      console.error('Google Login Error:', error);
-      toast.error("Login Error");
-    };
-  
-    return (
-      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <div className="mt-2">
-          <GoogleLogin 
-            onSuccess={handleSuccess} 
-            onError={handleError} 
-            useOneTap={true}
-            auto_select={true}
-            shape="rectangular"
-            size="large"
-          />
-        </div>
-      </GoogleOAuthProvider>
-    );
-};
+import GoogleButton from "./GoogleButton";
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -72,7 +26,7 @@ const LoginPage = () => {
         }else if(!response?.success){
             setErrors([response.message])
         }else{
-            toast.success("Login successful")
+            //toast.success("Login successful")
         }
     }
 
@@ -85,7 +39,9 @@ const LoginPage = () => {
                 <Input className="w-full" label={"Password"} type={"password"}  onChange={(e) => handleInput(e, setPassword)}/>
                 <button className="cursor-pointer mt-4 text-white px-6 py-2 rounded-lg mb-2
                 bg-[linear-gradient(45deg,_#2A4EC1_,#9532C7)]
-            hover:bg-[linear-gradient(45deg,_#9532C7_,#2A4EC1)]">Login</button>
+            hover:bg-[linear-gradient(45deg,_#9532C7_,#2A4EC1)]"
+              type="submit"
+              >Login</button>
                 <a className="text-md mt-2 text-center text-gray-400 hover:underline" href="">Forgot Password?</a>
                 <div className="mt-4 mb-2 grid grid-cols-[2fr_0.5fr_2fr] items-center text-center">
                   <hr className=""/>
@@ -93,7 +49,7 @@ const LoginPage = () => {
                   <hr />
                 </div>
                 <GoogleButton />
-                <p className="text-center mt-10">Don't have an account? <a className="underline font-bold" href="">Sign Up</a></p>
+                <p className="text-center mt-8">Don't have an account? <a className="underline font-bold" href="/signup">Sign Up</a></p>
             </div>
     </form>
 }

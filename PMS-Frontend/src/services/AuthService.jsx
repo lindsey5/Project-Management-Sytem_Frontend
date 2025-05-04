@@ -20,3 +20,13 @@ export const googleLogin = async (data) => {
         return error.response ? error.response.data : error.message
     }
 }
+
+export const signupVerificationCode = async (email) => {
+    try{
+        const response = await axios.post(`/api/email/verification-code?email=${email}`);
+        return response.data
+    }catch(error){
+        console.log(error)
+        return error.response ? error.response.data : error.message
+    }
+}
