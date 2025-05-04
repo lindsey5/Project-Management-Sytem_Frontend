@@ -1,4 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
 import SendIcon from '@mui/icons-material/Send';
 import { IconButton, TextField } from '@mui/material';
 import { useState, useRef, useEffect } from 'react';
@@ -200,7 +201,7 @@ const ChatbotContainer = ({ onClose, show}) => {
                         <SendIcon sx={{ color: 'black' }} />
                     </IconButton>}
                     <IconButton onClick={!isRecording ? startRecording : stopRecording} disabled={isAudioSending}>
-                        {!isRecording ? <MicIcon sx={{ color: 'black' }} /> : <CloseIcon />}
+                        {!isRecording ? <MicIcon sx={{ color: 'black' }} /> : <CheckIcon />}
                     </IconButton>
                 </div>
             </div>
