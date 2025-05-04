@@ -11,7 +11,6 @@ import { statusConfig } from "../../components/config";
 import StatusSelect from "../../components/Select";
 import { status } from "../../data/taskData";
 import { useNavigate } from "react-router-dom";
-import { ProjectContext } from "../../layouts/ProjectLayout";
 
 const items = [
     { name: 'All', color: '#808080' },      
@@ -34,6 +33,7 @@ const YourTasks = () => {
     useEffect(() => {
         const getTasksAsync = async () => {
             const response = await getUserTasks();
+            console.log(response)
             setTasks(response.tasks)
         }
         getTasksAsync();
