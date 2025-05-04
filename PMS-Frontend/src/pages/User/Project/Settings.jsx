@@ -15,6 +15,7 @@ import project_types from '../../../../project_types.json';
 import { updateProject } from "../../../services/ProjectService";
 import { convertToAsiaTime, formatDate } from "../../../utils/utils";
 import { ConfirmDialog } from "../../../components/dialog";
+import { UserContext } from "../../../context/userContext";
 
 const filter = createFilterOptions();
 
@@ -42,8 +43,9 @@ const CustomTextField = ({label, value, width, ...rest}) =>{
 }
 
 const ProjectSettings = () => {
-    const { project, role } = useContext(ProjectContext)
+    const { project, role } = useContext(ProjectContext);
     const { state, dispatch } = useProjectReducer();
+    const { user } = useContext(UserContext);
     const [value, setValue] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
 
@@ -87,7 +89,7 @@ const ProjectSettings = () => {
                     label="Title" 
                     value={state.title}
                     onChange={(e) => dispatch({ type: "SET_TITLE", payload: e.target.value})} 
-                    disabled={role !== 'Admin'}
+                    disabled={role !== 'Admin' || user.email !== project.user.email}
                 />
                 <CustomTextField
                     width={"100%"}
@@ -97,7 +99,7 @@ const ProjectSettings = () => {
                     maxRows={5}
                     inputProps={{ maxLength: 500 }}
                     onChange={(e) => dispatch({ type: "SET_DESCRIPTION", payload: e.target.value})} 
-                    disabled={role !== 'Admin'}
+                    disabled={role !== 'Admin' || project.user.email !== user.email}
                 />
                 <div className="flex flex-col gap-3 w-full">
                     <p className="text-lg font-bold">Project Type</p>
@@ -130,7 +132,7 @@ const ProjectSettings = () => {
 
                             return filtered;
                         }}
-                        disabled={role !== 'Admin'}
+                        disabled={role !== 'Admin' || project.user.email !== user.email}
                         selectOnFocus
                         clearOnBlur
                         handleHomeEndKeys
@@ -172,7 +174,7 @@ const ProjectSettings = () => {
                             <DatePicker 
                                 className="w-full"
                                 value={dayjs(state.start_date)}
-                                disabled={role !== 'Admin'}
+                                disabled={role !== 'Admin' || project.user.email !== user.email}
                                 onChange={(value) => dispatch({type: 'SET_START_DATE', payload: value.$d})}
                             />
                         </LocalizationProvider>
@@ -184,7 +186,7 @@ const ProjectSettings = () => {
                                 className="w-full"
                                 minDate={dayjs(state.start_date)}
                                 value={dayjs(state.end_date)}
-                                disabled={role !== 'Admin'}
+                                disabled={role !== 'Admin' || project.user.email !== user.email}
                                 onChange={(value) => dispatch({type: 'SET_END_DATE', payload: value.$d})}
                             />
                         </LocalizationProvider>
@@ -196,11 +198,11 @@ const ProjectSettings = () => {
                         width={"100%"}
                         item={[ { name: 'Active', color: green[500]}, { name: 'On Hold', color: grey[500]}, { name: 'Closed', color: red[500]}]}
                         value={state.status}
-                        disabled={role !== 'Admin'}
+                        disabled={role !== 'Admin' || project.user.email !== user.email}
                         onChange={(e) => dispatch({ type: "SET_STATUS", payload: e.target.value})}
                     />
                 </div>
-                {role === 'Admin' && <Button 
+                {role === 'Admin' && project.user.email === user.email && <Button 
                     variant="contained"
                     onClick={() => setOpenDialog(true)}
                 >

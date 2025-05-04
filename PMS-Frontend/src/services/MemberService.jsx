@@ -1,5 +1,20 @@
 import axios from "axios"
 
+export const updateMember = async (member_id, data) => {
+    try{
+        console.log(data)
+        const response = await axios.put(`/api/member/${member_id}`, data, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        })
+
+        return response.data
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
+}
+
 export const deleteMember = async (member_id) => {
     try{
         const response = await axios.delete(`/api/member/${member_id}`,{
