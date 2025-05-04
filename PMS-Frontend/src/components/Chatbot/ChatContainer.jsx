@@ -56,7 +56,7 @@ const ChatbotContainer = ({ onClose, show}) => {
                 config: {
                     systemInstruction: `You are a chatbot designed specifically for a Project Collaboration Platform named ProJex. 
                     Please respond only to questions related to ProJex.
-                    Possible question to answer:
+                    Possible questions to answer:
                     ${systemInstruction}
                     `,
                 },
@@ -114,8 +114,7 @@ const ChatbotContainer = ({ onClose, show}) => {
                         config: {
                             systemInstruction:`You are a chatbot designed specifically for a Project Collaboration Platform named ProJex. 
                             Please respond only to questions related to ProJex.
-                            Transcribe and answer the user's query from the audio.
-                            Possible question to answer:
+                            Possible questions to answer:
                             ${systemInstruction}
                             `,
                         },
