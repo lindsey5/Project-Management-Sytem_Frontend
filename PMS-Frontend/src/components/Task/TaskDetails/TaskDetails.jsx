@@ -38,8 +38,6 @@ const TaskDetails = memo(({task, open, closeModal}) => {
     const [selectedAttachment, setSelectedAttachment] = useState(false);
     const [showCommentEditor, setShowCommentEditor] = useState(false);
 
-    console.log('rendered')
-
     const handleFiles = async (e) => {
         const selectedFiles = Array.from(e.target.files || []);
   
