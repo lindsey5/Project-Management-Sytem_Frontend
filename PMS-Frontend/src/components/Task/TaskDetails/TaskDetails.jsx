@@ -1,5 +1,5 @@
 import { Modal, Card, Typography, Box, IconButton, Button } from "@mui/material";
-import { memo, useContext, useEffect, useState } from "react";
+import { memo, useCallback, useContext, useEffect, useState } from "react";
 import { createTaskAttachment, deleteTaskAttachment, getTaskAttachments } from "../../../services/TaskAttachmentService";
 import { ProjectContext } from "../../../layouts/ProjectLayout";
 import AddIcon from '@mui/icons-material/Add';
@@ -37,6 +37,8 @@ const TaskDetails = memo(({task, open, closeModal}) => {
     const [value, setValue] = useState("Comments");
     const [selectedAttachment, setSelectedAttachment] = useState(false);
     const [showCommentEditor, setShowCommentEditor] = useState(false);
+
+    console.log('rendered')
 
     const handleFiles = async (e) => {
         const selectedFiles = Array.from(e.target.files || []);
@@ -83,6 +85,10 @@ const TaskDetails = memo(({task, open, closeModal}) => {
         }
     }
 
+    const removeAttachment = useCallback((a) => {
+        role === 'Admin' ? setSelectedAttachment(a.id) : undefined
+    }, [role])
+
     return <Modal
             open={open}
             onClose={closeModal}
@@ -117,7 +123,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                            </Box>
                            <Attachments 
                                 attachments={attachments}
-                                remove={(a) => role === 'Admin' ? setSelectedAttachment(a.id) : undefined}
+                                remove={removeAttachment}
                                 openFile={openFile}
                            />
                         </Box>
@@ -167,7 +173,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                                             >
                                                 Add Comment
                                             </Button>}
-                                        {showCommentEditor && <CommentEditor task_id={task?.id} close={() => setShowCommentEditor(false)} />}
+                                        {showCommentEditor && <CommentEditor task_id={task.id} close={() => setShowCommentEditor(false)} />}
                                     </CommentContextProvider>
                                 </TabPanel>
                                 <HistoryPanel task_id={task?.id}/>

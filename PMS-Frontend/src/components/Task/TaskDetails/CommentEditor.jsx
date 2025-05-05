@@ -10,12 +10,26 @@ import {
   MenuSelectHeading,
   RichTextEditor,
 } from "mui-tiptap";
-import { useContext, useRef, useState, useEffect } from "react";
+import { useContext, useRef, useState, memo } from "react";
 import { openFile } from "../../../utils/utils";
 import { createComment, createCommentAttachment } from "../../../services/CommentService";
 import { CommentContext } from "../../../context/commentContext";
 
-export default function CommentEditor({ task_id, close }) {
+const FileChip = ({ file, index, deleteFile }) => {
+
+  const open = () => openFile(file)
+  const remove = () => deleteFile(index);
+
+  return <Chip
+      label={file.name}
+      onClick={open}
+      onDelete={remove}
+      sx={{ maxWidth: '150px', cursor: 'pointer' }}
+    />
+
+}
+
+const  CommentEditor = memo(({ task_id, close }) =>  {
   const rteRef = useRef(null);
   const [files, setFiles] = useState([]);
   const { fetchComments } = useContext(CommentContext)
@@ -85,8 +99,7 @@ export default function CommentEditor({ task_id, close }) {
           </MenuControlsContainer>
         )}
       />
-      {files && files.length > 0 && (
-        <Stack
+      <Stack
           direction="row"  
           width="100%"
           overflow={'auto'}
@@ -94,17 +107,10 @@ export default function CommentEditor({ task_id, close }) {
           boxSizing={'border-box'}
           gap={1}
         >
-          {files.map((file, index) => (
-            <Chip
-              key={index}
-              label={file.name}
-              onClick={() => openFile(file)}
-              onDelete={() => deleteFile(index)}
-              sx={{ maxWidth: '150px', cursor: 'pointer' }}
-            />
-          ))}
-        </Stack>
-      )}
+        {files.map((file, index) => (
+            <FileChip key={index} file={file} index={index} deleteFile={deleteFile}/> 
+        ))}
+      </Stack>
       <Stack direction="row" gap={2}>
         <Button sx={{ marginTop: '10px' }} onClick={close}>
           Cancel
@@ -115,4 +121,6 @@ export default function CommentEditor({ task_id, close }) {
       </Stack>
     </div>
   );
-}
+})
+
+export default CommentEditor

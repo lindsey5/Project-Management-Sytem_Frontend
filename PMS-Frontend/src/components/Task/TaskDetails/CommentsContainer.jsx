@@ -3,8 +3,29 @@ import { openFile, timeAgo } from "../../../utils/utils";
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import { EllipsisText } from "../../text";
 import { base64ToBlob } from "../../../utils/utils";
-import { useContext, useEffect } from "react";
+import { memo, useContext, useEffect } from "react";
 import { CommentContext } from "../../../context/commentContext";
+
+const CommentAttachmentChip = ({ attachment }) => {
+    const open = () => openFile(base64ToBlob(attachment))
+
+    return <Chip
+            icon={<AttachmentIcon />}
+            onClick={open}
+            sx={{
+                maxWidth: '300px',
+                padding: '0 8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                cursor: 'pointer',
+                ":hover" : {
+                    backgroundColor: '#9CA3AF'
+                }
+            }}
+            label={<EllipsisText text={attachment.name}/>}
+        /> 
+}
 
 const CommentsContainer = ({ task_id }) => {
     const { comments, setTaskId, lastItemRef } = useContext(CommentContext);
@@ -30,23 +51,7 @@ const CommentsContainer = ({ task_id }) => {
                <div className="notailwind" dangerouslySetInnerHTML={{ __html: comment.content }} />
                <div className="flex flex-wrap gap-3">
                 {comment.attachments.map(a => (
-                        <Chip
-                            key={a.id}
-                            icon={<AttachmentIcon />}
-                            onClick={() => openFile(base64ToBlob(a))}
-                            sx={{
-                                maxWidth: '300px',
-                                padding: '0 8px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'flex-start',
-                                cursor: 'pointer',
-                                ":hover" : {
-                                    backgroundColor: '#9CA3AF'
-                                }
-                            }}
-                            label={<EllipsisText text={a.name}/>}
-                        />                              
+                        <CommentAttachmentChip key={a.id} attachment={a} />                          
                     ))}
                </div>
             </div>
@@ -55,4 +60,4 @@ const CommentsContainer = ({ task_id }) => {
 
 }
 
-export default CommentsContainer
+export default memo(CommentsContainer)

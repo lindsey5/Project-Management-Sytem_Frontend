@@ -7,7 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { Box, TextField, Stack, Card, Button, Typography, Avatar} from "@mui/material";
-import { useContext, useEffect } from "react";
+import { memo, useContext, useEffect } from "react";
 import useTaskReducer from "../../../hooks/taskReducer";
 import { useState } from "react";
 import { formatDateTime, convertToAsiaTime, timeAgo } from "../../../utils/utils";
@@ -31,6 +31,7 @@ const TaskEditor = ({ members, role, task}) => {
     useEffect(() => {
         setSavedAssignees(task.assignees.map(t => ({...t.member, assigneeId: t.id})));
         setCurrentValue(task.assignees.map(t => ({...t.member})));
+        
         dispatch({ type: "SET_TASK", payload: {
             task_name: task.task_Name,
             description: task.description,
@@ -99,6 +100,8 @@ const TaskEditor = ({ members, role, task}) => {
             window.location.reload();
         }
     }
+
+    const handleAssignees = (e, value) => setCurrentValue(value)
 
     return <Box padding={2} flex={1} display={"flex"} flexDirection={"column"} overflow={"auto"}>
                 <Box display="flex" boxSizing={"border-box"} flexDirection={"column"} gap={3} marginBottom={2}>
@@ -178,7 +181,7 @@ const TaskEditor = ({ members, role, task}) => {
                 </LocalizationProvider>
                 <MembersAutocomplete 
                     members={members} 
-                    handleChange={(e, value) => setCurrentValue(value)} 
+                    handleChange={handleAssignees} 
                     value={currentValue}
                     readOnly={role != 'Admin'}
                 />
@@ -225,4 +228,4 @@ const TaskEditor = ({ members, role, task}) => {
     </Box>
 }
 
-export default TaskEditor
+export default memo(TaskEditor)

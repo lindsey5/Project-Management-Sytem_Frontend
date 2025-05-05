@@ -5,7 +5,7 @@ import { Card, Box, Typography, CircularProgress } from "@mui/material";
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { StatusChip } from "../../chip";
 import { EllipsisText } from "../../text";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, memo } from "react";
 import { getTaskHistory } from "../../../services/TaskService";
 
 const HistoryPanel = ({ task_id }) => {
