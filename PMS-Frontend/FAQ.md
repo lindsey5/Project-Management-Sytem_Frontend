@@ -42,3 +42,4 @@ Are there real-time notifications?
 
 Can I track task activity history?
 - Each task includes a history log showing who updated the task and when.
+
