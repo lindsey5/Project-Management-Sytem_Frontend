@@ -129,7 +129,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                                         multiple
                                         onChange={handleFiles}
                                         style={{ display: 'none' }}
-                                        accept="image/*,application/pdf,doc,.docx"
+                                        accept="image/*,application/pdf,doc,.docx,.xls,.xlsx"
                                     />
                                 </IconButton>}
                            </Box>
