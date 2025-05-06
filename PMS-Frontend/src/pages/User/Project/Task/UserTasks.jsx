@@ -34,7 +34,7 @@ const UserTasks = ({ allTasks }) => {
     }, [allTasks])
     
 
-    return <main className="w-full h-full py-10 px-4">
+    return <main className="min-h-0 flex-grow w-full pt-10 pb-20 px-4">
         <TaskDetails closeModal={() => setSelectedTask(null)} open={selectedTask != null} task={selectedTask}/>
         <div className="flex mb-4 w-full">
             <StatusSelect 
