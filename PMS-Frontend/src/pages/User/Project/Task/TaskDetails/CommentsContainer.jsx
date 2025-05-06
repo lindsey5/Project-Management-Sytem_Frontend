@@ -7,7 +7,8 @@ import { memo, useContext, useEffect } from "react";
 import { CommentContext } from "../../../../../context/commentContext";
 
 const CommentAttachmentChip = ({ attachment }) => {
-    const open = () => openFile(base64ToBlob(attachment))
+    console.log(attachment)
+    const open = () => openFile(base64ToBlob(attachment), attachment.name)
 
     return <Chip
             icon={<AttachmentIcon />}

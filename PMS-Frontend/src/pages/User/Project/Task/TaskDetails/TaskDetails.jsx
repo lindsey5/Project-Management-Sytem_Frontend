@@ -8,7 +8,6 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { getMembers } from "../../../../../services/MemberService";
-import { openFile } from "../../../../../utils/utils";
 import { toast } from "react-toastify";
 import { ConfirmDialog } from "../../../../../components/dialog";
 import Attachments from "../Attachments";
@@ -137,7 +136,6 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                            <Attachments 
                                 attachments={attachments}
                                 remove={removeAttachment}
-                                openFile={openFile}
                            />
                         </Box>
 

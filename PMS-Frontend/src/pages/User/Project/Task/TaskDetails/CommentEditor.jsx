@@ -17,7 +17,7 @@ import { CommentContext } from "../../../../../context/commentContext";
 
 const FileChip = ({ file, index, deleteFile }) => {
 
-  const open = () => openFile(file)
+  const open = () => openFile(file, file.name)
   const remove = () => deleteFile(index);
 
   return <Chip

@@ -148,9 +148,33 @@ export const downloadFile = (file) => {
     link.click();
 }
 
-export const openFile = (file) => {
+export const openFile = (file, fileName) => {
+  console.log(fileName)
   const fileURL = URL.createObjectURL(file);
-  window.open(fileURL);
+  // Ensure fileName has an extension
+  if (!fileName || !fileName.includes('.')) {
+    // Fallback extension based on MIME type
+    const extensionMap = {
+      'application/pdf': 'pdf',
+      'application/msword': 'doc',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
+      'application/vnd.ms-excel': 'xls',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
+      'image/png': 'png',
+      'image/jpeg': 'jpg',
+      'text/plain': 'txt',
+    };
+    console.log(extensionMap[file.type])
+    const ext = extensionMap[file.type] || 'bin';
+    fileName = `${fileName}.${ext}`;
+  }
+
+  const link = document.createElement('a');
+  link.href = fileURL;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
 
 export const base64ToBlob = (file) => {

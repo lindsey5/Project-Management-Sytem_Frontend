@@ -1,11 +1,11 @@
 import { Box, Chip } from "@mui/material";
 import AttachmentIcon from '@mui/icons-material/Attachment';
 import { EllipsisText } from "../../../../components/text";
-import { base64ToBlob } from "../../../../utils/utils";
+import { base64ToBlob, openFile } from "../../../../utils/utils";
 import { memo, useCallback } from "react";
 
-const AttachmentChip = memo(({ remove, attachment, openFile }) => {
-    const open = () => openFile(base64ToBlob(attachment));
+const AttachmentChip = memo(({ remove, attachment }) => {
+    const open = () => openFile(base64ToBlob(attachment), attachment.name);
 
     const removeAttachment = useCallback(() => {
         return remove ? remove(attachment) : undefined;
@@ -33,13 +33,13 @@ const AttachmentChip = memo(({ remove, attachment, openFile }) => {
     );
 });
 
-const Attachments = ({ attachments, remove, openFile }) => {
+const Attachments = ({ attachments, remove }) => {
 
     return (
         <Box display="flex" overflow={"auto"} gap={2}>
             {attachments.length > 0 ? (
                 attachments.map((a) => (
-                    <AttachmentChip key={a.id} attachment={a} remove={remove} openFile={openFile} />
+                    <AttachmentChip key={a.id} attachment={a} remove={remove} />
                 ))
             ) : (
                 <p className="my-5">No attachments</p>
