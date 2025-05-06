@@ -1,12 +1,12 @@
-import { statusConfig } from "../../config";
-import { timeAgo } from "../../../utils/utils";
+import { statusConfig } from "../../../../../components/config";
+import { timeAgo } from "../../../../../utils/utils";
 import TabPanel from "@mui/lab/TabPanel";
 import { Card, Box, Typography, CircularProgress } from "@mui/material";
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import { StatusChip } from "../../chip";
-import { EllipsisText } from "../../text";
+import { StatusChip } from "../../../../../components/chip";
+import { EllipsisText } from "../../../../../components/text";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { getTaskHistory } from "../../../services/TaskService";
+import { getTaskHistory } from "../../../../../services/TaskService";
 
 const HistoryPanel = ({ task_id }) => {
     const [history, setHistory] = useState([]);

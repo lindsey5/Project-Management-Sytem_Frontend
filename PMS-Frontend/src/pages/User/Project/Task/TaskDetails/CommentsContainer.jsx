@@ -1,10 +1,10 @@
 import { Avatar, Chip } from "@mui/material";
-import { openFile, timeAgo } from "../../../utils/utils";
+import { openFile, timeAgo } from "../../../../../utils/utils";
 import AttachmentIcon from '@mui/icons-material/Attachment';
-import { EllipsisText } from "../../text";
-import { base64ToBlob } from "../../../utils/utils";
+import { EllipsisText } from "../../../../../components/text";
+import { base64ToBlob } from "../../../../../utils/utils";
 import { memo, useContext, useEffect } from "react";
-import { CommentContext } from "../../../context/commentContext";
+import { CommentContext } from "../../../../../context/commentContext";
 
 const CommentAttachmentChip = ({ attachment }) => {
     const open = () => openFile(base64ToBlob(attachment))

@@ -1,14 +1,14 @@
-import CustomizedTable from "../table"
+import CustomizedTable from "../../../../components/table"
 import { IconButton, TableRow } from "@mui/material"
-import { StyledTableCell, StyledTableRow } from "../table"
-import { convertToAsiaTime, formatDateTime } from "../../utils/utils"
-import { statusConfig } from "../config"
+import { StyledTableCell, StyledTableRow } from "../../../../components/table"
+import { convertToAsiaTime, formatDateTime } from "../../../../utils/utils"
+import { statusConfig } from "../../../../components/config"
 import CircleIcon from '@mui/icons-material/Circle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useState, useMemo } from "react"
 import TaskDetails from "./TaskDetails/TaskDetails"
-import { status } from "../../data/taskData"
-import StatusSelect from "../Select"
+import { status } from "../../../../data/taskData"
+import StatusSelect from "../../../../components/Select"
 
 const TasksTable = ({ tasks }) => {
     const [selectedTask, setSelectedTask] = useState(null);

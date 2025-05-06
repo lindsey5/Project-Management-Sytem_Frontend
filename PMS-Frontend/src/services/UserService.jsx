@@ -15,3 +15,19 @@ export const getUserDetails = async () => {
     }
 
 }
+
+export const updateUser = async (data) => {
+  try{
+      const response = await axios.put("/api/user", data, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+      return response.data;
+
+  }catch(err){
+      console.error("Failed to fetch user details:", err);
+      return null
+  }
+
+}

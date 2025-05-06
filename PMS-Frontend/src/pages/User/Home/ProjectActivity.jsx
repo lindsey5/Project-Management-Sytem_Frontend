@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect, useCallback, useContext} from "react";
-import { statusConfig } from "../config";
-import { timeAgo } from "../../utils/utils";
+import { statusConfig } from "../../../components/config";
+import { timeAgo } from "../../../utils/utils";
 import { Card, Box, Typography, CircularProgress } from "@mui/material";
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import { StatusChip } from "../chip";
-import { EllipsisText } from "../text";
-import { getProjectTaskHistory } from "../../services/TaskService";
-import { ProjectContext } from "../../layouts/ProjectLayout";
+import { StatusChip } from "../../../components/chip";
+import { EllipsisText } from "../../../components/text";
+import { getProjectTaskHistory } from "../../../services/TaskService";
+import { ProjectContext } from "../../../layouts/ProjectLayout";
 import { useNavigate } from "react-router-dom";
 
 const ProjectActivity = () => {
@@ -66,7 +66,7 @@ const ProjectActivity = () => {
                     }}
                 >
                     <Box display="flex" flexDirection="column" gap={1} flex={1}>
-                        <Typography fontWeight={"bold"}>{h.task.task_Name}</Typography>
+                        <Typography fontWeight={"bold"}>{h?.task?.task_Name}</Typography>
                         <Typography>{h.action_Description}</Typography>
 
                         {!(h.new_Value == null && h.prev_Value == null) && (

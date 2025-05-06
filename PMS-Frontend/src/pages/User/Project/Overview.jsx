@@ -14,7 +14,7 @@ import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { priority } from "../../../data/taskData";
 
-const ProjectActivity = lazy(() => import('../../../components/Project/ProjectActivity'))
+const ProjectActivity = lazy(() => import('../Home/ProjectActivity'))
 
 const Overview = () => {
     const { project } = useContext(ProjectContext);

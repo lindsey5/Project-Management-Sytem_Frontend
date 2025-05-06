@@ -3,8 +3,8 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useEffect, useState } from 'react';
-import { statusConfig } from '../config';
-import { formatDate } from '../../utils/utils';
+import { statusConfig } from '../../../../components/config';
+import { formatDate } from '../../../../utils/utils';
 import TaskDetails from './TaskDetails/TaskDetails';
 
 const Calendar = ({ tasks}) => {

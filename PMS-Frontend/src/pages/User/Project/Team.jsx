@@ -83,6 +83,8 @@ const Team = () => {
         if (response.success) window.location.reload();
     };
 
+    console.log(project)
+
     return (
         <main className="w-full h-full overflow-y-auto py-10 p-5">
             <CustomizedTable
@@ -132,14 +134,14 @@ const Team = () => {
                                                     open={open}
                                                     onClose={handleClose}
                                                 >
-                                                    <MenuItem
+                                                    {project.user.email === user.email && menuMemberId === member.id && <MenuItem
                                                         onClick={() => {
                                                             handleShowUpdate(member.id, member.role === "Admin" ? "Member" : "Admin");
                                                             handleClose();
                                                         }}
                                                     >
                                                         {member.role === "Admin" ? "Demote" : "Make admin"}
-                                                    </MenuItem>
+                                                    </MenuItem>}
                                                     <MenuItem
                                                         onClick={() => {
                                                             handleShowRemove(member.id);

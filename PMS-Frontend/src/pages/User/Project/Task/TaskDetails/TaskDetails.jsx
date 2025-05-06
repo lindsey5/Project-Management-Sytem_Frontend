@@ -1,22 +1,22 @@
 import { Modal, Card, Typography, Box, IconButton, Button } from "@mui/material";
 import { memo, useCallback, useContext, useEffect, useState } from "react";
-import { createTaskAttachment, deleteTaskAttachment, getTaskAttachments } from "../../../services/TaskAttachmentService";
-import { ProjectContext } from "../../../layouts/ProjectLayout";
+import { createTaskAttachment, deleteTaskAttachment, getTaskAttachments } from "../../../../../services/TaskAttachmentService";
+import { ProjectContext } from "../../../../../layouts/ProjectLayout";
 import AddIcon from '@mui/icons-material/Add';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { getMembers } from "../../../services/MemberService";
-import { openFile } from "../../../utils/utils";
+import { getMembers } from "../../../../../services/MemberService";
+import { openFile } from "../../../../../utils/utils";
 import { toast } from "react-toastify";
-import { ConfirmDialog } from "../../dialog";
+import { ConfirmDialog } from "../../../../../components/dialog";
 import Attachments from "../Attachments";
 import HistoryPanel from "./HistoryPanel";
 import TaskEditor from "./TaskEditor";
 import CommentEditor from "./CommentEditor";
 import CommentsContainer from "./CommentsContainer";
-import { CommentContextProvider } from "../../../context/commentContext";
+import { CommentContextProvider } from "../../../../../context/commentContext";
 
 const style = {
     bgcolor: 'background.paper',

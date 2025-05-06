@@ -9,7 +9,7 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Badge, Tooltip } from "@mui/material";
-import ProjectSearch from "../Project/ProjectSearch";
+import ProjectSearch from "../../components/Project/ProjectSearch";
 import { SignalContext } from "../../context/signalContext";
 import { getNotifications } from '../../services/NotificationService';
 import { toast } from "react-toastify";

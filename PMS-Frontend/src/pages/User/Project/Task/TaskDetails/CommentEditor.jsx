@@ -11,9 +11,9 @@ import {
   RichTextEditor,
 } from "mui-tiptap";
 import { useContext, useRef, useState, memo } from "react";
-import { openFile } from "../../../utils/utils";
-import { createComment, createCommentAttachment } from "../../../services/CommentService";
-import { CommentContext } from "../../../context/commentContext";
+import { openFile } from "../../../../../utils/utils";
+import { createComment, createCommentAttachment } from "../../../../../services/CommentService";
+import { CommentContext } from "../../../../../context/commentContext";
 
 const FileChip = ({ file, index, deleteFile }) => {
 

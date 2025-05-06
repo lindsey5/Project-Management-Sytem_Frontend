@@ -8,24 +8,24 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState, useContext } from "react";
-import { getMembers } from "../../services/MemberService";
+import { getMembers } from "../../../../services/MemberService";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { ProjectContext } from "../../layouts/ProjectLayout";
-import MembersAutocomplete from "../AutoComplete";
-import FileUploadBtn from "../FileUploadBtn";
-import useTaskReducer from "../../hooks/taskReducer";
+import { ProjectContext } from "../../../../layouts/ProjectLayout";
+import MembersAutocomplete from "../../../../components/AutoComplete";
+import FileUploadBtn from "../../../../components/FileUploadBtn";
+import useTaskReducer from "../../../../hooks/taskReducer";
 import { Chip } from "@mui/material";
-import { CustomButton } from "../button";
-import { createTask } from "../../services/TaskService";
-import { createTaskAttachment } from "../../services/TaskAttachmentService";
-import StatusSelect from "../Select";
-import { status, priority } from '../../data/taskData';
-import { openFile } from "../../utils/utils";
+import { CustomButton } from "../../../../components/button";
+import { createTask } from "../../../../services/TaskService";
+import { createTaskAttachment } from "../../../../services/TaskAttachmentService";
+import StatusSelect from "../../../../components/Select";
+import { status, priority } from '../../../../data/taskData';
+import { openFile } from "../../../../utils/utils";
 
 const style = {
     bgcolor: 'background.paper',

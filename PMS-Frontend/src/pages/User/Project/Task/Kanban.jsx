@@ -1,18 +1,18 @@
-import { StatusChip } from "../chip"
+import { StatusChip } from "../../../../components/chip"
 import IconButton from '@mui/material/IconButton';
 import { useContext, useEffect, useState } from "react";
-import { ProjectContext } from "../../layouts/ProjectLayout";
+import { ProjectContext } from "../../../../layouts/ProjectLayout";
 import { Card, Stack, Typography } from "@mui/material";
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import AttachFileOutlinedIcon from '@mui/icons-material/AttachFileOutlined';
-import { convertToAsiaTime, formatDateTime } from "../../utils/utils";
+import { convertToAsiaTime, formatDateTime } from "../../../../utils/utils";
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import { getTask, updateTask } from "../../services/TaskService";
+import { getTask, updateTask } from "../../../../services/TaskService";
 import Badge from '@mui/material/Badge';
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../../../context/userContext";
 import TaskDetails from "./TaskDetails/TaskDetails";
-import { statusConfig } from "../config";
+import { statusConfig } from "../../../../components/config";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const StatusHeader = ({currentStatus, showButton, ...rest}) => {

@@ -96,6 +96,19 @@ export const downloadImageAsBase64 = async (imageUrl) => {
   }
 };
 
+export const fileToByteArray = (file) => {
+  return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+          const arrayBuffer = reader.result;
+          const bytes = new Uint8Array(arrayBuffer);
+          resolve(Array.from(bytes));
+      };
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
+  });
+};
+
 export const timeAgo = (date1, date2) => {
   const diffInMs = date2 - date1; 
 

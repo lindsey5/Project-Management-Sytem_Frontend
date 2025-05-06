@@ -7,18 +7,18 @@ import { useContext, useEffect, useState } from 'react';
 import { CustomButton } from '../../../components/button';
 import AddIcon from '@mui/icons-material/Add';
 import { ProjectContext } from '../../../layouts/ProjectLayout';
-import CreateTask from '../../../components/Task/CreateTask';
+import CreateTask from './Task/CreateTask';
 import { getTasks } from '../../../services/TaskService';
 import { lazy, Suspense } from 'react';
 import { getTaskAttachments } from '../../../services/TaskAttachmentService';
 import { CircularProgress } from '@mui/material';
-import TasksTable from '../../../components/Task/TasksTable';
-import UserTasks from '../../../components/Task/UserTasks';
-import Calendar from '../../../components/Task/Calendar';
-import MyGanttComponent from '../../../components/Task/GantChart';
+import TasksTable from './Task/TasksTable';
+import UserTasks from './Task/UserTasks';
+import Calendar from './Task/Calendar';
+import MyGanttComponent from './Task/GantChart';
 import ViewTimelineOutlinedIcon from '@mui/icons-material/ViewTimelineOutlined';
 
-const Kanban = lazy(() => import('../../../components/Task/Kanban'));
+const Kanban = lazy(() => import('./Task/Kanban'));
 
 const Tasks = () => {
     const [alignment, setAlignment] = useState('Kanban');
