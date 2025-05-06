@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { lazy, Suspense, useContext, useEffect, useState } from "react"
 import { ProjectContext } from "../../../layouts/ProjectLayout"
 import { Box, Card, Stack, Typography, Tooltip, Avatar } from "@mui/material";
 import { getTasks } from "../../../services/TaskService";
@@ -11,9 +11,10 @@ import { getMembers } from "../../../services/MemberService";
 import { DashboardCard } from "../../../components/Card";
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
-import ProjectActivity from "../../../components/Project/ProjectActivity";
 import { BarChart } from '@mui/x-charts/BarChart';
 import { priority } from "../../../data/taskData";
+
+const ProjectActivity = lazy(() => import('../../../components/Project/ProjectActivity'))
 
 const Overview = () => {
     const { project } = useContext(ProjectContext);
@@ -109,7 +110,7 @@ const Overview = () => {
         <div
             className="mt-[50px] md:grid md:grid-cols-[2fr_1fr] gap-5"
         >
-                        <Card sx={{ height: '400px', padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
+            <Card sx={{ height: '400px', padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
                 <Typography variant="h6">Team workload</Typography>
                 <Box 
                     marginTop={"30px"} 
@@ -174,7 +175,9 @@ const Overview = () => {
                  boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}
             >
                 <Typography variant="h6">Recent Activity</Typography>
+                <Suspense fallback={<div>Loading...</div>}>
                 <ProjectActivity />
+                </Suspense>
             </Card>
             <Card sx={{ height: '400px', padding: 3, boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}}>
                 <Typography variant="h6" sx={{ marginBottom: '20px'}}>Priority Overview</Typography>

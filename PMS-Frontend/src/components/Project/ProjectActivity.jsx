@@ -13,7 +13,6 @@ const ProjectActivity = () => {
     const [history, setHistory] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
-    const [loading, setLoading] = useState(false);
     const observer = useRef();
     const { project } = useContext(ProjectContext);
     const navigate = useNavigate();
@@ -31,15 +30,12 @@ const ProjectActivity = () => {
     
     useEffect(() => {
         const fetchHistory = async () => {
-            setLoading(true)
             const fetchedHistory = await getProjectTaskHistory(project.id, page);
-            setLoading(false)
             
             if (fetchedHistory.history.length === 0) {
                 setHasMore(false);
                 return;
             }
-        
             setHistory([...history, ...fetchedHistory.history])
         }
         fetchHistory()
@@ -120,7 +116,6 @@ const ProjectActivity = () => {
                 </Card>
             )
             })}
-            {loading && <CircularProgress />}
         </div>
     );
 };
