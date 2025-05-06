@@ -29,7 +29,7 @@ const CommentAttachmentChip = ({ attachment }) => {
 
 const CommentsContainer = ({ task_id }) => {
     const { comments, setTaskId, lastItemRef } = useContext(CommentContext);
-
+    
     useEffect(() => {
         if(task_id) setTaskId(task_id)
     }, [task_id])

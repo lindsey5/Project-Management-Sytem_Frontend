@@ -19,19 +19,39 @@ import { ConfirmDialog } from "../../dialog";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/userContext";
 
+const CreatorCard = memo(({ task }) => {
+    return <Card variant="outlined" sx={{ padding: 1.5}}>
+    <Typography variant="subtitle2">Creator</Typography>
+    <Stack direction={"row"} justifyContent={"space-between"} alignItems="end">
+        <Stack direction="row" gap={2} marginTop={1} alignItems="center">
+            <Avatar 
+                src={`data:image/jpeg;base64,${task?.member?.user?.profile_pic}`} 
+                sx={{ width: 42, height: 42 }}
+            />
+            <Box>
+                <Typography variant="h6" fontSize="18px">{task?.member?.user?.firstname} {task?.member?.user?.lastname}</Typography>
+                <Typography variant="subtitle2" color="gray">{task?.created_At && formatDateTime(convertToAsiaTime(task.created_At))}</Typography>               
+            </Box>
+        </Stack>
+        <Typography variant="subtitle2">
+                {`Updated ${timeAgo(new Date(task?.updated_At), new Date())}`}      
+        </Typography> 
+    </Stack>
+    </Card> 
+})
+
 const TaskEditor = ({ members, role, task}) => {
-    const [savedAssignees, setSavedAssignees] = useState([]);
+    const [assignees, setAssignees] = useState({
+        saved: task?.assignees.map(t => ({...t.member, assigneeId: t.id})) || [],
+        current: task?.assignees.map(t => ({...t.member})) || []
+    });
     const { user } = useContext(UserContext);
-    const [currentValue, setCurrentValue] = useState([]);
     const { state, dispatch } = useTaskReducer();
     const { project } = useContext(ProjectContext);
     const [openDelete, setOpenDelete] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        setSavedAssignees(task.assignees.map(t => ({...t.member, assigneeId: t.id})));
-        setCurrentValue(task.assignees.map(t => ({...t.member})));
-        
         dispatch({ type: "SET_TASK", payload: {
             task_name: task.task_Name,
             description: task.description,
@@ -42,20 +62,16 @@ const TaskEditor = ({ members, role, task}) => {
         } })
 
          return () => {
-            setSavedAssignees([]);
-            setCurrentValue([]);
             dispatch({type: 'CLEAR'});
          }
-    }, [])
+    }, [task])
 
     const handleSave = async () => {
         if(new Date(state.start_date) < new Date(state.due_date)){
-            const assigneesToRemove = savedAssignees
-                .filter(a => !currentValue.some(cur => cur.id == a.id))
+            const assigneesToRemove = assignees.saved.filter(a => !assignees.current.some(cur => cur.id == a.id))
                 .map(a => ({ id: a.assigneeId, member_Id: a.id, task_Id: task.id}))
     
-            const assigneesToAdd = currentValue
-                .filter(a => !savedAssignees.some(saved => saved.id == a.id))
+            const assigneesToAdd = assignees.current.filter(a => !assignees.saved.some(saved => saved.id == a.id))
                 .map(a => ({ member_Id: a.id, task_Id: task.id}));
     
             const assigneesToUpdate = {
@@ -100,8 +116,6 @@ const TaskEditor = ({ members, role, task}) => {
             window.location.reload();
         }
     }
-
-    const handleAssignees = (e, value) => setCurrentValue(value)
 
     return <Box padding={2} flex={1} display={"flex"} flexDirection={"column"} overflow={"auto"}>
                 <Box display="flex" boxSizing={"border-box"} flexDirection={"column"} gap={3} marginBottom={2}>
@@ -181,30 +195,13 @@ const TaskEditor = ({ members, role, task}) => {
                 </LocalizationProvider>
                 <MembersAutocomplete 
                     members={members} 
-                    handleChange={handleAssignees} 
-                    value={currentValue}
+                    handleChange={(e, value) => setAssignees({...assignees, current: value})} 
+                    value={assignees.current}
                     readOnly={role != 'Admin'}
                 />
                 </Box>
                 <Stack direction={"column"} justifyContent={"space-between"} gap={2} flex={1}>
-                <Card variant="outlined" sx={{ padding: 1.5}}>
-                    <Typography variant="subtitle2">Creator</Typography>
-                    <Stack direction={"row"} justifyContent={"space-between"} alignItems="end">
-                        <Stack direction="row" gap={2} marginTop={1} alignItems="center">
-                            <Avatar 
-                                src={`data:image/jpeg;base64,${task?.member?.user?.profile_pic}`} 
-                                sx={{ width: 42, height: 42 }}
-                            />
-                            <Box>
-                                <Typography variant="h6" fontSize="18px">{task?.member?.user?.firstname} {task?.member?.user?.lastname}</Typography>
-                                <Typography variant="subtitle2" color="gray">{task?.created_At && formatDateTime(convertToAsiaTime(task.created_At))}</Typography>               
-                            </Box>
-                        </Stack>
-                        <Typography variant="subtitle2">
-                                {`Updated ${timeAgo(new Date(task?.updated_At), new Date())}`}      
-                        </Typography> 
-                    </Stack>
-                </Card> 
+                    <CreatorCard task={task}/>
                     <ConfirmDialog 
                         handleAgree={handleDelete}
                         isOpen={openDelete}

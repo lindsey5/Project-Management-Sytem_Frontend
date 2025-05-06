@@ -30,13 +30,25 @@ const style = {
     display: 'flex'
 };
 
+const Comments = memo(({ task_id }) => {
+    const [show, setShow] = useState(false);
+
+    return !show ? <Button 
+        variant="contained"
+        sx={{ width: '150px'}}
+        onClick={() => setShow(true)}
+    >
+    Add Comment
+    </Button> : <CommentEditor task_id={task_id} close={() => setShow(false)} />
+})
+
+
 const TaskDetails = memo(({task, open, closeModal}) => {
     const [attachments, setAttachments] = useState([]);
     const { code, role } = useContext(ProjectContext);
     const [members, setMembers] = useState([]);
     const [value, setValue] = useState("Comments");
     const [selectedAttachment, setSelectedAttachment] = useState(false);
-    const [showCommentEditor, setShowCommentEditor] = useState(false);
 
     const handleFiles = async (e) => {
         const selectedFiles = Array.from(e.target.files || []);
@@ -68,7 +80,6 @@ const TaskDetails = memo(({task, open, closeModal}) => {
         return () => {
             setMembers([]);
             setAttachments([]);
-            setShowCommentEditor(false)
         }
     }, [task])
 
@@ -164,14 +175,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                                                 }}>
                                             <CommentsContainer task_id={task?.id}/>
                                         </Box>
-                                        {!showCommentEditor && <Button 
-                                                variant="contained"
-                                                sx={{ width: '150px'}}
-                                                onClick={() => setShowCommentEditor(true)}
-                                            >
-                                                Add Comment
-                                            </Button>}
-                                        {showCommentEditor && <CommentEditor task_id={task.id} close={() => setShowCommentEditor(false)} />}
+                                        <Comments task_id={task?.id}/>
                                     </CommentContextProvider>
                                 </TabPanel>
                                 <HistoryPanel task_id={task?.id}/>
