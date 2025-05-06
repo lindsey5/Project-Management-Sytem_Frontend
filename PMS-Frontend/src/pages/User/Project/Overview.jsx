@@ -8,7 +8,7 @@ import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { statusConfig } from "../../../components/config";
 import { getMembers } from "../../../services/MemberService";
-import { DashboardCard } from "../../../components/card";
+import { DashboardCard } from "../../../components/Card";
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
 import ProjectActivity from "../../../components/Project/ProjectActivity";
@@ -18,8 +18,6 @@ import { priority } from "../../../data/taskData";
 const Overview = () => {
     const { project } = useContext(ProjectContext);
     const [tasksData, setTasksData] = useState([]);
-    const [pieChartData, setPieChartData] = useState([]);
-    const [workloads, setWorkloads] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,10 +31,10 @@ const Overview = () => {
             // Set Pie Chart data
             const tasksStatus = [...new Set(response.tasks.map(task => task.status))];
 
-            setPieChartData(tasksStatus.map(status => {
+            const pieChartData = tasksStatus.map(status => {
                 const numberOfTask = response.tasks.filter(task => task.status == status).length
                 return { value: numberOfTask, percentage: (( numberOfTask / totalTask) * 100).toFixed(2), label: status, color: statusConfig[status]}
-            }))
+            })
             
             // Set data on cards
             const completedTasks = response.tasks.filter(task => task.status == "Completed").length;
@@ -66,20 +64,20 @@ const Overview = () => {
                     percentage: numberOfTask > 0 ? ((numberOfTask / totalTask) * 100).toFixed(2) : 0 }
             }).sort((a, b) => b.percentage - a.percentage )
 
-            setWorkloads([...distribution])
-
             setTasksData({
                 completedTasks,
                 overDueTasks,
                 tasksDueSoon,
                 tasksToday,
                 totalTask,
-                priorityData
+                priorityData,
+                pieChartData,
+                workloads: distribution
             })
         }
-        if(project) fetchData()
+        if(project.id) fetchData()
 
-    }, [])
+    }, [project.id])
 
     return <main className="w-full p-5 bg-gray-100">
         <div className="grid lg:grid-cols-4 gap-20 grid-cols-2">
@@ -126,7 +124,7 @@ const Overview = () => {
                     <Typography variant="subtitle1" width={"35%"}>Assignee</Typography>
                     <Typography variant="subtitle1" width={"70%"}>Work Distribution</Typography>
                 </Stack>
-                {workloads.map((workload, i) => {
+                {tasksData?.workloads && tasksData?.workloads.map((workload, i) => {
                     return <Box key={i} width={"100%"} display={"flex"} alignItems={"center"} gap={3}>
                         <div className="flex w-[30%] gap-3 items-center">
                             <Avatar src={`data:image/jpeg;base64,${workload.picture}`}/>
@@ -160,7 +158,7 @@ const Overview = () => {
                     series={[
                         {
                             arcLabel: (item) => `${item.percentage}%`,
-                            data: pieChartData,
+                            data: tasksData?.pieChartData || [],
                             innerRadius: 90,
                             arcLabelMinAngle: 20,
                         },
