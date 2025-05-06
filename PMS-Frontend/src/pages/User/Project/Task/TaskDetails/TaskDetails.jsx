@@ -57,7 +57,6 @@ const TaskDetails = memo(({task, open, closeModal}) => {
 
         for (const file of selectedFiles) {
             const newAttachment = await createTaskAttachment(task.id, file);
-            console.log(newAttachment)
             if (newAttachment.success) {
                 setAttachments(prev => [...prev, newAttachment.attachment]);
             } else {
