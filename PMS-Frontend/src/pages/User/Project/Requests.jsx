@@ -88,6 +88,7 @@ const Requests = () => {
         .then(async (response) => {
           if (response.success && status === "Approved") {
             const createResponse = await createMember({ project_id: project.id, user_id: userId, role: "Member" });
+            console.log(createResponse)
             const { user, ...rest } = createResponse.newMember;
             const { id, ...userWithoutId } = user;
             setMember({ ...rest, ...userWithoutId });

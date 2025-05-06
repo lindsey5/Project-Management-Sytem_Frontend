@@ -28,7 +28,7 @@ const JoinProject = ({ close }) =>{
     setLoading(true);
     const response = await createRequest(code);
     if(response.success) {
-        toast.success('Done! An admin will check it out your request.')
+        toast.success('Done! An admin will check your request.')
         sendRequestNotification(response.project.id);
         close();
     }

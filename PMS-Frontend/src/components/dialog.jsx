@@ -4,21 +4,23 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import { green, red, blue } from '@mui/material/colors';
+import { green, red, blue, grey } from '@mui/material/colors';
 
 const hoverVariants = {
   success: green[100], 
   error: red[100],     
-  info: blue[100]
+  info: blue[100],
+  default: grey[100],
 };
 
 const variants = {
     success: green[600],
     error: red[600],
-    info: blue[600]
+    info: blue[600],
+    default: 'black',
 }
 
-export const ConfirmDialog = ({ variant="info", isOpen, title, text, handleClose, handleAgree }) => {
+export const ConfirmDialog = ({ variant="default", isOpen, title, text, handleClose, handleAgree }) => {
     return (
       <Dialog
         open={isOpen}

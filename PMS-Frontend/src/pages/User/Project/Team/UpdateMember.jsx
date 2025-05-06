@@ -52,11 +52,10 @@ const UpdateMember = ({ open, closeModal, member, url}) => {
             <Button variant="contained" onClick={() => setShowDialog(true)}>Save</Button>
             <ConfirmDialog
                 title="Submit"
-                text="Click ok to continue."
+                text="Click yes to continue."
                 isOpen={showDialog}
                 handleAgree={handleSave}
                 handleClose={() => setShowDialog(false)}
-                variant="success"
             />
         </div>
     </Modal>

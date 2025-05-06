@@ -13,7 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import project_types from '../../../../project_types.json';
 import { updateProject } from "../../../services/ProjectService";
-import { convertToAsiaTime, formatDate } from "../../../utils/utils";
+import { convertToAsiaTime, formatDate, formatDateTime } from "../../../utils/utils";
 import { ConfirmDialog } from "../../../components/dialog";
 import { UserContext } from "../../../context/userContext";
 
@@ -78,7 +78,9 @@ const ProjectSettings = () => {
             end_date: formatDate(state.end_date)
         })
 
-        if(response.success) window.location.reload();
+        console.log(response)
+
+        //if(response.success) window.location.reload();
     }
     
 
@@ -214,7 +216,6 @@ const ProjectSettings = () => {
                     isOpen={openDialog}
                     text="Are you sure you want to save these changes?"
                     title="Update"
-                    variant="success"
                 />
             </div>
             <div className="flex flex-col items-center">
@@ -225,11 +226,10 @@ const ProjectSettings = () => {
                     value={project.project_code || ''}
                     viewBox={`0 0 256 256`}
                 />
-                <h1>Created: {formatDate(convertToAsiaTime(project.created_At))}</h1>
+                <h1>Created: {formatDateTime(convertToAsiaTime(project.created_At))}</h1>
                 <h1>Creator: {project.user.firstname} {project.user.lastname}</h1>
             </div>
     </main>
-
 }
 
 export default ProjectSettings

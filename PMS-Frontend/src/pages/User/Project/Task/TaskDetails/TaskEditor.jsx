@@ -67,37 +67,39 @@ const TaskEditor = ({ members, role, task}) => {
     }, [task])
 
     const handleSave = async () => {
-        if(new Date(state.start_date) < new Date(state.due_date)){
-            const assigneesToRemove = assignees.saved.filter(a => !assignees.current.some(cur => cur.id == a.id))
-                .map(a => ({ id: a.assigneeId, member_Id: a.id, task_Id: task.id}))
-    
-            const assigneesToAdd = assignees.current.filter(a => !assignees.saved.some(saved => saved.id == a.id))
-                .map(a => ({ member_Id: a.id, task_Id: task.id}));
-    
-            const assigneesToUpdate = {
-                assigneesToAdd,
-                assigneesToRemove
-            }
-    
-            const updateResponse = await updateTask(task.id, {
-                task_name: state.task_name,
-                description: state.description,
-                priority: state.priority,
-                status: state.status,
-                start_date: new Date(state.start_date),
-                due_date: new Date(state.due_date)
-            })
-            if(updateResponse.success){
-                const updateAssigneeResponse = await updateAssignees(task.id, assigneesToUpdate)
-
-                if(updateAssigneeResponse.success){
-                    window.location.reload();
-                }else{
-                    toast.error("Error please try again.");
+        if(confirm("Click ok to continue")){
+            if(new Date(state.start_date) < new Date(state.due_date)){
+                const assigneesToRemove = assignees.saved.filter(a => !assignees.current.some(cur => cur.id == a.id))
+                    .map(a => ({ id: a.assigneeId, member_Id: a.id, task_Id: task.id}))
+        
+                const assigneesToAdd = assignees.current.filter(a => !assignees.saved.some(saved => saved.id == a.id))
+                    .map(a => ({ member_Id: a.id, task_Id: task.id}));
+        
+                const assigneesToUpdate = {
+                    assigneesToAdd,
+                    assigneesToRemove
                 }
+        
+                const updateResponse = await updateTask(task.id, {
+                    task_name: state.task_name,
+                    description: state.description,
+                    priority: state.priority,
+                    status: state.status,
+                    start_date: new Date(state.start_date),
+                    due_date: new Date(state.due_date)
+                })
+                if(updateResponse.success){
+                    const updateAssigneeResponse = await updateAssignees(task.id, assigneesToUpdate)
+    
+                    if(updateAssigneeResponse.success){
+                        window.location.reload();
+                    }else{
+                        toast.error("Error please try again.");
+                    }
+                }
+            }else{
+                toast.error("Start date should be earlier than the due date.")
             }
-        }else{
-            toast.error("Start date should be earlier than the due date.")
         }
     }
 

@@ -77,12 +77,8 @@ const ProjectActivity = () => {
                                         label={
                                             <Typography
                                                 variant="subtitle1"
-                                                sx={{ textWrap: "nowrap" }}
-                                                textOverflow="ellipsis"
-                                                maxWidth="200px"
-                                                overflow="hidden"
                                             >
-                                                <EllipsisText text={h.prev_Value || ""} />
+                                                {h.prev_Value}
                                             </Typography>
                                         }
                                     />
@@ -96,12 +92,8 @@ const ProjectActivity = () => {
                                         label={
                                             <Typography
                                                 variant="subtitle1"
-                                                sx={{ textWrap: "nowrap" }}
-                                                textOverflow="ellipsis"
-                                                maxWidth="200px"
-                                                overflow="hidden"
                                             >
-                                                <EllipsisText text={h.new_Value || ""} />
+                                                {h.new_Value}
                                             </Typography>
                                         }
                                     />

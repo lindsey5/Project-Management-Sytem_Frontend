@@ -95,7 +95,7 @@ const Team = () => {
                             <StyledTableCell align="left">{member.email}</StyledTableCell>
                             <StyledTableCell align="left">{member.role}</StyledTableCell>
                             <StyledTableCell align="left">
-                                {formatDateTime(convertToAsiaTime(member.joined_At))}
+                                {formatDateTime(member.joined_At)}
                             </StyledTableCell>
                             {role === 'Admin' && (
                                 <StyledTableCell align="left">
