@@ -60,6 +60,20 @@ export const updateTask = async (id, updatedTask) => {
     }
 }
 
+export const deleteTask = async (id) => {
+    try{
+        const response = await axios.delete(`/api/task/${id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        return response.data
+
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
+}
+
 export const getProjectTaskHistory = async (project_id, page) => {
     try{
         const response = await axios.get(`/api/task_history/project/${project_id}?page=${page}`, {

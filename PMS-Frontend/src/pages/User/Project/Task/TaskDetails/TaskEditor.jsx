@@ -11,7 +11,7 @@ import { memo, useContext, useEffect } from "react";
 import useTaskReducer from "../../../../../hooks/taskReducer";
 import { useState } from "react";
 import { formatDateTime, convertToAsiaTime, timeAgo } from "../../../../../utils/utils";
-import { updateTask } from "../../../../../services/TaskService";
+import { deleteTask, updateTask } from "../../../../../services/TaskService";
 import { updateAssignees } from "../../../../../services/AssigneeService";
 import { ProjectContext } from "../../../../../layouts/ProjectLayout";
 import { toast } from "react-toastify";
@@ -102,14 +102,7 @@ const TaskEditor = ({ members, role, task}) => {
     }
 
     const handleDelete = async () => {
-        const response = await updateTask(task.id, {
-            task_name: state.task_name,
-            description: state.description,
-            priority: state.priority,
-            status: 'Deleted',
-            start_date: new Date(state.start_date),
-            due_date: new Date(state.due_date)
-        })
+        const response = await deleteTask(task.id)
 
         if(response.success) {
             navigate(`/project/tasks?c=${project.project_code}`, { replace: true });
@@ -147,6 +140,11 @@ const TaskEditor = ({ members, role, task}) => {
                         label="Status"
                         item={status}
                         value={state.status}
+                        slotProps={{
+                            input: {
+                            readOnly: role === "Viewer",
+                            },
+                        }}
                         handleChange={(e) => dispatch({ type: "SET_STATUS", payload: e.target.value})}
                     />
                     <StatusSelect 
@@ -156,7 +154,7 @@ const TaskEditor = ({ members, role, task}) => {
                         value={state.priority}
                         slotProps={{
                             input: {
-                            readOnly: role != 'Admin',
+                            readOnly: (role !== 'Admin' && role != "Editor" && !task.assignees.some(a => a.member.user.email === user.email)),
                             },
                         }}
                         handleChange={(e) => dispatch({ type: "SET_PRIORITY", payload: e.target.value})}
@@ -167,7 +165,6 @@ const TaskEditor = ({ members, role, task}) => {
                     <DateTimePicker
                         label="Start date"
                         value={dayjs(state.start_date)}
-                        readOnly={role != 'Admin'}
                         slotProps={{
                             input: {
                             readOnly: role != 'Admin',
@@ -217,7 +214,7 @@ const TaskEditor = ({ members, role, task}) => {
                         <Button 
                             variant="contained" 
                             onClick={handleSave} 
-                            disabled={project.status !== "Active" || (role !== 'Admin' && !task.assignees.some(a => a.member.user.email === user.email))}>
+                            disabled={project.status !== "Active" || (role !== 'Admin' && role != "Editor" && !task.assignees.some(a => a.member.user.email === user.email))}>
                             Save
                         </Button>
                     </Stack>

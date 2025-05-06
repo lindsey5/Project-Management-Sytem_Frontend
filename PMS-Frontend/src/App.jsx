@@ -15,7 +15,7 @@ import UserLayout from "./layouts/UserLayout";
 import Home from "./pages/User/Home";
 import ProjectLayout from "./layouts/ProjectLayout";
 import Tasks from "./pages/User/Project/Tasks";
-import Team from "./pages/User/Project/Team";
+import Team from "./pages/User/Project/Team/Team";
 import Requests from "./pages/User/Project/Requests";
 import Overview from "./pages/User/Project/Overview";
 import ProjectSettings from "./pages/User/Project/Settings";

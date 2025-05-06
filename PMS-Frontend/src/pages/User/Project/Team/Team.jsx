@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from "react";
-import { deleteMember, getMembers, updateMember } from "../../../services/MemberService";
+import { deleteMember, getMembers, updateMember } from "../../../../services/MemberService";
 import { useSearchParams } from "react-router-dom";
-import CustomizedTable from "../../../components/table";
-import { ProjectContext } from "../../../layouts/ProjectLayout";
-import { StyledTableCell, StyledTableRow } from "../../../components/table";
+import CustomizedTable from "../../../../components/table";
+import { ProjectContext } from "../../../../layouts/ProjectLayout";
+import { StyledTableCell, StyledTableRow } from "../../../../components/table";
 import { Avatar, IconButton, Menu, MenuItem, TableRow } from "@mui/material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { UserContext } from "../../../context/userContext";
-import { ConfirmDialog } from "../../../components/dialog";
-import { formatDateTime, convertToAsiaTime } from "../../../utils/utils";
+import { UserContext } from "../../../../context/userContext";
+import { ConfirmDialog } from "../../../../components/dialog";
+import { formatDateTime, convertToAsiaTime } from "../../../../utils/utils";
+import UpdateMember from "./UpdateMember";
 
 const Team = () => {
     const [members, setMembers] = useState([]);
@@ -19,30 +20,17 @@ const Team = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [menuMemberId, setMenuMemberId] = useState(null);
     const open = Boolean(anchorEl);
-    const [memberId, setMemberId] = useState(null);
+    const [member, setMember] = useState(null);
     const [openRemove, setOpenRemove] = useState(false);
-    const [openUpdate, setOpenUpdate] = useState(false);
-    const [memberRole, setMemberRole] = useState(null);
+    const [showUpdate, setShowUpdate] = useState(false);
 
-    const handleShowUpdate = (id, memberRole) => {
-        setMemberId(id);
-        setMemberRole(memberRole);
-        setOpenUpdate(true);
-    };
-
-    const handleCloseUpdate = () => {
-        setMemberId(null);
-        setOpenUpdate(false);
-        setMemberRole(null);
-    };
-
-    const handleShowRemove = (id) => {
-        setMemberId(id);
+    const handleShowRemove = (member) => {
+        setMember(member);
         setOpenRemove(true);
     };
 
     const handleCloseRemove = () => {
-        setMemberId(null);
+        setMember(null);
         setOpenRemove(false);
     };
 
@@ -72,18 +60,15 @@ const Team = () => {
         fetchMembers();
     }, []);
 
-    const handleUpdate = async () => {
-        const response = await updateMember(memberId, { role: memberRole });
-        console.log(response);
-        if (response.success) window.location.reload();
+    const handleCLoseUpdate = async () => {
+        setMember(null)
+        setShowUpdate(false);
     };
 
     const handleRemove = async () => {
-        const response = await deleteMember(memberId);
+        const response = await deleteMember(member.id);
         if (response.success) window.location.reload();
     };
-
-    console.log(project)
 
     return (
         <main className="w-full h-full overflow-y-auto py-10 p-5">
@@ -134,18 +119,17 @@ const Team = () => {
                                                     open={open}
                                                     onClose={handleClose}
                                                 >
-                                                    {project.user.email === user.email && menuMemberId === member.id && <MenuItem
+                                                    {role === "Admin" && menuMemberId === member.id && <MenuItem
                                                         onClick={() => {
-                                                            handleShowUpdate(member.id, member.role === "Admin" ? "Member" : "Admin");
-                                                            handleClose();
+                                                            setMember(member);
+                                                            setShowUpdate(true);
                                                         }}
                                                     >
-                                                        {member.role === "Admin" ? "Demote" : "Make admin"}
+                                                        Edit
                                                     </MenuItem>}
                                                     <MenuItem
                                                         onClick={() => {
-                                                            handleShowRemove(member.id);
-                                                            handleClose();
+                                                            handleShowRemove(member);
                                                         }}
                                                     >
                                                         Remove
@@ -160,14 +144,10 @@ const Team = () => {
                     ))
                 }
             />
-
-            <ConfirmDialog
-                title={memberRole === "Admin" ? "Promote to admin" : "Demote from admin"}
-                text={memberRole === "Admin" ? "Promote this user to admin?" : "Remove admin privileges from this user?"}
-                handleClose={handleCloseUpdate}
-                handleAgree={handleUpdate}
-                isOpen={memberId != null && openUpdate}
-                variant={memberRole === "Admin" ? 'success' : 'error'}
+            <UpdateMember 
+                closeModal={handleCLoseUpdate}
+                open={member !== null && showUpdate}
+                member={member}
             />
 
             <ConfirmDialog
@@ -175,7 +155,7 @@ const Team = () => {
                 text="Are you sure you want to remove this user?"
                 handleClose={handleCloseRemove}
                 handleAgree={handleRemove}
-                isOpen={memberId != null && openRemove}
+                isOpen={member != null && openRemove}
                 variant="error"
             />
         </main>

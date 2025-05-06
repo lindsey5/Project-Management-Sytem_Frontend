@@ -175,7 +175,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                                                 }}>
                                             <CommentsContainer task_id={task?.id}/>
                                         </Box>
-                                        <Comments task_id={task?.id}/>
+                                        {role !== "Viewer" && <Comments task_id={task?.id}/>}
                                     </CommentContextProvider>
                                 </TabPanel>
                                 <HistoryPanel task_id={task?.id}/>

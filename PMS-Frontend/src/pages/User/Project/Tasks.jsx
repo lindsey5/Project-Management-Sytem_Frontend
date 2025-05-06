@@ -103,7 +103,7 @@ const Tasks = () => {
                 onClick={() => handleChange("Your Task")}
             >Your Task</CustomButton>
 
-            {role === 'Admin' && <CustomButton 
+            {(role === 'Admin' || role === 'Editor') && <CustomButton 
                 sx={{ backgroundColor: '#2263e7', '&:hover' : { backgroundColor: 'rgb(13, 71, 187)' }}}
                 icon={<AddIcon fontSize='small' />}
                 disabled={project.status !== "Active"}
