@@ -6,7 +6,7 @@ import { statusConfig } from "../../../../components/config"
 import CircleIcon from '@mui/icons-material/Circle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useState, useMemo } from "react"
-import TaskDetails from "../../../../components/Task/TaskDetails/TaskDetails"
+import TaskDetails from "./TaskDetails/TaskDetails"
 import { status } from "../../../../data/taskData"
 import StatusSelect from "../../../../components/Select"
 
