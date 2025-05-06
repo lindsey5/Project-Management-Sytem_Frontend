@@ -45,7 +45,6 @@ export const getMembers = async (project_code) => {
 
 export const createMember = async (data) =>{
     try{
-        console.log(data)
         const response = await axios.post('/api/member', data, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -56,5 +55,4 @@ export const createMember = async (data) =>{
     }catch(error){
         return error.response ? error.response.data : error.message
     }
-
 }

@@ -1,5 +1,5 @@
 What is a ProJex?
-- ProJex is Project Management System or Project Collaboration platform it helps teams and organizations plan, track, and manage their projects effectively. It provides tools for task management, resource allocation, time tracking, collaboration, and reporting.
+- ProJex is Project Collaboration platform it helps teams and organizations plan, track, and manage their projects effectively. It provides tools for task management, resource allocation, time tracking, collaboration, and reporting.
 
 How to create an account?
 - You can create an account by either signing in with your Google account or by filling out the registration form on the sign-up page manually.
@@ -41,5 +41,5 @@ Are there real-time notifications?
 - Yes, you’ll receive instant notifications when you're assigned to a task, removed from a project, or your join request is accepted.
 
 Can I track task activity history?
-- Each task includes a history log showing who updated the task and when.
+- Yes, you can track task activity history.
 

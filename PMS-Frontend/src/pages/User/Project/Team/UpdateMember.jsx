@@ -5,7 +5,7 @@ import { updateMember } from "../../../../services/MemberService";
 
 const roles = ["Admin", "Editor", "Member", "Viewer"];
 
-const UpdateMember = ({ open, closeModal, member}) => {
+const UpdateMember = ({ open, closeModal, member, url}) => {
     const [role, setRole] = useState('');
     const [showDialog, setShowDialog] = useState(false);
 
@@ -16,7 +16,7 @@ const UpdateMember = ({ open, closeModal, member}) => {
 
     const handleSave = async () => {
          const response = await updateMember(member.id, { role });
-         if(response.success) window.location.reload();
+         if(response.success) url ? window.location.href = url : window.location.reload();
     }
 
     return <Modal open={open}
@@ -51,8 +51,8 @@ const UpdateMember = ({ open, closeModal, member}) => {
             </FormControl>
             <Button variant="contained" onClick={() => setShowDialog(true)}>Save</Button>
             <ConfirmDialog
-                title="Update"
-                text="Are you sure you want to update this?"
+                title="Submit"
+                text="Click ok to continue."
                 isOpen={showDialog}
                 handleAgree={handleSave}
                 handleClose={() => setShowDialog(false)}

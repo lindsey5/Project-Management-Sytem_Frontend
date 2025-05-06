@@ -18,6 +18,7 @@ import Select from '@mui/material/Select';
 import { ConfirmDialog } from "../../../components/dialog";
 import { createMember } from "../../../services/MemberService";
 import { useNavigate } from "react-router-dom";
+import UpdateMember from "./Team/UpdateMember";
 
 const requestPaginationState = {
     page:  1,
@@ -51,6 +52,7 @@ const Requests = () => {
     const [userId, setUserId] = useState();
     const [showAprrove, setShowApprove] = useState(false);
     const [showDecline, setShowDecline] = useState(false);
+    const [member, setMember] = useState(null);
 
     const navigate = useNavigate();
 
@@ -68,16 +70,12 @@ const Requests = () => {
     }
 
     useEffect(() => {
-        fetchRequests(project.id, state)
-    }, [state.page, state.status])
-
-    useEffect(() => {
         const fetch = setTimeout(() => {
             fetchRequests(project.id, state)
         }, 300)
       
         return () => clearTimeout(fetch)
-    }, [state.searchTerm])
+    }, [state.searchTerm, state.page, state.status])
 
     const handleClose = () => {
         setId(undefined);
@@ -87,10 +85,12 @@ const Requests = () => {
 
     const handleSubmit = async (id, status) => {
         updateRequest(id, status)
-        .then(response => {
+        .then(async (response) => {
           if (response.success && status === "Approved") {
-            createMember({ project_id: project.id, user_id: userId });
-            window.location.href = `/project/team?c=${code}`;
+            const createResponse = await createMember({ project_id: project.id, user_id: userId, role: "Member" });
+            const { user, ...rest } = createResponse.newMember;
+            const { id, ...userWithoutId } = user;
+            setMember({ ...rest, ...userWithoutId });
           } else {
             window.location.reload();
           }
@@ -98,6 +98,12 @@ const Requests = () => {
     }
 
     return <main className="w-full h-full px-10 py-4">
+        <UpdateMember 
+            open={member !== null}
+            member={member}
+            closeModal={() => window.location.href = `/project/team?c=${code}`}
+            url={`/project/team?c=${code}`}
+        />
         <Stack direction="row" justifyContent="space-between" alignItems="center">
             <TextField
                 id="input-with-icon-textfield"
