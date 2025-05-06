@@ -16,6 +16,7 @@ import { updateProject } from "../../../services/ProjectService";
 import { convertToAsiaTime, formatDate, formatDateTime } from "../../../utils/utils";
 import { ConfirmDialog } from "../../../components/dialog";
 import { UserContext } from "../../../context/userContext";
+import { toast } from "react-toastify";
 
 const filter = createFilterOptions();
 
@@ -79,6 +80,7 @@ const ProjectSettings = () => {
         })
 
         if(response.success) window.location.reload();
+        else toast.error(response.message)
     }
     
 

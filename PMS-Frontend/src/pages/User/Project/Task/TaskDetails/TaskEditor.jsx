@@ -88,6 +88,7 @@ const TaskEditor = ({ members, role, task}) => {
                     start_date: new Date(state.start_date),
                     due_date: new Date(state.due_date)
                 })
+                
                 if(updateResponse.success){
                     const updateAssigneeResponse = await updateAssignees(task.id, assigneesToUpdate)
     
@@ -96,6 +97,8 @@ const TaskEditor = ({ members, role, task}) => {
                     }else{
                         toast.error("Error please try again.");
                     }
+                }else{
+                     toast.error(updateResponse.message)
                 }
             }else{
                 toast.error("Start date should be earlier than the due date.")

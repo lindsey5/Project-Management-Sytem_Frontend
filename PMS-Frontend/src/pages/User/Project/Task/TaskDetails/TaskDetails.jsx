@@ -55,13 +55,18 @@ const TaskDetails = memo(({task, open, closeModal}) => {
   
         if (selectedFiles.length === 0) return;
 
-        await Promise.all(
-            selectedFiles.map(async (file) => {
-                const newAttachment = await createTaskAttachment(task.id, file)
-                if(newAttachment.success) setAttachments(prev => [...prev, newAttachment.attachment]);
-            })
-        );
-        toast.success("Attachments successfully saved")
+        for (const file of selectedFiles) {
+            const newAttachment = await createTaskAttachment(task.id, file);
+            console.log(newAttachment)
+            if (newAttachment.success) {
+                setAttachments(prev => [...prev, newAttachment.attachment]);
+            } else {
+                toast.error(newAttachment.message);
+                return; 
+            }
+        }
+
+        toast.success("All attachments successfully saved");
     };
 
     useEffect(() => {
@@ -119,7 +124,7 @@ const TaskDetails = memo(({task, open, closeModal}) => {
                         <Box sx={{padding: '0 10px 10px 10px'}}>
                            <Box display="flex" alignItems="center" gap={2} width="100%">
                                 <Typography variant="h6" color="gray">Attachments</Typography>
-                                {role === 'Admin' && <IconButton component="label">
+                                {(role === 'Admin' || role === 'Editor') && <IconButton component="label">
                                     <AddIcon />
                                     <input
                                         type="file"

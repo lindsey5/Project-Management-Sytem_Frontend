@@ -26,6 +26,7 @@ import { createTaskAttachment } from "../../../../services/TaskAttachmentService
 import StatusSelect from "../../../../components/Select";
 import { status, priority } from '../../../../data/taskData';
 import { openFile } from "../../../../utils/utils";
+import { toast } from "react-toastify";
 
 const style = {
     bgcolor: 'background.paper',
@@ -62,6 +63,7 @@ const CreateTask = ({open, close, currentStatus}) => {
                 ...data,
                 project_id: project.id
             })
+            console.log(response)
             if(response.success) {
                 
                 files.forEach(async (file) => {
@@ -70,6 +72,8 @@ const CreateTask = ({open, close, currentStatus}) => {
                   
                 navigate(`/project/tasks?c=${project.project_code}`, { replace: true });
                 window.location.reload();
+            }else{
+                toast.error(response.message)
             }
 
             setLoading(false)

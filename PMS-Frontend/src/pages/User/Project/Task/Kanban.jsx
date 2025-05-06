@@ -14,6 +14,7 @@ import { UserContext } from "../../../../context/userContext";
 import TaskDetails from "./TaskDetails/TaskDetails";
 import { statusConfig } from "../../../../components/config";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const StatusHeader = ({currentStatus, showButton, ...rest}) => {
     return <div className="flex items-center justify-between flex-1" {...rest}>
@@ -64,12 +65,12 @@ const Kanban = ({ tasks, setTasks }) => {
         ...taskToUpdate,
         status: newStatus,
       })
-      console.log(role)
-      console.log(response)
       if(response.success) {
         setTasks(tasks.map(task => 
           task.id === taskToUpdate.id ? { ...task, status: newStatus,  updated_At: new Date() } : task
         ));
+      }else{
+        toast.error(response.message)
       }
       
       setLoading(false); 
