@@ -78,9 +78,7 @@ const ProjectSettings = () => {
             end_date: formatDate(state.end_date)
         })
 
-        console.log(response)
-
-        //if(response.success) window.location.reload();
+        if(response.success) window.location.reload();
     }
     
 
