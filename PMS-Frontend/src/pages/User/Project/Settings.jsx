@@ -202,7 +202,7 @@ const ProjectSettings = () => {
                         onChange={(e) => dispatch({ type: "SET_STATUS", payload: e.target.value})}
                     />
                 </div>
-                {role === 'Admin' && project.user.email === user.email && <Button 
+                {role === 'Admin'  && <Button 
                     variant="contained"
                     onClick={() => setOpenDialog(true)}
                 >

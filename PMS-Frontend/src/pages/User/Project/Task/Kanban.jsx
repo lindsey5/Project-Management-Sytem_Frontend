@@ -64,7 +64,8 @@ const Kanban = ({ tasks, setTasks }) => {
         ...taskToUpdate,
         status: newStatus,
       })
-
+      console.log(role)
+      console.log(response)
       if(response.success) {
         setTasks(tasks.map(task => 
           task.id === taskToUpdate.id ? { ...task, status: newStatus,  updated_At: new Date() } : task
@@ -106,7 +107,7 @@ const Kanban = ({ tasks, setTasks }) => {
                           
                           const isDraggable = !loading &&
                           project.status === 'Active' &&
-                          (role === 'Admin' || task.assignees.some(a => a.member.user.email === user.email));
+                          (role === 'Admin' || role === 'Editor' || task.assignees.some(a => a.member.user.email === user.email));
 
                           if (index > -1) {
                               const [item] = task.assignees.splice(index, 1);
