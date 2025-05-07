@@ -11,6 +11,7 @@ import { statusConfig } from "../../components/config";
 import StatusSelect from "../../components/Select";
 import { status } from "../../data/taskData";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/userContext";
 
 const items = [
     { name: 'All', color: '#808080' },      
@@ -20,6 +21,7 @@ const items = [
   ];
 
 const YourTasks = () => {
+    const { user } = useContext(UserContext);
     const [tasks, setTasks] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState('All');
     const [selectedProjectStatus, setSelectedProjectStatus] = useState('Active');
@@ -131,7 +133,7 @@ const YourTasks = () => {
                         </StyledTableCell>
                         <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.created_At))}</StyledTableCell>
                         <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.updated_At))}</StyledTableCell>
-                        <StyledTableCell align="center">{task.member.user.firstname} {task.member.user.lastname}</StyledTableCell>      
+                        <StyledTableCell align="center">{task.member.user.email === user.email ? "You" : `${task.member.user.firstname} ${task.member.user.lastname}`}</StyledTableCell>      
                     </StyledTableRow>
                 })}
             />

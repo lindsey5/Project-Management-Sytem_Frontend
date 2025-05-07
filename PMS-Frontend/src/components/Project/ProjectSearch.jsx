@@ -162,7 +162,6 @@ const ProjectSearch = ({close}) => {
                                 <div className='flex flex-col gap-2 items-start'>
                                     <div>
                                         <h1 className='break-all font-bold text-xl'>{project.title}</h1>
-                                        <h2 className='break-all text-gray-400 mt-1'>{project.type}</h2>
                                     </div>
                                     <p className='text-gray-400 text-[14px]'>Deadline: {project.end_date}</p>
                                     <p className='text-gray-400 text-[14px]'>Creator: {project.user.firstname} {project.user.lastname.charAt(0)}.</p>

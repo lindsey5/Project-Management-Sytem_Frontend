@@ -183,24 +183,261 @@
     "name": "Environmental Impact Report Tool",
     "category": "Sustainability"
   },
-  { "name": "Bug Tracking System", "category": "Software QA" },
-  { "name": "Blockchain Wallet", "category": "Fintech" },
-  { "name": "E-Learning Platform", "category": "Education" },
-  { "name": "HR Management System", "category": "Human Resources" },
-  { "name": "Job Portal", "category": "Recruitment" },
-  { "name": "Content Management System (CMS)", "category": "Web Development" },
-  { "name": "Online Voting System", "category": "Civic Tech" },
-  { "name": "Help Desk Ticketing System", "category": "IT Support" },
-  { "name": "Property Listing Platform", "category": "Real Estate" },
-  { "name": "News Aggregator App", "category": "Media & News" },
-  { "name": "Online Examination System", "category": "Education" },
-  { "name": "Library Management System", "category": "Education" },
-  { "name": "Donation Platform", "category": "Nonprofit" },
-  { "name": "Freelance Marketplace", "category": "Business" },
-  { "name": "Survey & Feedback Tool", "category": "Analytics" },
-  { "name": "Smart Home Control App", "category": "IoT" },
-  { "name": "Voice Assistant Integration", "category": "AI/ML" },
-  { "name": "Augmented Reality App", "category": "AR/VR" },
-  { "name": "Cybersecurity Monitoring Tool", "category": "Security" },
-  { "name": "Time Tracking App", "category": "Productivity" }
+  {
+    "name": "Commercial Building Construction",
+    "category": "Construction & Real Estate"
+  },
+  {
+    "name": "Residential Housing Development",
+    "category": "Construction & Real Estate"
+  },
+  {
+    "name": "Office Space Renovation",
+    "category": "Construction & Real Estate"
+  },
+  {
+    "name": "Green Building Initiative",
+    "category": "Sustainability"
+  },
+  {
+    "name": "Urban Planning Project",
+    "category": "Construction & Real Estate"
+  },
+  {
+    "name": "Road & Infrastructure Development",
+    "category": "Public Infrastructure"
+  },
+  {
+    "name": "Bridge Construction Project",
+    "category": "Public Infrastructure"
+  },
+  {
+    "name": "Landscape Design and Implementation",
+    "category": "Construction & Real Estate"
+  },
+  {
+    "name": "Real Estate Property Development",
+    "category": "Real Estate"
+  },
+  {
+    "name": "Solar Energy Installation Project",
+    "category": "Renewable Energy"
+  },
+  {
+    "name": "Digital Marketing Campaign",
+    "category": "Marketing & Sales"
+  },
+  {
+    "name": "Brand Awareness Project",
+    "category": "Marketing & Sales"
+  },
+  {
+    "name": "Social Media Engagement Strategy",
+    "category": "Marketing & Sales"
+  },
+  {
+    "name": "Product Launch Event",
+    "category": "Product Management"
+  },
+  {
+    "name": "Market Research and Analysis",
+    "category": "Marketing & Sales"
+  },
+  {
+    "name": "Sales Funnel Optimization",
+    "category": "Sales Strategy"
+  },
+  {
+    "name": "Influencer Marketing Strategy",
+    "category": "Marketing & Sales"
+  },
+  {
+    "name": "Retail Store Launch",
+    "category": "Retail"
+  },
+  {
+    "name": "Loyalty Program Development",
+    "category": "Customer Engagement"
+  },
+  {
+    "name": "Trade Show and Exhibition Planning",
+    "category": "Event Management"
+  },
+  {
+    "name": "Student Enrollment Campaign",
+    "category": "Education & Training"
+  },
+  {
+    "name": "Scholarship Program Management",
+    "category": "Education & Training"
+  },
+  {
+    "name": "Curriculum Development Project",
+    "category": "Education & Training"
+  },
+  {
+    "name": "Teacher Training Program",
+    "category": "Education & Training"
+  },
+  {
+    "name": "School Infrastructure Development",
+    "category": "Education & Training"
+  },
+  {
+    "name": "Virtual Classroom Setup",
+    "category": "Education & Training"
+  },
+  {
+    "name": "Water Conservation Project",
+    "category": "Environmental Sustainability"
+  },
+  {
+    "name": "Waste Management Initiative",
+    "category": "Environmental Sustainability"
+  },
+  {
+    "name": "Community Health Outreach",
+    "category": "Public Health"
+  },
+  {
+    "name": "Disaster Relief Program",
+    "category": "Humanitarian Aid"
+  },
+  {
+    "name": "Neighborhood Safety Program",
+    "category": "Community Development"
+  },
+  {
+    "name": "Local Business Development Initiative",
+    "category": "Economic Development"
+  },
+  {
+    "name": "Youth Empowerment Project",
+    "category": "Social Development"
+  },
+  {
+    "name": "Senior Citizen Support Program",
+    "category": "Social Services"
+  },
+  {
+    "name": "Remote Work Setup and Optimization",
+    "category": "IT Infrastructure"
+  },
+  {
+    "name": "Cloud-Based Backup Solutions",
+    "category": "IT Infrastructure"
+  },
+  {
+    "name": "Network Security Enhancement",
+    "category": "IT Infrastructure"
+  },
+  {
+    "name": "Disaster Recovery Planning",
+    "category": "IT Infrastructure"
+  },
+  {
+    "name": "Employee Engagement Strategy",
+    "category": "Human Resources"
+  },
+  {
+    "name": "Corporate Wellness Program",
+    "category": "Human Resources"
+  },
+  {
+    "name": "Workforce Diversity Initiative",
+    "category": "Human Resources"
+  },
+  {
+    "name": "Employee Feedback and Survey System",
+    "category": "Human Resources"
+  },
+  {
+    "name": "Volunteer Coordination Platform",
+    "category": "Nonprofit Management"
+  },
+  {
+    "name": "Fundraising Campaign Management",
+    "category": "Nonprofit Management"
+  },
+  {
+    "name": "Nonprofit Event Planning",
+    "category": "Nonprofit Management"
+  },
+  { 
+    "name": "Bug Tracking System", 
+    "category": "Software QA" 
+  },
+  { 
+    "name": "Blockchain Wallet", 
+    "category": "Fintech" 
+  },
+  { 
+    "name": "E-Learning Platform", 
+    "category": "Education"
+  },
+  { 
+    "name": "HR Management System", 
+    "category": "Human Resources" 
+  },
+  { 
+    "name": "Job Portal", 
+    "category": "Recruitment" 
+  },
+  { 
+    "name": "Content Management System (CMS)", 
+    "category": "Web Development"
+  },
+  { 
+    "name": "Online Voting System", 
+    "category": "Civic Tech" 
+  },
+  { 
+    "name": "Help Desk Ticketing System", 
+    "category": "IT Support" 
+  },
+  { 
+    "name": "Property Listing Platform", 
+    "category": "Real Estate" 
+  },
+  { 
+    "name": "News Aggregator App", 
+    "category": "Media & News" 
+  },
+  { 
+    "name": "Online Examination System", 
+    "category": "Education" 
+  },
+  { 
+    "name": "Library Management System", 
+    "category": "Education" 
+  },
+  { 
+    "name": "Donation Platform", 
+    "category": "Nonprofit" 
+  },
+  { 
+    "name": "Freelance Marketplace", 
+    "category": "Business" 
+  },
+  { 
+    "name": "Survey & Feedback Tool", 
+    "category": "Analytics" 
+  },
+  { 
+    "name": "Smart Home Control App", 
+    "category": "IoT" 
+  },
+  { 
+    "name": "Voice Assistant Integration", 
+    "category": "AI/ML" },
+  { 
+    "name": "Augmented Reality App", 
+    "category": "AR/VR" },
+  { 
+    "name": "Cybersecurity Monitoring Tool", 
+    "category": "Security" },
+  { 
+    "name": "Time Tracking App", 
+    "category": "Productivity" 
+  }
 ]

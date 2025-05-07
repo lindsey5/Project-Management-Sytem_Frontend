@@ -78,7 +78,7 @@ const UserTasks = ({ allTasks }) => {
                                 </StyledTableCell>
                                 <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.created_At))}</StyledTableCell>
                                 <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.updated_At))}</StyledTableCell>
-                                <StyledTableCell align="center">{task.member.user.firstname} {task.member.user.lastname}</StyledTableCell>
+                                <StyledTableCell align="center">{task.member.user.email === user.email ? "You" : `${task.member.user.firstname} ${task.member.user.lastname}`}</StyledTableCell>
                                 <StyledTableCell align="center">
                                     <IconButton onClick={() => setSelectedTask(task)}>
                                         <VisibilityIcon />

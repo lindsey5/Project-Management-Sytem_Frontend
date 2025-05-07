@@ -13,7 +13,7 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import { green } from '@mui/material/colors';
+import { green, grey } from '@mui/material/colors';
 import { CustomButton } from "../button";
 import dayjs from "dayjs";
 
@@ -144,7 +144,7 @@ const CreateProjectModal = ({close}) => {
                 }}
                 renderGroup={(params) => (
                     <li key={params.key}>
-                    <GroupHeader>{params.group}</GroupHeader>
+                    <GroupHeader sx={{ fontWeight: 'bold', backgroundColor: grey[200]}}>{params.group}</GroupHeader>
                     <GroupItems>{params.children}</GroupItems>
                     </li>
                 )}

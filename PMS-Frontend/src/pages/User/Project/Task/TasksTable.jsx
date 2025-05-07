@@ -5,12 +5,14 @@ import { convertToAsiaTime, formatDateTime } from "../../../../utils/utils"
 import { statusConfig } from "../../../../components/config"
 import CircleIcon from '@mui/icons-material/Circle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useState, useMemo } from "react"
+import { useState, useMemo, useContext } from "react"
 import TaskDetails from "./TaskDetails/TaskDetails"
 import { status } from "../../../../data/taskData"
 import StatusSelect from "../../../../components/Select"
+import { UserContext } from "../../../../context/userContext"
 
 const TasksTable = ({ tasks }) => {
+    const { user } = useContext(UserContext);
     const [selectedTask, setSelectedTask] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState('All');
 
@@ -66,7 +68,7 @@ const TasksTable = ({ tasks }) => {
                                 </StyledTableCell>
                                 <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.created_At))}</StyledTableCell>
                                 <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task.updated_At))}</StyledTableCell>
-                                <StyledTableCell align="center">{task.member.user.firstname} {task.member.user.lastname}</StyledTableCell>
+                                <StyledTableCell align="center">{task.member.user.email === user.email ? "You" : `${task.member.user.firstname} ${task.member.user.lastname}`}</StyledTableCell>
                                 <StyledTableCell align="center">
                                     <IconButton onClick={() => setSelectedTask(task)}>
                                         <VisibilityIcon />
