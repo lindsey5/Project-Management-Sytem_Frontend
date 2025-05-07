@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { cn, convertToAsiaTime, formatDateTime } from '../../utils/utils';
+import { cn, formatDateTime } from '../../utils/utils';
 import { useEffect, useMemo, useState } from 'react';
 import CreateProjectModal from './CreateProject';
 import { getProjects, openProject } from '../../services/ProjectService';
