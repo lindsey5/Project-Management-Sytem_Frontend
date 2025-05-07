@@ -204,12 +204,15 @@ const ProjectSettings = () => {
                         onChange={(e) => dispatch({ type: "SET_STATUS", payload: e.target.value})}
                     />
                 </div>
+                <div className="flex gap-3">
+                {project.user.email === user.email && <Button variant="contained" color="error">Delete Project</Button>}
                 {role === 'Admin'  && <Button 
                     variant="contained"
                     onClick={() => setOpenDialog(true)}
                 >
                     Save changes
                 </Button>}
+                </div>
                 <ConfirmDialog 
                     handleAgree={saveUpdate}
                     handleClose={() => setOpenDialog(false)}

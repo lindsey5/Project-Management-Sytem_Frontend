@@ -3,7 +3,7 @@ import { UserContext } from "../../../context/userContext"
 import { DashboardCard } from "../../../components/Card";
 import { getAllUserTasks } from "../../../services/TaskService";
 import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
-import { convertToAsiaTime, formatDate, formatDateTime } from "../../../utils/utils";
+import { convertToAsiaTime, formatDateTime } from "../../../utils/utils";
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
@@ -14,6 +14,7 @@ import { statusConfig } from "../../../components/config";
 import CustomizedTable from "../../../components/table";
 import StatusSelect from "../../../components/Select";
 import { status as statusData} from '../../../data/taskData'
+import CircleIcon from '@mui/icons-material/Circle';
 
 const Home = () => {
     const { user } = useContext(UserContext);
@@ -55,7 +56,7 @@ const Home = () => {
             }))
 
             setTasksDetails({
-                allTasks: response.tasks.filter(task => task.project.status === "Active" && formatDate(convertToAsiaTime(task.start_date)) === formatDate(new Date())),
+                allTasks: response.tasks.filter(task => task.project.status === "Active" && task.status !== "Completed"),
                 activeTasks,
                 overDueTask,
                 completedTasks,
@@ -107,7 +108,7 @@ const Home = () => {
             className="mt-[50px] md:grid md:grid-cols-[2fr_1fr] gap-5"
         >
             <Card className="border-1 border-gray-200 h-[500px] border-box px-5 py-10 gap-5 flex flex-col" sx={{ boxShadow: '2px 8px 8px 3px rgb(221, 221, 221)'}} >
-                <Typography variant="h5">Tasks today</Typography>
+                <Typography variant="h5">Assigned Tasks</Typography>
                 <Box className="flex">
                     <StatusSelect 
                         width={'200px'}
@@ -122,6 +123,7 @@ const Home = () => {
                             <StyledTableCell align="center">Task name</StyledTableCell>
                             <StyledTableCell align="center">Project title</StyledTableCell>
                             <StyledTableCell align="center">Status</StyledTableCell>
+                            <StyledTableCell align="center">Start date</StyledTableCell>
                             <StyledTableCell align="center">Due date</StyledTableCell>
                     </TableRow>}
 
@@ -129,7 +131,13 @@ const Home = () => {
                         <StyledTableRow key={task.id}>
                             <StyledTableCell align="center">{task?.task_Name}</StyledTableCell>
                             <StyledTableCell align="center">{task?.project.title}</StyledTableCell>
-                            <StyledTableCell align="center">{task?.status}</StyledTableCell>
+                            <StyledTableCell align="center">
+                                <div className="flex items-center gap-2">
+                                    <CircleIcon sx={{ color: statusConfig[task.status]}} fontSize="small"/>
+                                {task.status}
+                                </div>
+                            </StyledTableCell>
+                            <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task?.start_date))}</StyledTableCell>
                             <StyledTableCell align="center">{formatDateTime(convertToAsiaTime(task?.due_date))}</StyledTableCell>
                         </StyledTableRow>
                     )}

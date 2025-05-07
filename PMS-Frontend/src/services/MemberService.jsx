@@ -56,3 +56,16 @@ export const createMember = async (data) =>{
         return error.response ? error.response.data : error.message
     }
 }
+
+export const leaveProject = async (id) => {
+    try{
+        const response = await axios.delete(`/api/member/left/${id}`,{
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        })
+        return response.data
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
+}

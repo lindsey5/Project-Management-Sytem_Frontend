@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
-import { deleteMember, getMembers, updateMember } from "../../../../services/MemberService";
+import { deleteMember, getMembers, leaveProject } from "../../../../services/MemberService";
 import { useSearchParams } from "react-router-dom";
 import CustomizedTable from "../../../../components/table";
 import { ProjectContext } from "../../../../layouts/ProjectLayout";
 import { StyledTableCell, StyledTableRow } from "../../../../components/table";
-import { Avatar, IconButton, Menu, MenuItem, TableRow } from "@mui/material";
+import { Avatar, Button, IconButton, Menu, MenuItem, TableRow } from "@mui/material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { UserContext } from "../../../../context/userContext";
 import { ConfirmDialog } from "../../../../components/dialog";
-import { formatDateTime, convertToAsiaTime } from "../../../../utils/utils";
+import { formatDateTime } from "../../../../utils/utils";
 import UpdateMember from "./UpdateMember";
 
 const Team = () => {
@@ -23,6 +23,7 @@ const Team = () => {
     const [member, setMember] = useState(null);
     const [openRemove, setOpenRemove] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
+    const [showLeave, setShowLeave] = useState(false);
 
     const handleShowRemove = (member) => {
         setMember(member);
@@ -43,6 +44,14 @@ const Team = () => {
         setAnchorEl(null);
         setMenuMemberId(null);
     };
+
+    const handleShowLeave = () => {
+        setShowLeave(true);
+    }
+
+    const handleCloseLeave = () => {
+        setShowLeave(false)
+    }
 
     useEffect(() => {
         const fetchMembers = async () => {
@@ -70,8 +79,18 @@ const Team = () => {
         if (response.success) window.location.reload();
     };
 
+    const handleLeave = async () => {
+        const response = await leaveProject(project.id)
+        if(response.success) window.location.reload();
+    }
+
     return (
         <main className="w-full h-full overflow-y-auto py-10 p-5">
+            <Button 
+                variant="contained" 
+                color="error"
+                onClick={handleShowLeave}
+            >Leave Project</Button>
             <CustomizedTable
                 cols={
                     <TableRow>
@@ -156,6 +175,14 @@ const Team = () => {
                 handleClose={handleCloseRemove}
                 handleAgree={handleRemove}
                 isOpen={member != null && openRemove}
+                variant="error"
+            />
+            <ConfirmDialog 
+                title="Confirm"
+                text="Are you sure you want to leave this project?"
+                handleClose={handleCloseLeave}
+                handleAgree={handleLeave}
+                isOpen={showLeave}
                 variant="error"
             />
         </main>
