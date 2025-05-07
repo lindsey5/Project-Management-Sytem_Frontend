@@ -4,10 +4,10 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { cn } from '../../utils/utils';
+import { cn, convertToAsiaTime, formatDateTime } from '../../utils/utils';
 import { useEffect, useMemo, useState } from 'react';
 import CreateProjectModal from './CreateProject';
-import { getProjects } from '../../services/ProjectService';
+import { getProjects, openProject } from '../../services/ProjectService';
 import { Box, Chip } from '@mui/material';
 import JoinProject from './JoinProject';
 import { CustomButton } from '../button';
@@ -71,10 +71,16 @@ const ProjectSearch = ({close}) => {
     useEffect(() => {
         const fetchProjects = async () => {
             const fetchedProjects = await getProjects();
-            setProjects(fetchedProjects.projects.sort((a, b) => new Date(a.end_date) - new Date(b.end_date)))
+            const cleanedFetchedProject = fetchedProjects.projects.map(p => ({ ...p.project, last_accessed: p.last_accessed }));
+            setProjects(cleanedFetchedProject)
         }
         fetchProjects();
     }, [])
+
+    const handleOpen = async (project) => {
+        const response = await openProject(project.id);
+        if(response.success) window.location.href = `/project/tasks?c=${project.project_code}`
+    }
 
     return <aside className="flex justity-start fixed left-18 right-0 inset-y-0 bg-black/50 z-10">
         {showCreate && <CreateProjectModal close={() => setShowCreate(false)}/>}
@@ -150,7 +156,7 @@ const ProjectSearch = ({close}) => {
                     return <div 
                             key={project.id}
                             className='rounded-lg p-3 justify-between flex items-center cursor-pointer hover:bg-gray-100'
-                            onClick={() => window.location.href = `/project/tasks?c=${project.project_code}`}
+                            onClick={() => handleOpen(project)}
                         >
                             <div className='flex items-center gap-3'>
                                 <div className='flex flex-col gap-2 items-start'>
@@ -160,6 +166,7 @@ const ProjectSearch = ({close}) => {
                                     </div>
                                     <p className='text-gray-400 text-[14px]'>Deadline: {project.end_date}</p>
                                     <p className='text-gray-400 text-[14px]'>Creator: {project.user.firstname} {project.user.lastname.charAt(0)}.</p>
+                                    <p className='text-gray-400 text-[14px]'>Last opened: {formatDateTime(project.last_accessed)}.</p>
                                     <Chip 
                                         label={project.status} 
                                         variant='filled' 

@@ -19,6 +19,8 @@ import { ConfirmDialog } from "../../../components/dialog";
 import { createMember } from "../../../services/MemberService";
 import { useNavigate } from "react-router-dom";
 import UpdateMember from "./Team/UpdateMember";
+import { toast } from "react-toastify";
+import { openProject } from "../../../services/ProjectService";
 
 const requestPaginationState = {
     page:  1,
@@ -85,17 +87,14 @@ const Requests = () => {
 
     const handleSubmit = async (id, status) => {
         updateRequest(id, status)
-        .then(async (response) => {
-          if (response.success && status === "Approved") {
-            const createResponse = await createMember({ project_id: project.id, user_id: userId, role: "Member" });
-            console.log(createResponse)
-            const { user, ...rest } = createResponse.newMember;
-            const { id, ...userWithoutId } = user;
-            setMember({ ...rest, ...userWithoutId });
-          } else {
-            window.location.reload();
-          }
-        });
+            .then(async (response) => {
+                if (response.success && status === "Approved") {
+                    const createResponse = await createMember({ project_id: project.id, user_id: userId, role: "Member" });
+                    const { user, ...rest } = createResponse.newMember;
+                    const { id, ...userWithoutId } = user;
+                    setMember({ ...rest, ...userWithoutId })
+                }else toast.error(response.message);
+            })
     }
 
     return <main className="w-full h-full px-10 py-4">

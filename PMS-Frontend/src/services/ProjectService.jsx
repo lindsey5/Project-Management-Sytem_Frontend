@@ -81,3 +81,16 @@ export const getAuthorization = async (project_code) => {
         return error.response ? error.response.data : error.message
     }
 }
+
+export const openProject = async (project_id) => {
+    try{
+        const response = await axios.post(`/api/recent_opened_project/${project_id}`, {}, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }})
+
+        return response.data
+    }catch(error){
+        return error.response ? error.response.data : error.message
+    }
+}

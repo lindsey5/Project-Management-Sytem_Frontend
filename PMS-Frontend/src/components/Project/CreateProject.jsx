@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import useProjectReducer from "../../hooks/projectReducer";
 import { useState } from "react";
-import { CreateProject } from "../../services/ProjectService";
+import { CreateProject, openProject } from "../../services/ProjectService";
 import { formatDate } from "../../utils/utils";
 import { toast } from "react-toastify";
 import project_types from '../../../project_types.json'
@@ -55,8 +55,13 @@ const CreateProjectModal = ({close}) => {
                 status: 'Active'
             })
             if(response.success) {
-                dispatch({type: 'CLEAR'})
-                window.location.href = `/project/tasks?c=${response.data.project_code}`
+                const openProjectResponse = await openProject(response.data.id);
+                
+                if(openProjectResponse.success) {
+                    window.location.href = `/project/tasks?c=${response.data.project_code}`
+                    dispatch({type: 'CLEAR'})
+                }
+                
             }else{
                 toast.error("Failed, please try again.")
             }
@@ -164,20 +169,8 @@ const CreateProjectModal = ({close}) => {
             <CustomButton 
                 sx={{borderRadius: '10px'}}
                 onClick={handleSubmit}
+                disabled={loading}
             >CREATE</CustomButton>
-                {loading && (
-                <CircularProgress
-                    size={24}
-                    sx={{
-                    color: green[500],
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    marginTop: '-12px',
-                    marginLeft: '-12px',
-                    }}
-                />
-                )}
             <button className="p-2 rounded-lg cursor-pointer hover:bg-gray-200"
                 onClick={close}
             >Cancel</button>
