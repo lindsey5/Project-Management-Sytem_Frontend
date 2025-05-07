@@ -83,14 +83,9 @@ const Team = () => {
         const response = await leaveProject(project.id)
         if(response.success) window.location.reload();
     }
-
+    
     return (
         <main className="w-full h-full overflow-y-auto py-10 p-5">
-            <Button 
-                variant="contained" 
-                color="error"
-                onClick={handleShowLeave}
-            >Leave Project</Button>
             <CustomizedTable
                 cols={
                     <TableRow>
@@ -163,6 +158,12 @@ const Team = () => {
                     ))
                 }
             />
+            {user.email !== project.user.email && <Button 
+                sx={{ marginTop: '20px'}}
+                variant="contained" 
+                color="error"
+                onClick={handleShowLeave}
+            >Leave Project</Button>}
             <UpdateMember 
                 closeModal={handleCLoseUpdate}
                 open={member !== null && showUpdate}
@@ -177,6 +178,7 @@ const Team = () => {
                 isOpen={member != null && openRemove}
                 variant="error"
             />
+
             <ConfirmDialog 
                 title="Confirm"
                 text="Are you sure you want to leave this project?"

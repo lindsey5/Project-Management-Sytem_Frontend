@@ -12,7 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import project_types from '../../../../project_types.json';
-import { updateProject } from "../../../services/ProjectService";
+import { deleteProject, updateProject } from "../../../services/ProjectService";
 import { convertToAsiaTime, formatDate, formatDateTime } from "../../../utils/utils";
 import { ConfirmDialog } from "../../../components/dialog";
 import { UserContext } from "../../../context/userContext";
@@ -49,6 +49,7 @@ const ProjectSettings = () => {
     const { user } = useContext(UserContext);
     const [value, setValue] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
 
     useEffect(() => {
         if(project) {
@@ -81,6 +82,11 @@ const ProjectSettings = () => {
 
         if(response.success) window.location.reload();
         else toast.error(response.message)
+    }
+
+    const handleDelete = async () => {
+        const response = await deleteProject(project.id);
+        if(response.success) window.location.reload();
     }
     
 
@@ -205,7 +211,12 @@ const ProjectSettings = () => {
                     />
                 </div>
                 <div className="flex gap-3">
-                {project.user.email === user.email && <Button variant="contained" color="error">Delete Project</Button>}
+                {project.user.email === user.email && 
+                <Button 
+                    onClick={() => setShowDelete(true)}
+                    variant="contained" 
+                    color="error"
+                >Delete Project</Button>}
                 {role === 'Admin'  && <Button 
                     variant="contained"
                     onClick={() => setOpenDialog(true)}
@@ -219,6 +230,14 @@ const ProjectSettings = () => {
                     isOpen={openDialog}
                     text="Are you sure you want to save these changes?"
                     title="Update"
+                />
+                <ConfirmDialog 
+                    handleAgree={handleDelete}
+                    handleClose={() => setShowDelete(false)}
+                    variant="error"
+                    isOpen={showDelete}
+                    text="Are you sure you want to delete this project?"
+                    title="Delete"
                 />
             </div>
             <div className="flex flex-col items-center">

@@ -33,6 +33,8 @@ const NotficationContainer = forwardRef(({ notification }, ref) => {
         messageType = "update your role"
     }else if(notification.type === "LeftFromProject"){
         messageType = "left in the project"
+    }else if(notification.type === "ProjectDeleted"){
+        messageType = "delete a project";
     }
 
     const handleClick = async () => {
