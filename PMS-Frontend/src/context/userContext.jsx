@@ -8,11 +8,15 @@ export const UserContextProvider = ({ children }) => {
     
     useEffect(() => {
         const getUser = async () => {
-            setUser(await getUserDetails());
+            const details = await getUserDetails()
+            if(details) setUser(details) 
+            else{
+                 localStorage.removeItem('token');
+                 window.location.href = '/'
+            }
         }
         getUser();
     }, [])
-
   
     return (
         <UserContext.Provider value={{ user }}>

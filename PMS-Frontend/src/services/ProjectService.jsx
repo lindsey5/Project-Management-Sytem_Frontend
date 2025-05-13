@@ -63,6 +63,7 @@ export const getProjects = async () => {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         })
+        console.log(response.data)
         return response.data
     }catch(error){
         return error.response ? error.response.data : error.message

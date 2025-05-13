@@ -85,15 +85,19 @@ const Team = () => {
     }
     
     return (
-        <main className="w-full h-full overflow-y-auto py-10 p-5">
+        <main className="w-full h-full overflow-y-auto p-5">
+            <div className="w-full flex justify-end mb-5">
+                <Button variant="contained">Invite</Button>
+            </div>
             <CustomizedTable
                 cols={
                     <TableRow>
                         <StyledTableCell align="left">Fullname</StyledTableCell>
                         <StyledTableCell align="left">Email</StyledTableCell>
-                        <StyledTableCell align="left">Role</StyledTableCell>
-                        <StyledTableCell align="left">Joined At</StyledTableCell>
-                        {role === 'Admin' && <StyledTableCell align="left">Action</StyledTableCell>}
+                        <StyledTableCell align="center">Role</StyledTableCell>
+                        <StyledTableCell align="center">Joined At</StyledTableCell>
+                        <StyledTableCell align="center">Added by</StyledTableCell>
+                        {role === 'Admin' && <StyledTableCell align="center">Action</StyledTableCell>}
                     </TableRow>
                 }
                 rows={
@@ -104,15 +108,16 @@ const Team = () => {
                                     src={`data:image/jpeg;base64,${member.profile_pic}`}
                                     sx={{ width: 40, height: 40 }}
                                 />
-                                {member.firstname} {member.lastname}
+                                {member.firstname} {member.lastname} {member.email === user.email && '(You)'}
                             </StyledTableCell>
                             <StyledTableCell align="left">{member.email}</StyledTableCell>
-                            <StyledTableCell align="left">{member.role}</StyledTableCell>
-                            <StyledTableCell align="left">
-                                {formatDateTime(member.joined_At)}
+                            <StyledTableCell align="center">{member.role}</StyledTableCell>
+                            <StyledTableCell align="center">{formatDateTime(member.joined_At)}</StyledTableCell>
+                            <StyledTableCell align="center">
+                               {member?.user_Added_by?.firstname} {member?.user_Added_by?.lastname}
                             </StyledTableCell>
                             {role === 'Admin' && (
-                                <StyledTableCell align="left">
+                                <StyledTableCell align="center">
                                     {((user.email === project.user.email && user.email !== member.email) ||
                                         (member.user_Id !== project.user_id && member.role !== 'Admin')) && (
                                         <>

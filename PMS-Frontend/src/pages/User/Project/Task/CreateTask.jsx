@@ -63,12 +63,12 @@ const CreateTask = ({open, close, currentStatus}) => {
                 ...data,
                 project_id: project.id
             })
-            console.log(response)
+
             if(response.success) {
                 
-                files.forEach(async (file) => {
+                for(const file of files){
                     await createTaskAttachment(response.task.id, file);
-                })
+                }
                   
                 navigate(`/project/tasks?c=${project.project_code}`, { replace: true });
                 window.location.reload();

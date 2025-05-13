@@ -248,7 +248,7 @@ const ProjectSettings = () => {
                     value={project.project_code || ''}
                     viewBox={`0 0 256 256`}
                 />
-                <h1>Created: {formatDateTime(convertToAsiaTime(project.created_At))}</h1>
+                <h1>Created: {formatDateTime(project.created_At)}</h1>
                 <h1>Creator: {project.user.firstname} {project.user.lastname}</h1>
             </div>
     </main>
