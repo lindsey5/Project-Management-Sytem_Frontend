@@ -15,7 +15,7 @@ import { CircularProgress } from '@mui/material';
 import TasksTable from './Task/TasksTable';
 import UserTasks from './Task/UserTasks';
 import Calendar from './Task/Calendar';
-import MyGanttComponent from './Task/GantChart';
+import MyGanttComponent from './Task/GanttChart';
 import ViewTimelineOutlinedIcon from '@mui/icons-material/ViewTimelineOutlined';
 
 const Kanban = lazy(() => import('./Task/Kanban'));

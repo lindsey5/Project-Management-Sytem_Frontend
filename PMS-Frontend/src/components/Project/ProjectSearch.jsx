@@ -163,9 +163,9 @@ const ProjectSearch = ({close}) => {
                                     <div>
                                         <h1 className='break-all font-bold text-xl'>{project.title}</h1>
                                     </div>
+                                    <p className='text-gray-400 text-[14px]'>Start: {project.start_date}</p>
                                     <p className='text-gray-400 text-[14px]'>Deadline: {project.end_date}</p>
                                     <p className='text-gray-400 text-[14px]'>Creator: {project.user.firstname} {project.user.lastname.charAt(0)}.</p>
-                                    <p className='text-gray-400 text-[14px]'>Last opened: {formatDateTime(project.last_accessed)}.</p>
                                     <Chip 
                                         label={project.status} 
                                         variant='filled' 

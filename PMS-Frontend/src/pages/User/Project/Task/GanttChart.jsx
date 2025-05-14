@@ -14,8 +14,6 @@ const MyGanttComponent = ({ tasks }) => {
                 end: task.due_date,
                 type: "narrow",
                 lazy: true,
-                details: "Outline the project's scope and resources.",
-                duration: `${((new Date(task.due_date) - new Date(task.start_date)) / (1000 * 60 * 60 * 24)).toFixed(1)} days`,
             })))
         }
 
