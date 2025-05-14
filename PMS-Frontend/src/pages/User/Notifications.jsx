@@ -47,7 +47,7 @@ const NotficationContainer = forwardRef(({ notification }, ref) => {
     }
 
     const handleClick = async () => {
-        if(notification.type !== "RemovedToProject" && notification.type !== "InvitationAccepted"){
+        if(notification.type !== "RemovedToProject" && notification.type !== "InvitationSent"){
             const response = await getProject(notification.project_id);
             if(response.success) navigate(`/project/tasks?c=${response.project.project_code}`, { state: { task : notification.task_id } });
         }
@@ -67,9 +67,6 @@ const NotficationContainer = forwardRef(({ notification }, ref) => {
             className={`hover:bg-gray-50 cursor-pointer flex gap-5 w-full shadow-md 
                 p-6 rounded-lg border-1 border-gray-200 ${!notification.isRead && 'font-bold'}`}
         >
-        <ConfirmDialog 
-            handleAgree={}
-        />
         <Avatar src={`data:image/jpeg;base64,${notification.user.profile_pic}`} sx={{ width: '50px', height: '50px'}}/>
         <div>
             <h1 className="mb-3 text-md">
