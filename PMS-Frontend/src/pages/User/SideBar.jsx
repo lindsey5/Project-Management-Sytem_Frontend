@@ -7,12 +7,12 @@ import FolderCopyOutlinedIcon from '@mui/icons-material/FolderCopyOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
+import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Badge, Tooltip } from "@mui/material";
 import ProjectSearch from "../../components/Project/ProjectSearch";
 import { SignalContext } from "../../context/signalContext";
 import { getNotifications } from '../../services/NotificationService';
-import { toast } from "react-toastify";
 
 const gradientColor = { 
     default: "linear-gradient(45deg, #2328ff, #a1ffaa)",

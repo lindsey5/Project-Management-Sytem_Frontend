@@ -10,6 +10,7 @@ import { UserContext } from "../../../../context/userContext";
 import { ConfirmDialog } from "../../../../components/dialog";
 import { formatDateTime } from "../../../../utils/utils";
 import UpdateMember from "./UpdateMember";
+import Invite from "./Invite";
 
 const Team = () => {
     const [members, setMembers] = useState([]);
@@ -24,6 +25,7 @@ const Team = () => {
     const [openRemove, setOpenRemove] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
     const [showLeave, setShowLeave] = useState(false);
+    const [showInvite, setShowInvite] = useState(false);
 
     const handleShowRemove = (member) => {
         setMember(member);
@@ -86,9 +88,16 @@ const Team = () => {
     
     return (
         <main className="w-full h-full overflow-y-auto p-5">
-            <div className="w-full flex justify-end mb-5">
-                <Button variant="contained">Invite</Button>
-            </div>
+            <Invite 
+                project_id={project.id}
+                handleClose={() => setShowInvite(false)}
+                open={showInvite}
+            />
+            {role === 'Admin' && 
+                <div className="w-full flex justify-end mb-5">
+                    <Button variant="contained" onClick={() => setShowInvite(true)}>Invite</Button>
+                </div>
+            }
             <CustomizedTable
                 cols={
                     <TableRow>

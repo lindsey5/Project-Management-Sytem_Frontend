@@ -40,7 +40,6 @@ const VerifyCode = ({ newUser }) => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        console.log(newUser)
         if(newUser) setUser(newUser)
     }, [newUser])
 
@@ -127,7 +126,7 @@ const SignupPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors([])
-        
+        setLoading(false)
         if(newUser.password !== newUser.confirmPassword){
             setErrors(["Password doesn't match"]);
         }else if(isStrongPassword(newUser.password)){

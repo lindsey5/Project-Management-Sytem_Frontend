@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState, useCallback, useContext, forwardRef } from "react"
 import { getNotifications, updateNotifications } from "../../services/NotificationService";
 import { SignalContext } from "../../context/signalContext";
-import { Avatar } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { formatDateTime } from "../../utils/utils";
 import CircleIcon from '@mui/icons-material/Circle';
 import { getProject } from "../../services/ProjectService";
 import { useNavigate } from "react-router-dom";
+import { acceptInvitation } from "../../services/InvitationService";
+import { toast } from "react-toastify";
+import { ConfirmDialog } from "../../components/dialog";
 
 const NotficationContainer = forwardRef(({ notification }, ref) => {
     var messageType;
     const navigate = useNavigate();
+    const [showAccept, setShowAccept] = useState(false);
+    
 
     if(notification.type === 'TaskAssigned'){
         messageType = "assigned a task to you";
@@ -23,24 +28,36 @@ const NotficationContainer = forwardRef(({ notification }, ref) => {
         messageType = "removed an attachment";
     }else if(notification.type === "RemovedToProject"){
         messageType = "removed you in a project";
-    }else if(notification.type === "AddedToProject"){
-        messageType = "added you in a project"
+    }else if(notification.type === "RequestAccepted"){
+        messageType = "accepted your request"
     }else if(notification.type === "CommentAdded"){
         messageType = "added a comment"
     }else if(notification.type === "TaskDeleted"){
         messageType = "deleted a task"
     }else if(notification.type === "RoleUpdated"){
-        messageType = "update your role"
+        messageType = "updated your role"
     }else if(notification.type === "LeftFromProject"){
         messageType = "left in the project"
     }else if(notification.type === "ProjectDeleted"){
-        messageType = "delete a project";
+        messageType = "deleted a project";
+    }else if(notification.type === "InvitationSent"){
+        messageType = `invited you to join in a project "${notification.invitation.project.title}"`
+    }else if(notification.type === 'InvitationAccepted'){
+         messageType = 'accepted your invitation'
     }
 
     const handleClick = async () => {
-        if(notification.type !== "RemovedToProject"){
+        if(notification.type !== "RemovedToProject" && notification.type !== "InvitationAccepted"){
             const response = await getProject(notification.project_id);
             if(response.success) navigate(`/project/tasks?c=${response.project.project_code}`, { state: { task : notification.task_id } });
+        }
+    }
+
+    const handleAccept = async () => {
+        if(confirm("Accept invitation?")){
+            const response = await acceptInvitation(notification.invitation_id);
+            if(response.success) navigate(`/project/task?c=${response.invitation.project.project_code}`)
+            else toast.error()
         }
     }
 
@@ -50,16 +67,27 @@ const NotficationContainer = forwardRef(({ notification }, ref) => {
             className={`hover:bg-gray-50 cursor-pointer flex gap-5 w-full shadow-md 
                 p-6 rounded-lg border-1 border-gray-200 ${!notification.isRead && 'font-bold'}`}
         >
+        <ConfirmDialog 
+            handleAgree={}
+        />
         <Avatar src={`data:image/jpeg;base64,${notification.user.profile_pic}`} sx={{ width: '50px', height: '50px'}}/>
-        <div className="">
+        <div>
             <h1 className="mb-3 text-md">
                 <span className="font-bold">{notification.user.firstname} {notification.user.lastname}</span> {messageType}
                 {!notification.isRead && <CircleIcon sx={{ marginLeft: '7px', fontSize: '15px'}} color="error"/>}
             </h1>
             <p className="text-gray-500 text-sm">{formatDateTime(notification.date_time)}</p>
-            <div className="mt-6 border-1 border-gray-300 rounded-xl p-3">
+           {notification.message && <div className="mt-6 border-1 border-gray-300 rounded-xl p-3">
                 <p className="whitespace-pre-line">{notification.message}</p>
-            </div>
+            </div>}
+            {notification?.invitation?.status === "Pending" && <div className="flex mt-4 gap-4">
+                <Button 
+                    onClick={handleAccept}
+                    variant="contained" 
+                    color="success"
+                >Accept</Button>
+                <Button variant="outlined" color="error">Decline</Button>
+            </div>}
         </div>
     </div>
 })

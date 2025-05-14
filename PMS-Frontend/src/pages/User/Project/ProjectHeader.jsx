@@ -1,15 +1,15 @@
 import { useContext, useEffect, useState } from "react"
-import { ProjectContext } from "../../layouts/ProjectLayout"
+import { ProjectContext } from "../../../layouts/ProjectLayout"
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Tab from '@mui/material/Tab';
 import { Stack, Tabs, Badge } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { StatusChip } from "../chip";
-import { getMembers } from "../../services/MemberService";
-import { UserContext } from "../../context/userContext";
-import { getRequest } from "../../services/RequestService";
-import { SignalContext } from "../../context/signalContext";
+import { StatusChip } from "../../../components/chip";
+import { getMembers } from "../../../services/MemberService";
+import { UserContext } from "../../../context/userContext";
+import { getRequest } from "../../../services/RequestService";
+import { SignalContext } from "../../../context/signalContext";
 
 const ProjectHeader = () => {
     const { project, code, role } = useContext(ProjectContext);

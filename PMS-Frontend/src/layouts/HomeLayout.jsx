@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom"
-import HomeHeader from "../components/Home/Header"
+import HomeHeader from "../pages/Home/Header"
+
 export default function HomeLayout() {
     if(localStorage.getItem("token")){
         return <Navigate to="/home" replace/>

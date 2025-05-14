@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react"
 import { getAuthorization } from "../services/ProjectService"
 import { Outlet, useSearchParams } from "react-router-dom"
-import ProjectHeader from "../components/Project/ProjectHeader";
+import ProjectHeader from "../pages/User/Project/ProjectHeader";
 
 export const ProjectContext = createContext();
 
