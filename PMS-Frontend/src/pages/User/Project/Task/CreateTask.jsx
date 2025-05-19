@@ -178,7 +178,7 @@ const CreateTask = ({open, close, currentStatus}) => {
                         value={state.status}
                     />
                 </Stack>
-                <MembersAutocomplete members={members} handleChange={(e, values) => handleChange(values.map(value => value.id), "SET_ASSIGNEES")}/>
+                <MembersAutocomplete members={members.filter(member => member.role !== 'Viewer')} handleChange={(e, values) => handleChange(values.map(value => value.id), "SET_ASSIGNEES")}/>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DateTimePicker']}>
                     <DateTimePicker

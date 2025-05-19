@@ -159,7 +159,7 @@ const TaskEditor = ({ members, role, task}) => {
                         value={state.priority}
                         slotProps={{
                             input: {
-                            readOnly: (role !== 'Admin' && role != "Editor"),
+                            readOnly: (role !== 'Admin'),
                             },
                         }}
                         handleChange={(e) => dispatch({ type: "SET_PRIORITY", payload: e.target.value})}
@@ -219,7 +219,7 @@ const TaskEditor = ({ members, role, task}) => {
                         <Button 
                             variant="contained" 
                             onClick={handleSave} 
-                            disabled={project.status !== "Active" || (role !== 'Admin' && role != "Editor" && !task.assignees.some(a => a.member.user.email === user.email))}>
+                            disabled={project.status !== "Active" || (role !== 'Admin' && !task.assignees.some(a => a.member.user.email === user.email))}>
                             Save
                         </Button>
                     </Stack>

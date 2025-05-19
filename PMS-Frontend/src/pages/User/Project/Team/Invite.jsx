@@ -1,6 +1,6 @@
 import { Button, Modal, TextField } from "@mui/material"
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { sendInvitation } from '../../../../services/InvitationService';
 import { toast } from "react-toastify";
 

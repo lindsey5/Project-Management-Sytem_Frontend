@@ -9,43 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { acceptInvitation } from "../../services/InvitationService";
 import { toast } from "react-toastify";
 import { ConfirmDialog } from "../../components/dialog";
+import generateNotificationTitle from '../../utils/generateNotificationTitle';
 
 const NotficationContainer = forwardRef(({ notification }, ref) => {
-    var messageType;
     const navigate = useNavigate();
-    const [showAccept, setShowAccept] = useState(false);
-    
-
-    if(notification.type === 'TaskAssigned'){
-        messageType = "assigned a task to you";
-    }else if(notification.type === 'TaskRemoved'){
-        messageType = "removed you in a task"
-    }else if(notification.type === 'TaskUpdated'){
-        messageType = "updated a task"
-    }else if(notification.type === "AttachmentAdded"){
-        messageType = "added an attachment";
-    }else if(notification.type === "AttachmentRemoved"){
-        messageType = "removed an attachment";
-    }else if(notification.type === "RemovedToProject"){
-        messageType = "removed you in a project";
-    }else if(notification.type === "RequestAccepted"){
-        messageType = "accepted your request"
-    }else if(notification.type === "CommentAdded"){
-        messageType = "added a comment"
-    }else if(notification.type === "TaskDeleted"){
-        messageType = "deleted a task"
-    }else if(notification.type === "RoleUpdated"){
-        messageType = "updated your role"
-    }else if(notification.type === "LeftFromProject"){
-        messageType = "left in the project"
-    }else if(notification.type === "ProjectDeleted"){
-        messageType = "deleted a project";
-    }else if(notification.type === "InvitationSent"){
-        messageType = `invited you to join in a project "${notification.invitation.project.title}"`
-    }else if(notification.type === 'InvitationAccepted'){
-         messageType = 'accepted your invitation'
-    }
-
+    const title = generateNotificationTitle(notification)
     const handleClick = async () => {
         if(notification.type !== "RemovedToProject" && notification.type !== "InvitationSent"){
             const response = await getProject(notification.project_id);
@@ -70,7 +38,7 @@ const NotficationContainer = forwardRef(({ notification }, ref) => {
         <Avatar src={`data:image/jpeg;base64,${notification.user.profile_pic}`} sx={{ width: '50px', height: '50px'}}/>
         <div>
             <h1 className="mb-3 text-md">
-                <span className="font-bold">{notification.user.firstname} {notification.user.lastname}</span> {messageType}
+                <span className="font-bold">{notification.user.firstname} {notification.user.lastname}</span> {title}
                 {!notification.isRead && <CircleIcon sx={{ marginLeft: '7px', fontSize: '15px'}} color="error"/>}
             </h1>
             <p className="text-gray-500 text-sm">{formatDateTime(notification.date_time)}</p>

@@ -16,6 +16,7 @@ import TaskEditor from "./TaskEditor";
 import CommentEditor from "./CommentEditor";
 import CommentsContainer from "./CommentsContainer";
 import { CommentContextProvider } from "../../../../../context/commentContext";
+import { UserContext } from "../../../../../context/userContext";
 
 const style = {
     bgcolor: 'background.paper',
@@ -44,6 +45,7 @@ const Comments = memo(({ task_id }) => {
 
 const TaskDetails = memo(({task, open, closeModal}) => {
     const [attachments, setAttachments] = useState([]);
+    const { user } = useContext(UserContext)
     const { code, role } = useContext(ProjectContext);
     const [members, setMembers] = useState([]);
     const [value, setValue] = useState("Comments");
@@ -72,6 +74,12 @@ const TaskDetails = memo(({task, open, closeModal}) => {
             const response = await getTaskAttachments(task.id);
 
             const fetchedMembers = await getMembers(code);
+            console.log(fetchedMembers)
+            const index = fetchedMembers.members.findIndex(m => m.user.email == user.email);
+            if (index > -1) {
+                const [item] = fetchedMembers.members.splice(index, 1);
+                fetchedMembers.members.unshift(item);
+            }
 
             setMembers(fetchedMembers.members);
             setAttachments(response.attachments)

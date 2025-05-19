@@ -108,6 +108,7 @@ const Kanban = ({ tasks, setTasks }) => {
                           
                           const isDraggable = !loading &&
                           project.status === 'Active' &&
+                          role !== 'Viewer' && 
                           (role === 'Admin' || role === 'Editor' || task.assignees.some(a => a.member.user.email === user.email));
 
                           if (index > -1) {
