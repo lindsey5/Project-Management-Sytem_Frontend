@@ -34,7 +34,7 @@ export const signup = async (data) => {
 }
 export const signupVerificationCode = async (email) => {
     try{
-        const response = await axios.post(`/api/email/verification-code?email=${email}`);
+        const response = await axios.post(`/api/email/signup/verification-code?email=${email}`);
         return response.data
     }catch(error){
         console.log(error)

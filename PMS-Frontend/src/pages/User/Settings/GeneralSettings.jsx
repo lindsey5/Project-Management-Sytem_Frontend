@@ -6,20 +6,26 @@ import { updateUser } from "../../../services/UserService"
 const GeneralSettings = () => {
     const { user } = useContext(UserContext)
     const [updatedUser, setUpdatedUser] = useState();
+    const [error, setError] = useState('');
 
     useEffect(() => {
         if(user) setUpdatedUser(user)
     }, [user])
 
     const handleSave = async () => {
-        const data = {
-            ...updatedUser,
-            profile_pic: updatedUser.profile_pic.split(',')[1]
-        }
+        setError('')
+        if(!updatedUser.firstname) setError('Firstname is required')
+        else if(!updatedUser.lastname) setError('Lastname is required')
+        else {
+            const data = {
+                ...updatedUser,
+                profile_pic: updatedUser.profile_pic.split(',')[1]
+            }
 
-        const response = await updateUser(data);
-    
-        if(response.success) window.location.reload()
+            const response = await updateUser(data);
+        
+            if(response.success) window.location.reload()
+        }
     };
 
     const handleFiles = async (e) => {
@@ -52,6 +58,7 @@ const GeneralSettings = () => {
                 </Button>
             </div>
         </div>
+        <p className="mb-4 text-red-600">{error}</p>
         <div className="flex gap-10 mb-12">
             <TextField 
                 value={updatedUser?.firstname || ''} 

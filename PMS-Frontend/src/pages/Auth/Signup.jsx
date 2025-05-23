@@ -126,7 +126,7 @@ const SignupPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors([])
-        setLoading(false)
+        setLoading(true)
         if(newUser.password !== newUser.confirmPassword){
             setErrors(["Password doesn't match"]);
         }else if(isStrongPassword(newUser.password)){
@@ -142,6 +142,7 @@ const SignupPage = () => {
                 setShowVerify(true)
             }
         }
+        setLoading(false)
     }
 
     return <div className="py-20 w-full h-screen flex justify-around items-center bg-2 bg-cover bg-center">

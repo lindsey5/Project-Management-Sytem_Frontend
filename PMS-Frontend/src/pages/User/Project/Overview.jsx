@@ -155,13 +155,11 @@ const Overview = () => {
                 <PieChart
                     sx={{ marginTop: '30px'}}
                     height={250}
-                    width={250}
                     series={[
                         {
                             arcLabel: (item) => `${item.percentage}%`,
                             data: tasksData?.pieChartData || [],
                             innerRadius: 90,
-                            arcLabelMinAngle: 20,
                         },
                     ]}
                 />

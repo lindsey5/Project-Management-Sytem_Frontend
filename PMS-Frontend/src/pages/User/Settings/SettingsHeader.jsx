@@ -19,8 +19,6 @@ const SettingsHeader = () => {
             aria-label="scrollable tabs"
         >
             <Tab label="General" value="/settings" />
-            <Tab label="Security" value="/settings/security" />
-            <Tab label="Your Projects" value="/settings/projects" />
         </Tabs>
     </header>
 }
