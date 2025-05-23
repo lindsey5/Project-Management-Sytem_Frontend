@@ -76,7 +76,7 @@ const Home = () => {
 
     },[status, tasksDetails?.allTasks])
 
-    return <main className="pt-10 pb-6 px-10">
+    return <main className="pt-10 pb-6 px-10 bg-gray-100">
         <h1 className="font-bold text-4xl mb-12">Welcome {user && user.firstname}!</h1>
         <div className="flex md:grid grid-cols-4 wrap gap-16">
             <DashboardCard 
