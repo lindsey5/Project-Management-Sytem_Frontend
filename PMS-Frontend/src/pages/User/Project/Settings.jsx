@@ -71,6 +71,8 @@ const ProjectSettings = () => {
             index === self.findIndex((o) => o.name === option.name)
     ).sort((a, b) => a.category.localeCompare(b.category));
 
+
+
     const saveUpdate = async () =>{
         const response = await updateProject({  
             ...state,
@@ -97,7 +99,7 @@ const ProjectSettings = () => {
                     label="Title" 
                     value={state.title}
                     onChange={(e) => dispatch({ type: "SET_TITLE", payload: e.target.value})} 
-                    disabled={role !== 'Admin' && user.email !== project.user.email}
+                    disabled={role !== 'Admin' && role !== 'Editor'}
                 />
                 <CustomTextField
                     width={"100%"}
@@ -107,7 +109,7 @@ const ProjectSettings = () => {
                     maxRows={5}
                     inputProps={{ maxLength: 500 }}
                     onChange={(e) => dispatch({ type: "SET_DESCRIPTION", payload: e.target.value})} 
-                    disabled={role !== 'Admin' && project.user.email !== user.email}
+                    disabled={role !== 'Admin' && role !== 'Editor'}
                 />
                 <div className="flex flex-col gap-3 w-full">
                     <p className="text-lg font-bold">Project Type</p>
@@ -140,7 +142,7 @@ const ProjectSettings = () => {
 
                             return filtered;
                         }}
-                        disabled={role !== 'Admin' && project.user.email !== user.email}
+                        disabled={role !== 'Admin' && role !== 'Editor'}
                         selectOnFocus
                         clearOnBlur
                         handleHomeEndKeys
@@ -181,8 +183,8 @@ const ProjectSettings = () => {
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker 
                                 className="w-full"
-                                value={dayjs(state.start_date)}
-                                disabled={role !== 'Admin' && project.user.email !== user.email}
+                                value={dayjs(convertToAsiaTime(state.start_date))}
+                                disabled={role !== 'Admin' && role !== 'Editor'}
                                 onChange={(value) => dispatch({type: 'SET_START_DATE', payload: value.$d})}
                             />
                         </LocalizationProvider>
@@ -193,8 +195,8 @@ const ProjectSettings = () => {
                             <DatePicker 
                                 className="w-full"
                                 minDate={dayjs(state.start_date)}
-                                value={dayjs(state.end_date)}
-                                disabled={role !== 'Admin' && project.user.email !== user.email}
+                                value={dayjs(convertToAsiaTime(state.end_date))}
+                                disabled={role !== 'Admin' && role !== 'Editor'}
                                 onChange={(value) => dispatch({type: 'SET_END_DATE', payload: value.$d})}
                             />
                         </LocalizationProvider>
@@ -206,7 +208,7 @@ const ProjectSettings = () => {
                         width={"100%"}
                         item={[ { name: 'Active', color: green[500]}, { name: 'On Hold', color: grey[500]}, { name: 'Closed', color: red[500]}]}
                         value={state.status}
-                        disabled={role !== 'Admin' && project.user.email !== user.email}
+                        disabled={role !== 'Admin' && role !== 'Editor'}
                         onChange={(e) => dispatch({ type: "SET_STATUS", payload: e.target.value})}
                     />
                 </div>
@@ -217,7 +219,7 @@ const ProjectSettings = () => {
                     variant="contained" 
                     color="error"
                 >Delete Project</Button>}
-                {role === 'Admin'  && <Button 
+                {(role === 'Admin' || role === 'Editor')  && <Button 
                     variant="contained"
                     onClick={() => setOpenDialog(true)}
                 >
