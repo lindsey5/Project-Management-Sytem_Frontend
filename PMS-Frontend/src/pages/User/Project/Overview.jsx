@@ -25,9 +25,13 @@ const Overview = () => {
             const response = await getTasks(project.id);
             const totalTask = response.tasks.length
 
-            const priorityData = priority.map(p => {
-                return response.tasks.filter(task => task.priority === p.name).length
-            })
+            const priorityData = priority.map((p, i) => ({
+                id: i,
+                label: p.name,
+                data: [response.tasks.filter(task => task.priority === p.name).length]
+            }));
+
+            console.log(priorityData)
 
             // Set Pie Chart data
             const tasksStatus = [...new Set(response.tasks.map(task => task.status))];
@@ -181,12 +185,11 @@ const Overview = () => {
                 <Typography variant="h6" sx={{ marginBottom: '20px'}}>Priority Overview</Typography>
                 {tasksData.priorityData && <BarChart
                     height={300}
-                    series={[
-                        { data: tasksData?.priorityData },
-                    ]}
-                    xAxis={[{ data: priority.map(p => p.name), scaleType: 'band' }]}
+                    series={tasksData?.priorityData || []}
+                    xAxis={[{ data: ['Tasks'], scaleType: 'band' }]}    
                     yAxis={[{ width: 50 }]}
-                    />}
+                    colors={['#4CAF50', '#FFA726', '#ff2f2c']}
+                />}
             </Card>
                 
         </div>
