@@ -1,37 +1,10 @@
 import { useState, useEffect } from "react"
 import { signup, signupVerificationCode } from "../../services/AuthService";
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
-import { IconButton, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import GoogleButton from "./GoogleButton";
 import { isStrongPassword } from "../../utils/utils";
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-
-const PasswordField = ({ onChange, label }) => {
-    const [show, setShow] = useState(false);
-
-    return <div className="relative">
-        <IconButton 
-            size="md"
-            onClick={() => setShow(!show)}
-            sx={{ 
-                zIndex: 2,
-                position: 'absolute',
-                top: '50%',
-                right: 5,
-                transform: "translateY(-50%)"
-            }}>
-            {show ? <VisibilityOffIcon fontSize="inherit"/> : <VisibilityIcon fontSize="inherit"/>}
-        </IconButton>
-        <TextField 
-            type={show ? "text" : "password"}
-            label={label}
-            required
-            fullWidth
-            onChange={onChange} 
-        />
-    </div>
-}
+import PasswordField from '../../components/PasswordField'
 
 const VerifyCode = ({ newUser }) => {
     const [user, setUser] = useState();

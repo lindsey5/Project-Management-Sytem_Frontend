@@ -41,3 +41,18 @@ export const signupVerificationCode = async (email) => {
         return error.response ? error.response.data : error.message
     }
 }
+
+export const changePassword = async (data) => {
+    try{
+        const response = await axios.post('/api/auth/password', data, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+        });
+        console.log(response)
+        return response.data
+    }catch(error){
+        console.log(error)
+        return error.response ? error.response.data : error.message
+    }
+}

@@ -2,11 +2,13 @@ import { useContext, useEffect, useState } from "react"
 import { Avatar, Button, TextField } from "@mui/material"
 import { UserContext } from "../../../context/userContext"
 import { updateUser } from "../../../services/UserService"
+import ChangePassword from "./ChangePassword"
 
 const GeneralSettings = () => {
     const { user } = useContext(UserContext)
     const [updatedUser, setUpdatedUser] = useState();
     const [error, setError] = useState('');
+    const [showChangePassword, setShowChangePassword] = useState(false)
 
     useEffect(() => {
         if(user) setUpdatedUser(user)
@@ -43,6 +45,7 @@ const GeneralSettings = () => {
     }
 
     return <main className="flex-grow p-10">
+        <ChangePassword open={showChangePassword} handleClose={() => setShowChangePassword(false)}/>
         <div className="flex gap-5 items-center mb-12">
             <Avatar src={updatedUser?.profile_pic} sx={{ width: '100px', height: '100px'}} />
             <div className="flex flex-col gap-3">
@@ -77,6 +80,9 @@ const GeneralSettings = () => {
             <h1 className="font-bold text-xl">Email:</h1>
             <p>{user?.email}</p>
         </div>
+        {user?.changePasswordAllowed && <Button
+            onClick={() => setShowChangePassword(true)}
+        >Change password</Button>}
         {updatedUser && JSON.stringify(user) !== JSON.stringify(updatedUser) && <div className="flex gap-4">
             <Button variant="contained" onClick={() => handleSave()}>Save</Button>
             <Button 
