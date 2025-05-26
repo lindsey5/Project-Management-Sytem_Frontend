@@ -10,9 +10,11 @@ import TaskDetails from "./TaskDetails/TaskDetails"
 import { status } from "../../../../data/taskData"
 import StatusSelect from "../../../../components/Select"
 import { UserContext } from "../../../../context/userContext"
+import { ProjectContext } from "../../../../layouts/ProjectLayout"
 
 const TasksTable = ({ tasks }) => {
     const { user } = useContext(UserContext);
+    const { role } = useContext(ProjectContext)
     const [selectedTask, setSelectedTask] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState('All');
 
@@ -71,10 +73,10 @@ const TasksTable = ({ tasks }) => {
                 item={[{ name: 'All', color: 'rgb(174, 172, 175)'}, ...status]} 
                 value={selectedStatus}
             />
-            <Button 
+            {role === 'Admin' && <Button 
                 onClick={generateCSV}
                 variant="contained"
-            >Export</Button>
+            >Export</Button>}
         </div>
         <CustomizedTable
             cols={<TableRow>

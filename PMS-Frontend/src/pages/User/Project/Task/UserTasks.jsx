@@ -1,5 +1,5 @@
 import CustomizedTable from "../../../../components/table"
-import { IconButton, TableRow } from "@mui/material"
+import { IconButton, TableRow, Button } from "@mui/material"
 import { StyledTableCell, StyledTableRow } from "../../../../components/table"
 import { convertToAsiaTime, formatDateTime } from "../../../../utils/utils"
 import { statusConfig } from "../../../../components/config"
@@ -32,11 +32,46 @@ const UserTasks = ({ allTasks }) => {
             setTasks(allTasks.filter(task => task.assignees.find(a => a.member.user.email === user.email)));
         }
     }, [allTasks])
+
+    const generateCSV = () => {
+        const csvRows = [];
+        const headers = ['Task', 'Priority', 'Status', 'Start Date', 'Due Date', 'Created At', 'Last Update', 'Creator', 'Assignees'];
+        csvRows.push(headers.join(','));
+
+        filteredTasks.forEach(row => {
+            // Prepare multiline assignees string with escaping
+            const assigneesString = row.assignees
+            .map(assignee => `${assignee.member.user.firstname} ${assignee.member.user.lastname}`)
+            .join('\n')
+            .replace(/"/g, '""'); // escape double quotes if any
+            
+            const values = [
+            row.task_Name.replace(/"/g, '""'),
+            `${row.priority}, ${row.status}`.replace(/"/g, '""'),
+            formatDateTime(row.start_date),
+            formatDateTime(row.due_date),
+            formatDateTime(row.created_At),
+            formatDateTime(row.updated_At),
+            `${row.member.user.firstname} ${row.member.user.lastname}`.replace(/"/g, '""'),
+            `"${assigneesString}"` // wrap multiline field in double quotes
+            ];
+
+            csvRows.push(values.join(','));
+        });
+
+        const csvBlob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+        const csvUrl = URL.createObjectURL(csvBlob);
+
+        const link = document.createElement('a');
+        link.href = csvUrl;
+        link.download = 'tasks_report.csv';
+        link.click();
+    };
     
 
     return <main className="min-h-0 flex-grow w-full pt-10 pb-20 px-4">
         <TaskDetails closeModal={() => setSelectedTask(null)} open={selectedTask != null} task={selectedTask}/>
-        <div className="flex mb-4 w-full">
+        <div className="flex mb-4 w-full justify-between">
             <StatusSelect 
                 sx={{ height: '45px'}}
                 width={'150px'}
@@ -45,6 +80,10 @@ const UserTasks = ({ allTasks }) => {
                 item={[{ name: 'All', color: 'rgb(174, 172, 175)'}, ...status]} 
                 value={selectedStatus}
             />
+             <Button 
+                onClick={generateCSV}
+                variant="contained"
+            >Export</Button>
         </div>
         
         <CustomizedTable
