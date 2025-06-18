@@ -36,7 +36,7 @@ const HeroSection = () => {
 
 const HomePage = () => {
     useEffect(() => {
-        document.title = "ProJek";
+        document.title = "ProJex";
     }, []);
     
     return <>
