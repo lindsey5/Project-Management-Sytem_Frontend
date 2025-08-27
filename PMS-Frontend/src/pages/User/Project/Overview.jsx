@@ -8,7 +8,7 @@ import TaskOutlinedIcon from '@mui/icons-material/TaskOutlined';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { statusConfig } from "../../../components/config";
 import { getMembers } from "../../../services/MemberService";
-import { DashboardCard } from "../../../components/Card";
+import { DashboardCard } from "../../../components/card";
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
 import { BarChart } from '@mui/x-charts/BarChart';
