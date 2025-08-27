@@ -11,12 +11,12 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5046',
+        target: 'https://project-management-system-backend-m3cn.onrender.com',
         changeOrigin: true,
         secure: false,
       },
       '/chathub': {
-        target: 'http://localhost:5046',
+        target: 'https://project-management-system-backend-m3cn.onrender.com',
         changeOrigin: true,
         secure: false,
       },
