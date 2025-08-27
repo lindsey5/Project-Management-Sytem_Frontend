@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect, useCallback, useContext} from "react";
 import { statusConfig } from "../../../components/config";
 import { timeAgo } from "../../../utils/utils";
-import { Card, Box, Typography, CircularProgress } from "@mui/material";
+import { Card, Box, Typography } from "@mui/material";
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { StatusChip } from "../../../components/chip";
-import { EllipsisText } from "../../../components/text";
 import { getProjectTaskHistory } from "../../../services/TaskService";
 import { ProjectContext } from "../../../layouts/ProjectLayout";
 import { useNavigate } from "react-router-dom";
