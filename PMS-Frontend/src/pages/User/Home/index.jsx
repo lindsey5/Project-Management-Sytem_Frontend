@@ -15,17 +15,20 @@ import CustomizedTable from "../../../components/table";
 import StatusSelect from "../../../components/Select";
 import { status as statusData} from '../../../data/taskData'
 import CircleIcon from '@mui/icons-material/Circle';
+import { Backdrop, CircularProgress} from "@mui/material";
 
 const Home = () => {
     const { user } = useContext(UserContext);
     const [tasksDetails, setTasksDetails] = useState(); 
     const [pieChartData, setPieChartData] = useState([]);
     const [status, setStatus] = useState('All');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             const response = await getAllUserTasks();
-            
+            setLoading(false)
             const totalTasks = response.tasks.filter(task => task.project.status === "Active").length
 
             const activeTasks = response.tasks
@@ -77,6 +80,14 @@ const Home = () => {
     },[status, tasksDetails?.allTasks])
 
     return <main className="pt-10 pb-6 px-10 bg-gray-100">
+        {loading && (
+            <Backdrop
+                sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        )}
         <h1 className="font-bold text-4xl mb-12">Welcome {user && user.firstname}!</h1>
         <div className="flex md:grid grid-cols-4 wrap gap-16">
             <DashboardCard 
